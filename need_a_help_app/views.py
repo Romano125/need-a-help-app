@@ -1,0 +1,127 @@
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.views import generic
+from user.models import Profile, UserFavourite, Requests
+from django.contrib.auth.models import User
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
+
+
+def home(request):
+    return render(request, 'need_a_help_app/index.html')
+
+
+class AppMainView(LoginRequiredMixin, generic.ListView):
+    template_name = 'need_a_help_app/app_main.html'
+    context_object_name = 'users'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return User.objects.all()
+
+
+class RepairmanDetailView(LoginRequiredMixin, generic.DetailView):
+    model = User
+    context_object_name = 'repairman'
+    template_name = 'user/repairman_info.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RepairmanDetailView, self).get_context_data(**kwargs)
+
+        rep_id = self.kwargs['pk']
+        user = self.request.user
+        favs = UserFavourite.objects.all()
+
+        f = 0
+        for us in favs:
+            if us.user == user.id and us.repairman == rep_id:
+                f = 1
+
+        context_data['f'] = f
+
+        return context_data
+
+
+class UpdateUserView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    context_object_name = 'repairman'
+    fields = [
+        'email',
+        'address',
+        'birth_date',
+        'phone_number',
+        'profession',
+        'knowledges',
+        'photo'
+    ]
+
+    success_url = reverse_lazy('main')
+
+
+@login_required
+def add_favorite(request, user_id, rep_id):
+    f = 0
+    favs = UserFavourite.objects.all()
+    for us in favs:
+        if us.user == user_id and us.repairman == rep_id:
+            f = 1
+
+    if f == 0:
+        add_fav = UserFavourite(user=user_id, repairman=rep_id)
+        add_fav.save()
+
+    return redirect('repairman_info', pk=rep_id)
+
+
+@login_required
+def del_favorite(request, user_id, rep_id):
+    f = 0
+    favs = UserFavourite.objects.all()
+    for us in favs:
+        if us.user == user_id and us.repairman == rep_id:
+            fav_to_del = UserFavourite.objects.filter(user=user_id, repairman=rep_id)
+            f = 1
+
+    if f == 1:
+        fav_to_del.delete()
+
+    return redirect('repairman_info', pk=rep_id)
+
+
+@login_required
+def show_favs(request):
+    favs = UserFavourite.objects.all()
+    users = User.objects.all()
+
+    context = {
+        'favs': favs,
+        'users': users
+    }
+    return render(request, 'need_a_help_app/favorites.html', context)
+
+
+class RequestsView(LoginRequiredMixin, generic.ListView):
+    template_name = 'need_a_help_app/request_user.html'
+    context_object_name = 'users'
+    paginate_by = 2
+
+    def get_queryset(self):
+        return User.objects.all()
+
+
+class RequestCreateView(LoginRequiredMixin, CreateView):
+    model = Requests
+    fields = [
+        'job_title',
+        'price',
+        'required_knowledges',
+        'address',
+        'job_description',
+        'photo'
+    ]
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
