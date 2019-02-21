@@ -95,7 +95,7 @@
 {% block content %}
    <h2>My favorites</h2>
    <hr width="100%">
-   {% if us %}
+   {% if favs %}
        {% for us in favs %}
             {% if us.user == user.id %}
                 {% for rep in users %}
