@@ -11,7 +11,7 @@
                 {% if object.user == user %}
                     <div>
                         <a href="{% url 'request_update' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Update</a>
-                        <a href="{% url 'request_delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1">Delete</a>
+                        <a href="{% url 'request_delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i>&nbsp Delete</a>
                     </div>
                 {% endif %}
             </div>
@@ -22,10 +22,10 @@
             <h4>Description:</h4>
             <p class="article-content">{{ object.job_description }}</p>
             {% if object.user == user %}
-                <a href="#" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px">Applications</a>
+                <a href="#" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px"><i class="fas fa-pencil-alt"></i>&nbsp Applications</a>
             {% else %}
-                <a href="#" class="btn btn-warning mt-1 mb-1" style="margin-left: 220px">Applications</a>
-                <a href="#" class="btn btn-outline-success mt-1 mb-1">Apply</a>
+                <a href="#" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px"><i class="fas fa-pencil-alt"></i>&nbsp Applications</a>
+                <a href="#" class="btn btn-outline-success mt-1 mb-1"><i class="far fa-check-square"></i>&nbsp Apply</a>
             {% endif %}
           </div>
     </article>

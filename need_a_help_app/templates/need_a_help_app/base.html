@@ -20,21 +20,25 @@
           {% if user.is_authenticated and user.profile.role == 'client' %}
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
-                    <li><a href="{% url 'main' %}">Home</a></li>
-                    <li><a href="{% url 'info' user.id %}">My profile</a></li>
-                    <li><a href="#">Messages</a></li>
-                    <li><a href="{% url 'profile' %}">Settings</a></li>
-                    <li><a href="{% url 'favorites' %}">My favourites</a></li>
+                    <div class="list-group">
+                      <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
+                      <a class="list-group-item sb" href="{% url 'info' user.id %}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; My profile</a>
+                      <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
+                      <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
+                      <a class="list-group-item sb" href="{% url 'favorites' %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My favourites</a>
+                    </div>
                 </ul>
             </div>
           {% elif user.is_authenticated and user.profile.role == 'repairman' %}
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
-                    <li><a href="{% url 'main' %}">Home</a></li>
-                    <li><a href="{% url 'info' user.id %}">My Profile</a></li>
-                    <li><a href="#">Messages</a></li>
-                    <li><a href="{% url 'profile' %}">Settings</a></li>
-                    <li><a href="#">My feedbacks</a></li>
+                    <div class="list-group">
+                      <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
+                      <a class="list-group-item sb" href="{% url 'info' user.id %}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; My profile</a>
+                      <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
+                      <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
+                      <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
+                    </div>
                 </ul>
             </div>
           {% endif %}
@@ -78,7 +82,7 @@
 
             {% if user.is_authenticated and user.profile.role == 'client' %}
               {% block app_client %}{% endblock %}
-            {% else %}
+            {% elif user.is_authenticated and user.profile.role == 'repairman' %}
               {% block app_repairman %}{% endblock %}
             {% endif %}
 
@@ -119,4 +123,10 @@
         </script>
     </body>
 </html>
+
+<!-- star rating iskoristiti kasnije za ocijenjivanje majstora
+  <div class="rating">
+      <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+  </div>
+-->
 

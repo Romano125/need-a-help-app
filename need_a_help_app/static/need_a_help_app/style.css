@@ -195,12 +195,10 @@ header.masthead .masthead-content .masthead-subheading {
   margin-top: 135px;
   margin-left: -20px;
 }
-.sidebar-name {
-  color: white;
-}
 
 .sidebar-nav {
   padding-left: 0px;
+  color: black;
 }
 
 #sidebar-wrapper {
@@ -234,18 +232,18 @@ header.masthead .masthead-content .masthead-subheading {
   line-height: 40px;
 }
 
-.sidebar_nav li a {
+.sidebar_nav li .sb {
   padding: 0;
-  list-style: none;
   text-indent: 20px;
   line-height: 40px;
   text-decoration: none;
   list-style-type: none;
+  background-color: black;
 }
 
-a:hover {
+.sb:hover {
   text-decoration: none;
-  color: white;
+  color: black;
 }
 
 .top-menu {
@@ -256,5 +254,23 @@ a:hover {
   position:sticky;
   position: -webkit-sticky;
   z-index:1;
+}
+
+/*star rating*/
+
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.rating > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   content: "\2605";
+   color: yellow;
+   position: absolute;
 }
 

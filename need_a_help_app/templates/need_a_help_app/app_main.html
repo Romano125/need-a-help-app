@@ -41,7 +41,7 @@
                 <form class="card card-sm">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto">
-                            <i class="fas fa-search h4 text-body"></i>
+                            <i class="fas fa-search h4 text-body"></i>&nbsp&nbsp
                         </div>
                         <!--end of col-->
                         <div class="col">
@@ -169,6 +169,15 @@
                     <a href="{% url 'info' rep.id %}">
                         <img class="rounded-circle account-img" src="{{ rep.profile.photo.url }}">
                     </a>
+                    <div class="row">
+                        <div class="col-sm-10" align="center">
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-7 pl-5">
                     <h1>{{ rep.first_name }} {{ rep.last_name }}</h1>
@@ -177,6 +186,7 @@
                     <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>
                 </div>
             </div>
+            <hr width="100%">
         {% endif %}
     {% endfor %}
 
@@ -221,7 +231,12 @@
                     <small class="text-secondary text-muted">Price: {{ u.price }} €</small><br>
                     <small class="text-secondary text-muted">Address: {{ u.address }}</small><br>
                 </div>
+                <div class="col-sm-2 pt-5" align="right">
+                    <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                    <a href="#" class="btn btn-outline-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i></a>
+                </div>
             </div>
+            <hr width="100%">
         {% endfor %}
     {% endfor %}
 
