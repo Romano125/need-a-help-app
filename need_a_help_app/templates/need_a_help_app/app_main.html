@@ -207,6 +207,23 @@
 {% block content_repairman %}
     <h2>All jobs</h2>
     <hr width="100%">
+    {% for us in users %}
+        {% for u in us.requests_set.all %}
+            <div class="row">
+                <div class="col-sm-3">
+                    <a href="{% url 'request_detail' u.id %}">
+                        <img class="rounded-circle account-img" src="{{ u.photo.url }}">
+                    </a>
+                </div>
+                <div class="col-sm-7 pl-5">
+                    <h1>{{ u.job_title }}</h1>
+                    <small class="text-secondary text-muted">Required knowladges: {{ u.required_knowledges }}</small><br>
+                    <small class="text-secondary text-muted">Price: {{ u.price }} €</small><br>
+                    <small class="text-secondary text-muted">Address: {{ u.address }}</small><br>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
 
     {% if is_paginated %}
 

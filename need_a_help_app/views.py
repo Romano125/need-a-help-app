@@ -22,7 +22,7 @@ def home(request):
 class AppMainView(LoginRequiredMixin, ListView):
     template_name = 'need_a_help_app/app_main.html'
     context_object_name = 'users'
-    paginate_by = 5
+    paginate_by = 3
 
     def get_queryset(self):
         return User.objects.all()
@@ -153,6 +153,17 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+    def test_func(self):
+        req = self.get_object()
+        if self.request.user == req.user:  # ako je ulogirani user isti kao onaj ciji post mijenjamo, ne zelimo da netko drugi ureduje sve druge postove
+            return True
+        return False
+
+
+class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Requests
+    success_url = reverse_lazy('main')
 
     def test_func(self):
         req = self.get_object()
