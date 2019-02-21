@@ -6,7 +6,7 @@
         <img class="rounded-circle article-img" src="{{ object.photo.url }}">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ object.user }}</a>
+              <a class="mr-2" href="{% url 'info' object.user.id %}">{{ object.user }}</a>
               <small class="text-muted">{{ object.date|date:'F d, Y H:i' }}</small>
                 {% if object.user == user %}
                     <div>

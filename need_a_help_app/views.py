@@ -28,13 +28,13 @@ class AppMainView(LoginRequiredMixin, ListView):
         return User.objects.all()
 
 
-class RepairmanDetailView(LoginRequiredMixin, DetailView):
+class InfoDetailView(LoginRequiredMixin, DetailView):
     model = User
-    context_object_name = 'repairman'
-    template_name = 'user/repairman_info.html'
+    context_object_name = 'info'
+    template_name = 'user/info.html'
 
     def get_context_data(self, **kwargs):
-        context_data = super(RepairmanDetailView, self).get_context_data(**kwargs)
+        context_data = super(InfoDetailView, self).get_context_data(**kwargs)
 
         rep_id = self.kwargs['pk']
         user = self.request.user
@@ -78,7 +78,7 @@ def add_favorite(request, user_id, rep_id):
         add_fav = UserFavourite(user=user_id, repairman=rep_id)
         add_fav.save()
 
-    return redirect('repairman_info', pk=rep_id)
+    return redirect('info', pk=rep_id)
 
 
 @login_required
@@ -93,7 +93,7 @@ def del_favorite(request, user_id, rep_id):
     if f == 1:
         fav_to_del.delete()
 
-    return redirect('repairman_info', pk=rep_id)
+    return redirect('info', pk=rep_id)
 
 
 @login_required

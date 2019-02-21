@@ -166,7 +166,7 @@
         {% if rep.profile.role == 'repairman' %}
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="{% url 'repairman_info' rep.id %}">
+                    <a href="{% url 'info' rep.id %}">
                         <img class="rounded-circle account-img" src="{{ rep.profile.photo.url }}">
                     </a>
                 </div>

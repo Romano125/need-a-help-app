@@ -1,0 +1,58 @@
+{% extends 'need_a_help_app/base.html' %}
+
+{% block title %}
+    <title>Info</title>
+{% endblock %}
+
+{% block content %}
+    <div class="content-section mt-3">
+        {% if error %}
+            <div class="alert alert-warning">
+                {{ error }}
+            </div>
+        {% endif %}
+
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{ info.profile.photo.url }}">
+        <div class="media-body">
+          <h2 class="account-heading pt-5">{{ info.first_name }} {{ info.last_name }}</h2>
+          <p class="text-secondary text-muted">{{ info.email }}</p>
+          <div align="right">
+            <a class="btn btn-outline-danger rounded-circle" href="#"><i class="fas fa-envelope fa-2x"></i></a>
+            {% if info.profile.role == 'repairman' %}
+              {% if f %}
+                <a class="btn btn-warning rounded-circle" style="color: yellow;" href="{% url 'del_favorite' user.id info.id %}"><i class="fas fa-star fa-2x"></i></a>
+              {% else %}
+                <a class="btn btn-outline-warning rounded-circle" style="color: yellow;" href="{% url 'add_favorite' user.id info.id %}"><i class="fas fa-star fa-2x"></i></a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <hr width="100%">
+      <div class="container">
+        <fieldset class="from-group">
+          {% if info.profile.role == 'repairman' %}
+            <h4>Address: {{ info.profile.address }}</h4>
+            <h4>Phone number: {{ info.profile.phone_number }}</h4>
+            <h4>Birth_date: {{ info.profile.birth_date }}</h4>
+            <h4>Profession: {{ info.profile.profession }}</h4>
+            <h4>Knowledges: {{ info.profile.knowledges }}</h4>
+            <h4>Hired(count): 55</h4>
+            <h4>Popularity: *****</h4>
+            <h4>Price: {{ info.profile.costs }} €</h4>
+          {% else %}
+            <h4>Address: {{ info.profile.address }}</h4>
+            <h4>Phone number: {{ info.profile.phone_number }}</h4>
+            <h4>Birth_date: {{ info.profile.birth_date }}</h4>
+            <h4>Number_hired(count): 55</h4>
+            <h4>Badges: None</h4>
+            <h4>Price: {{ info.profile.costs }} €</h4>
+          {% endif %}
+        </fieldset>
+
+        <button class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedback</button>
+        <button class="btn btn-outline-success"><i class="fas fa-handshake"></i>&nbsp&nbspHire</button>
+      </div>
+    </div>
+{% endblock %}
