@@ -27,7 +27,7 @@
                     <li><a href="{% url 'favorites' %}">My favourites</a></li>
                 </ul>
             </div>
-          {% else %}
+          {% elif user.is_authenticated and user.profile.role == 'repairman' %}
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
                     <li><a href="{% url 'main' %}">Home</a></li>

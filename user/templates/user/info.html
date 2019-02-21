@@ -18,12 +18,14 @@
           <h2 class="account-heading pt-5">{{ info.first_name }} {{ info.last_name }}</h2>
           <p class="text-secondary text-muted">{{ info.email }}</p>
           <div align="right">
-            <a class="btn btn-outline-danger rounded-circle" href="#"><i class="fas fa-envelope fa-2x"></i></a>
-            {% if info.profile.role == 'repairman' %}
-              {% if f %}
-                <a class="btn btn-warning rounded-circle" style="color: yellow;" href="{% url 'del_favorite' user.id info.id %}"><i class="fas fa-star fa-2x"></i></a>
-              {% else %}
-                <a class="btn btn-outline-warning rounded-circle" style="color: yellow;" href="{% url 'add_favorite' user.id info.id %}"><i class="fas fa-star fa-2x"></i></a>
+            {% if user.id != info.id %}
+              <a class="btn btn-outline-danger rounded-circle" href="#"><i class="fas fa-envelope fa-2x"></i></a>
+              {% if info.profile.role == 'repairman' %}
+                {% if f %}
+                  <a class="btn btn-warning rounded-circle" style="color: yellow;" href="{% url 'del_favorite' user.id info.id %}"><i class="fas fa-star fa-2x"></i></a>
+                {% else %}
+                  <a class="btn btn-outline-warning rounded-circle" style="color: yellow;" href="{% url 'add_favorite' user.id info.id %}"><i class="fas fa-star fa-2x"></i></a>
+                {% endif %}
               {% endif %}
             {% endif %}
           </div>
@@ -47,12 +49,12 @@
             <h4>Birth_date: {{ info.profile.birth_date }}</h4>
             <h4>Number_hired(count): 55</h4>
             <h4>Badges: None</h4>
-            <h4>Price: {{ info.profile.costs }} €</h4>
           {% endif %}
         </fieldset>
-
-        <button class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedback</button>
-        <button class="btn btn-outline-success"><i class="fas fa-handshake"></i>&nbsp&nbspHire</button>
+        {% if info.profile.role == 'repairman' and user.id != info.id %}
+          <button class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedback</button>
+          <button class="btn btn-outline-success"><i class="fas fa-handshake"></i>&nbsp&nbspHire</button>
+        {% endif %}
       </div>
     </div>
 {% endblock %}
