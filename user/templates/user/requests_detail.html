@@ -1,0 +1,27 @@
+{% extends 'need_a_help_app/base.html' %}
+
+{% block content %}
+
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ object.photo.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'profile' %}">{{ object.user }}</a>
+              <small class="text-muted">{{ object.date|date:'F d, Y H:i' }}</small>
+                {% if object.user == user %}
+                    <div>
+                        <a href="{% url 'request_update' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Update</a>
+                        <a href="#" class="btn btn-danger btn-sm mt-1 mb-1">Delete</a>
+                    </div>
+                {% endif %}
+            </div>
+            <h2 class="article-title">{{ object.job_title }}</h2>
+            <small class="text-muted">Required knowledges: {{ object.required_knowledges }}</small><br>
+            <small class="text-muted">Price: {{ object.price }} €</small><br>
+            <small class="text-muted">Address: {{ object.address }}</small><br>
+            <h4>Description:</h4>
+            <p class="article-content">{{ object.job_description }}</p>
+            <a href="#" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px">Applications</a>
+          </div>
+    </article>
+{% endblock %}

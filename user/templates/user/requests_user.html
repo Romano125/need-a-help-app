@@ -102,23 +102,21 @@
     </div>
    </div>
    <hr width="100%">
-   {% if users %}
-       {% for req in users %}
-            {% if req.requests.id == user.id %}
-                <div class="row">
-                    <div class="col-sm-3">
-                        <a href="#">
-                            <img class="rounded-circle account-img" src="{{ req.requests.photo.url }}">
-                        </a>
-                    </div>
-                    <div class="col-sm-7 pl-5">
-                        <h1>{{ req.requests.job_title }}</h1>
-                        <small class="text-secondary text-muted">Required knowladges: {{ req.requests.required_knowledges }}</small><br>
-                        <small class="text-secondary text-muted">Price: {{ req.requests.price }} €</small><br>
-                        <small class="text-secondary text-muted">Address: {{ req.requests.address }}</small><br>
-                    </div>
+   {% if req %}
+       {% for i in req %}
+            <div class="row">
+                <div class="col-sm-3">
+                    <a href="{% url 'request_detail' i.id %}">
+                        <img class="rounded-circle account-img" src="{{ i.photo.url }}">
+                    </a>
                 </div>
-            {% endif %}
+                <div class="col-sm-7 pl-5">
+                    <h1>{{ i.job_title }}</h1>
+                    <small class="text-secondary text-muted">Required knowladges: {{ i.required_knowledges }}</small><br>
+                    <small class="text-secondary text-muted">Price: {{ i.price }} €</small><br>
+                    <small class="text-secondary text-muted">Address: {{ i.address }}</small><br>
+                </div>
+            </div>
        {% endfor %}
    {% else %}
     <h3 class="text-secondary text-muted" align="center">No results</h3>

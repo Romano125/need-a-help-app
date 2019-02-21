@@ -1,10 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views import generic
 from user.models import Profile, UserFavourite, Requests
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 
@@ -13,7 +19,7 @@ def home(request):
     return render(request, 'need_a_help_app/index.html')
 
 
-class AppMainView(LoginRequiredMixin, generic.ListView):
+class AppMainView(LoginRequiredMixin, ListView):
     template_name = 'need_a_help_app/app_main.html'
     context_object_name = 'users'
     paginate_by = 5
@@ -22,7 +28,7 @@ class AppMainView(LoginRequiredMixin, generic.ListView):
         return User.objects.all()
 
 
-class RepairmanDetailView(LoginRequiredMixin, generic.DetailView):
+class RepairmanDetailView(LoginRequiredMixin, DetailView):
     model = User
     context_object_name = 'repairman'
     template_name = 'user/repairman_info.html'
@@ -102,13 +108,15 @@ def show_favs(request):
     return render(request, 'need_a_help_app/favorites.html', context)
 
 
-class RequestsView(LoginRequiredMixin, generic.ListView):
-    template_name = 'need_a_help_app/request_user.html'
-    context_object_name = 'users'
+class RequestsView(LoginRequiredMixin, ListView):
+    model = Requests
+    template_name = 'user/requests_user.html'
+    context_object_name = 'req'
     paginate_by = 2
 
     def get_queryset(self):
-        return User.objects.all()
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return Requests.objects.filter(user=user).order_by('-date')
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
@@ -125,3 +133,29 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class RequestDetailView(LoginRequiredMixin, DetailView):
+    model = Requests
+
+
+class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Requests
+    fields = [
+        'job_title',
+        'price',
+        'required_knowledges',
+        'address',
+        'job_description',
+        'photo'
+    ]
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        req = self.get_object()
+        if self.request.user == req.user:  # ako je ulogirani user isti kao onaj ciji post mijenjamo, ne zelimo da netko drugi ureduje sve druge postove
+            return True
+        return False

@@ -77,4 +77,4 @@ class Requests(models.Model):
         return f'{ self.user.username } Request'
 
     def get_absolute_url(self):
-        return redirect('main')
+        return reverse('request_detail', kwargs={'pk': self.pk})
