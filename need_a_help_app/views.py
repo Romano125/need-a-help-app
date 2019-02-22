@@ -178,10 +178,10 @@ def search(request):
     q = request.GET.get('q')
     users = User.objects.all()
     if q:
-        user = Profile.objects.filter(Q(profession__icontains=q))
+        prof = Profile.objects.filter(Q(profession__contains=q))
 
     f = 0
-    if user:
+    if prof:
         f = 1
 
     return render(request, 'need_a_help_app/search_results.html', {'users': users, 'q': q, 'f': f})
