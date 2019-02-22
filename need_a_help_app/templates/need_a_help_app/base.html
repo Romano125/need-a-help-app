@@ -20,7 +20,7 @@
           {% if user.is_authenticated and user.profile.role == 'client' %}
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
-                    <div class="list-group">
+                    <div class="list-group pt-2">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
                       <a class="list-group-item sb" href="{% url 'info' user.id %}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; My profile</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
@@ -33,7 +33,7 @@
           {% elif user.is_authenticated and user.profile.role == 'repairman' %}
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
-                    <div class="list-group">
+                    <div class="list-group pt-2">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
                       <a class="list-group-item sb" href="{% url 'info' user.id %}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; My profile</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>

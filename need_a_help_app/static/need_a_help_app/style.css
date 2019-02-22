@@ -213,8 +213,8 @@ header.masthead .masthead-content .masthead-subheading {
   width: 0;
   height: 100%;
   overflow-y: hidden;
-  background-color: black;
-  border: 2px solid black;
+  background-color: #001a00;
+  border: 2px solid #001a00;
 }
 
 #page-content-wrapper {
@@ -224,11 +224,12 @@ header.masthead .masthead-content .masthead-subheading {
 }
 
 #wrapper.menuDisplayed #sidebar-wrapper {
-  width: 180px;
+  width: 225px;
+  opacity: 0.9;
 }
 
 #wrapper.menuDisplayed #page-content-wrapper {
-  padding-left: 180px;
+  position: relative;
 }
 
 .sidebar-nav li {
@@ -244,12 +245,19 @@ header.masthead .masthead-content .masthead-subheading {
   line-height: 40px;
   text-decoration: none;
   list-style-type: none;
-  background-color: black;
+  background-color: #001a00;
+}
+
+.sb {
+  background-color: #001a00;
+  color: #ccffcc;
+  opacity: 0.9;
 }
 
 .sb:hover {
   text-decoration: none;
-  color: black;
+  color: white;
+  background-color: red;
 }
 
 .top-menu {
