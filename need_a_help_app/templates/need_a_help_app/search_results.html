@@ -65,7 +65,7 @@
                 <a href="#" class="btn btn-outline-danger"><i class="fas fa-medal fa-3x"></i></a>
             </div>
             <div class="col-sm-3">
-                <a href="{% url 'requests_user' user.id %}" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
+                <a href="#" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
             </div>
             <div class="col-sm-3">
                 <a href="#" class="btn btn-outline-warning"><i class="fas fa-handshake fa-3x"></i></a>
@@ -93,68 +93,40 @@
 {% endblock %}
 
 {% block content %}
-   <h2>My favorites</h2>
-   <hr width="100%">
-   {% if favs %}
-       {% for us in favs %}
-            {% if us.user == user.id %}
-                {% for rep in users %}
-                    {% if rep.id == us.repairman %}
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <a href="{% url 'info' rep.id %}">
-                                    <img class="rounded-circle account-img" src="{{ rep.profile.photo.url }}">
-                                </a>
-                                <div class="row">
-                                    <div class="col-sm-10" align="center">
-                                        <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                        <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                        <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                        <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                        <i class="fas fa-star" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 pl-5">
-                                <h1>{{ rep.first_name }} {{ rep.last_name }}</h1>
-                                <small class="text-secondary text-muted">Profession: {{ rep.profile.profession }}</small><br>
-                                <small class="text-secondary text-muted">Cost: 155</small><br>
-                                <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>
-                            </div>
-                            <div class="col-sm-5 pt-5" align="right">
-                                <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
-                                <a href="{% url 'info' rep.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
-                            </div>
-                        </div>
-                        <hr width="100%">
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-       {% endfor %}
-   {% else %}
-    <h3 class="text-secondary text-muted" align="center">No results</h3>
-   {% endif %}
+    <div class="content-section mt-3">
+        {% if error %}
+            <div class="alert alert-warning">
+                {{ error }}
+            </div>
+        {% endif %}
+    </div>
 
-    <br>
+   <div class="row">
+    <div class="col-sm-8">
+        <h2>{{ user.profession }}</h2>
+    </div>
+   </div>
+   <hr width="100%">
+
     {% if is_paginated %}
 
         {% if page_obj.has_previous %}
-            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            <a class="btn btn-outline-info mb-4" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>
         {% endif %}
 
         {% for i in page_obj.paginator.page_range %}
             {% if page_obj.number == i %}
-                <a class="btn btn-info mb-4" href="?page={{ i }}">{{ i }}</a>
+                <a class="btn btn-info mb-4" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
             {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a class="btn btn-outline-info mb-4" href="?page={{ i }}">{{ i }}</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
             {% endif %}
 
         {% endfor %}
 
         {% if page_obj.has_next %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Last</a>
         {% endif %}
 
     {% endif %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.http import HttpResponse
 from django.views import generic
 from user.models import Profile, UserFavourite, Requests
@@ -170,3 +170,12 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == req.user:  # ako je ulogirani user isti kao onaj ciji post mijenjamo, ne zelimo da netko drugi ureduje sve druge postove
             return True
         return False
+
+
+@login_required
+def search(request):
+    q = request.GET.get('q')
+    if q:
+        user = Profile.objects.filter(profession__startswith=q)
+
+    return render_to_response('need_a_help_app/search_results.html', {'user': user, 'q': q})

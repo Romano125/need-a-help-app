@@ -13,4 +13,5 @@ urlpatterns = [
     path('request/<int:pk>/', views.RequestDetailView.as_view(), name='request_detail'),
     path('request/<int:pk>/update/', views.RequestUpdateView.as_view(), name='request_update'),
     path('request/<int:pk>/delete/', views.RequestDeleteView.as_view(), name='request_delete'),
+    path('search/', views.search, name='search'),
 ]

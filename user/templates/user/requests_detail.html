@@ -18,7 +18,7 @@
             <h2 class="article-title">{{ object.job_title }}</h2>
             <small class="text-muted">Required knowledges: {{ object.required_knowledges }}</small><br>
             <small class="text-muted">Price: {{ object.price }} €</small><br>
-            <small class="text-muted">Address: {{ object.address }}</small><br>
+            <small class="text-muted">Address: {{ object.address }}</small><br><br>
             <h4>Description:</h4>
             <p class="article-content">{{ object.job_description }}</p>
             {% if object.user == user %}
