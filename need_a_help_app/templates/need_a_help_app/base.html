@@ -26,6 +26,7 @@
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="{% url 'favorites' %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My favourites</a>
+                      <a class="list-group-item sb" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>
                     </div>
                 </ul>
             </div>
@@ -38,6 +39,7 @@
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
+                      <a class="list-group-item sb" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>
                     </div>
                 </ul>
             </div>
@@ -64,7 +66,8 @@
                   <!-- Navbar Right Side -->
                   <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                      <a class="nav-item nav-link" href="{% url 'logout' %}">Logout {{ user.username }}</a>
+                      <span class="nav-item nav-link">Welcome, {{ user.username }} <a href="{% url 'info' user.id %}"><img class="rounded-circle navbar-img" src="{{ user.profile.photo.url }}"></a></span>
+                      <!-- <a class="nav-item nav-link" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>-->
                     {% else %}
                       <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                       <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>

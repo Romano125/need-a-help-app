@@ -80,6 +80,12 @@ a.article-title:hover {
   margin-bottom: 16px;
 }
 
+.navbar-img {
+  height: 32px;
+  width: 32px;
+  margin-right: 10px;
+}
+
 .account-heading {
   font-size: 2.5rem;
 }
