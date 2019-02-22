@@ -22,11 +22,28 @@
             <h4>Description:</h4>
             <p class="article-content">{{ object.job_description }}</p>
             {% if object.user == user %}
-                <a href="#" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px"><i class="fas fa-pencil-alt"></i>&nbsp Applications</a>
+                <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications</button>
             {% else %}
-                <a href="#" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px"><i class="fas fa-pencil-alt"></i>&nbsp Applications</a>
+                <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications</button>
                 <a href="#" class="btn btn-outline-success mt-1 mb-1"><i class="far fa-check-square"></i>&nbsp Apply</a>
             {% endif %}
           </div>
     </article>
+
+    <!-- Modal -->
+    <div class="modal fade" id="applications" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Applications</strong></h5>
+            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h3 class="text-secondary text-muted" align="center">No results</h3>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}

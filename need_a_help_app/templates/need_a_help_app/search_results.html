@@ -65,7 +65,7 @@
                 <a href="#" class="btn btn-outline-danger"><i class="fas fa-medal fa-3x"></i></a>
             </div>
             <div class="col-sm-3">
-                <a href="#" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
+                <a href="{% url 'requests_user' user.id %}" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
             </div>
             <div class="col-sm-3">
                 <a href="#" class="btn btn-outline-warning"><i class="fas fa-handshake fa-3x"></i></a>
@@ -96,6 +96,9 @@
    <div class="row">
     <div class="col-sm-8">
         <h2>You searched for: <strong>{{ q }}</strong></h2>
+    </div>
+    <div class="col-sm-4" align="right">
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
     </div>
    </div>
    <hr width="100%">
@@ -157,5 +160,30 @@
         {% endif %}
 
     {% endif %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Filter By</strong></h5>
+            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4>Price: min - max</h4>
+            <div class="rating">
+                <h4>:Popularity </h4><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+            </div>
+            <h4>Knowledges: None</h4>
+            <h4>Address: -</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
 

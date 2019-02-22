@@ -36,36 +36,13 @@
     </div>
     <div class="container">
     <br/>
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8">
-                <form class="card card-sm">
-                    <div class="card-body row no-gutters align-items-center">
-                        <div class="col-auto">
-                            <i class="fas fa-search h4 text-body"></i>&nbsp&nbsp
-                        </div>
-                        <!--end of col-->
-                        <div class="col">
-                            <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Where is a problem?">
-                        </div>&nbsp&nbsp
-                        <!--end of col-->
-                        <div class="col-auto">
-                            <button class="btn btn-lg btn-success" type="submit">Search</button>
-                        </div>
-                        <!--end of col-->
-                    </div>
-                </form>
-            </div>
-            <!--end of col-->
-        </div>
-    </div>
-    <hr width="100%">
     <div class="container p-4">
         <div class="row" align="center">
             <div class="col-sm-3">
                 <a href="#" class="btn btn-outline-danger"><i class="fas fa-medal fa-3x"></i></a>
             </div>
             <div class="col-sm-3">
-                <a href="#" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
+                <a href="{% url 'requests_user' user.id %}" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
             </div>
             <div class="col-sm-3">
                 <a href="#" class="btn btn-outline-warning"><i class="fas fa-handshake fa-3x"></i></a>
