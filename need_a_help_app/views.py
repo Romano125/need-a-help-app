@@ -13,6 +13,7 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def home(request):
@@ -175,7 +176,12 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @login_required
 def search(request):
     q = request.GET.get('q')
+    users = User.objects.all()
     if q:
-        user = Profile.objects.filter(profession__startswith=q)
+        user = Profile.objects.filter(Q(profession__icontains=q))
 
-    return render_to_response('need_a_help_app/search_results.html', {'user': user, 'q': q})
+    f = 0
+    if user:
+        f = 1
+
+    return render(request, 'need_a_help_app/search_results.html', {'users': users, 'q': q, 'f': f})

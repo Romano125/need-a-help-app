@@ -38,14 +38,14 @@
     <br/>
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-8">
-                <form class="card card-sm">
+                <form class="card card-sm" action="{% url 'search' %}" method="GET">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto">
                             <i class="fas fa-search h4 text-body"></i>&nbsp&nbsp
                         </div>
                         <!--end of col-->
                         <div class="col">
-                            <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Where is a problem?">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" type="text" value='{{ request.GET.q }}' placeholder="Where is a problem?">
                         </div>&nbsp&nbsp
                         <!--end of col-->
                         <div class="col-auto">
@@ -93,20 +93,47 @@
 {% endblock %}
 
 {% block content %}
-    <div class="content-section mt-3">
-        {% if error %}
-            <div class="alert alert-warning">
-                {{ error }}
-            </div>
-        {% endif %}
-    </div>
-
    <div class="row">
     <div class="col-sm-8">
-        <h2>{{ user.profession }}</h2>
+        <h2>You searched for: <strong>{{ q }}</strong></h2>
     </div>
    </div>
    <hr width="100%">
+   {% if f %}
+       {% for us in users %}
+            {% if us.profile.profession == q %}
+                <div class="row">
+                    <div class="col-sm-3">
+                        <a href="{% url 'info' us.id %}">
+                            <img class="rounded-circle account-img" src="{{ us.profile.photo.url }}">
+                        </a>
+                        <div class="row">
+                            <div class="col-sm-10" align="center">
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 pl-5">
+                        <h1>{{ us.first_name }} {{ us.last_name }}</h1>
+                        <small class="text-secondary text-muted">Profession: {{ us.profile.profession }}</small><br>
+                        <small class="text-secondary text-muted">Cost: {{ us.profile.costs }} €</small><br>
+                        <small class="text-secondary text-muted">Address: {{ us.profile.address }}</small><br>
+                    </div>
+                    <div class="col-sm-4 pt-5" align="right">
+                        <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                        <a href="{% url 'info' us.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
+                    </div>
+                </div>
+                <hr width="100%">
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <h3 class="text-secondary text-muted" align="center">No results</h3>
+    {% endif %}
 
     {% if is_paginated %}
 

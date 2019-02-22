@@ -38,14 +38,14 @@
     <br/>
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-8">
-                <form class="card card-sm">
+                <form class="card card-sm" action="{% url 'search' %}" method="GET">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto">
                             <i class="fas fa-search h4 text-body"></i>&nbsp&nbsp
                         </div>
                         <!--end of col-->
                         <div class="col">
-                            <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Where is a problem?">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" type="text" value='{{ request.GET.q }}' placeholder="Where is a problem?">
                         </div>&nbsp&nbsp
                         <!--end of col-->
                         <div class="col-auto">
@@ -115,13 +115,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4 pl-5">
+                            <div class="col-sm-5 pl-5">
                                 <h1>{{ rep.first_name }} {{ rep.last_name }}</h1>
                                 <small class="text-secondary text-muted">Profession: {{ rep.profile.profession }}</small><br>
                                 <small class="text-secondary text-muted">Cost: 155</small><br>
                                 <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>
                             </div>
-                            <div class="col-sm-5 pt-5" align="right">
+                            <div class="col-sm-4 pt-5" align="right">
                                 <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
                                 <a href="{% url 'info' rep.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
                             </div>
