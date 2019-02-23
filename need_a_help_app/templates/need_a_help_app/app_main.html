@@ -222,7 +222,7 @@
     <h2>All jobs</h2>
     <hr width="100%">
     {% for us in users %}
-        {% for u in us.requests_set.all %}
+        {% for u in us.requests_set.all|dictsortreversed:'date' %}
             <div class="row">
                 <div class="col-sm-3">
                     <a href="{% url 'request_detail' u.id %}">
