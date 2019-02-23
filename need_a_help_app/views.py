@@ -138,6 +138,24 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
 
 class RequestDetailView(LoginRequiredMixin, DetailView):
     model = Requests
+    template_name = 'user/requests_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RequestDetailView, self).get_context_data(**kwargs)
+
+        req_id = self.kwargs['pk']
+        user_req = self.request.user
+        user_log = User.objects.filter(username=user_req)
+        req = Requests.objects.all()
+
+        for r in req:
+            if req_id == r.id:
+                r.seen = True
+                r.save()
+
+        context_data['req'] = req
+
+        return context_data
 
 
 class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):

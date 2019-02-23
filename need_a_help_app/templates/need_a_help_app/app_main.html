@@ -232,7 +232,9 @@
                 <div class="col-sm-7 pl-5">
                     <a class="mr-2" href="{% url 'info' u.user.id %}">{{ u.user }}</a>
                     <small class="text-muted">{{ u.date|date:'F d, Y H:i' }}</small>&nbsp
-                    <span class="badge badge-info">New</span>
+                    {% if u.seen == False %}
+                        <span class="badge badge-info">New</span>
+                    {% endif %}
                     <hr width="100%">
                     <h1>{{ u.job_title }}</h1>
                     <small class="text-secondary text-muted">Required knowladges: {{ u.required_knowledges }}</small><br>

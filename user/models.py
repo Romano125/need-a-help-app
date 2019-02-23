@@ -72,6 +72,7 @@ class Requests(models.Model):
     job_description = models.TextField(max_length=1000, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     photo = models.ImageField(default='default_request.jpg', upload_to='requests_user')
+    seen = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{ self.user.username } Request'
