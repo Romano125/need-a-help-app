@@ -184,4 +184,4 @@ def search(request):
     if prof:
         f = 1
 
-    return render(request, 'need_a_help_app/search_results.html', {'users': users, 'q': q, 'f': f})
+    return render(request, 'need_a_help_app/search_results.html', {'users': users, 'q': q, 'f': f, 'prof': prof})

@@ -96,6 +96,7 @@
    <div class="row">
     <div class="col-sm-8">
         <h2>You searched for: <strong>{{ q }}</strong></h2>
+        <h2><strong>{{ prof.first.profession }}</strong></h2>
     </div>
     <div class="col-sm-4" align="right">
         <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
@@ -104,7 +105,7 @@
    <hr width="100%">
    {% if f %}
        {% for us in users %}
-            {% if us.profile.profession == q %}
+            {% if us.profile.profession == prof.first.profession %}
                 <div class="row">
                     <div class="col-sm-3">
                         <a href="{% url 'info' us.id %}">
