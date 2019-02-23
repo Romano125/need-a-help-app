@@ -72,10 +72,18 @@ class Requests(models.Model):
     job_description = models.TextField(max_length=1000, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     photo = models.ImageField(default='default_request.jpg', upload_to='requests_user')
-    seen = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{ self.user.username } Request'
 
     def get_absolute_url(self):
         return reverse('request_detail', kwargs={'pk': self.pk})
+
+
+class SeenRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    request = models.ForeignKey(Requests, on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{ self.user.username } seen { self.request.job_title }'

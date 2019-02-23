@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.http import HttpResponse
 from django.views import generic
-from user.models import Profile, UserFavourite, Requests
+from user.models import Profile, UserFavourite, Requests, SeenRequest
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -27,6 +27,16 @@ class AppMainView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return User.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context_data = super(AppMainView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        reqq_seen = SeenRequest.objects.filter(user=us)
+
+        context_data['seen_r'] = reqq_seen
+
+        return context_data
 
 
 class InfoDetailView(LoginRequiredMixin, DetailView):
@@ -144,16 +154,35 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         context_data = super(RequestDetailView, self).get_context_data(**kwargs)
 
         req_id = self.kwargs['pk']
-        user_req = self.request.user
-        user_log = User.objects.filter(username=user_req)
-        req = Requests.objects.all()
+        user_log = self.request.user
+        req = Requests.objects.filter(id=req_id)
+        reqq_seen = SeenRequest.objects.all()
+        us = User.objects.all()
 
-        for r in req:
-            if req_id == r.id:
-                r.seen = True
-                r.save()
+        f = 0
+        for r in reqq_seen:
+            if r.user == user_log and req_id == r.request.id and not r.seen:
+                req_to_save = r
+                f = 1
 
-        context_data['req'] = req
+        c = 0
+        if user_log.profile.role == 'client':
+            for u in us:
+                for r in reqq_seen:
+                    if r.user == u and req_id == r.request.id:
+                        c += 1
+
+            if c != us.count():
+                for u in us:
+                    seen_req = SeenRequest(user=u, request=req.first(), seen=False)
+                    seen_req.save()
+            f = 2
+
+        if f == 1:
+            req_to_save.seen = True
+            req_to_save.save()
+
+        context_data['s'] = reqq_seen
 
         return context_data
 
