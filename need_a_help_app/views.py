@@ -36,15 +36,14 @@ class AppMainView(LoginRequiredMixin, ListView):
         reqq_seen = SeenRequest.objects.filter(user=us)
 
         hired = Hire.objects.filter(user=us)
-        users = User.objects.all()
+        uss = User.objects.all()
 
         f_hired = []
-        for u in users:
+        for u in uss:
             for h in hired:
                 if h.user == us and h.repairman == u.id and h.status == 'pending':
                     f_hired.append(u)
 
-        f_hired = Hire.objects.filter(user=us).count()
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
 
@@ -191,7 +190,7 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
                     if r.user == u and req_id == r.request.id:
                         c += 1
 
-            if c != us.count():
+            if c != us.count() and f == 0:
                 for u in us:
                     seen_req = SeenRequest(user=u, request=req.first(), seen=False)
                     seen_req.save()

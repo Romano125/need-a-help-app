@@ -186,7 +186,7 @@
                     <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>
                 </div>
                 <div class="col-sm-4 pt-5" align="right">
-                    {% if f_hired %}
+                    {% if rep in f_hired %}
                         <a href="{% url 'hire_repairman' user.id rep.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
                     {% else %}
                         <a href="{% url 'hire_repairman' user.id rep.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
