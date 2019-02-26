@@ -87,3 +87,15 @@ class SeenRequest(models.Model):
 
     def __str__(self):
         return f'{ self.user.username } seen { self.request.job_title }'
+
+
+class Hire(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    repairman = models.IntegerField()
+    status = models.CharField(max_length=100, default='pending')
+    accepted = models.BooleanField(default=False)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        rep = User.objects.filter(id=self.repairman).first()
+        return f'{ self.user.username } hired { rep.username }'

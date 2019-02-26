@@ -72,29 +72,56 @@
 {% block content %}
    <div class="row">
     <div class="col-sm-8">
-        <h2>My requests</h2>
+        <h2>Hired list</h2>
     </div>
     <div class="col-sm-4" align="right">
-        <a class="btn btn-info" href="{% url 'add_request' %}"><i class="fas fa-plus-circle"></i>&nbsp Add request</a>
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
     </div>
    </div>
    <hr width="100%">
-   {% if req %}
-       {% for i in req %}
+   {% if hir %}
+       {% for i in hir %}
             <div class="row">
                 <div class="col-sm-3">
-                    <a href="{% url 'request_detail' i.id %}">
-                        <img class="rounded-circle account-img" src="{{ i.photo.url }}">
-                    </a>
+                    {% for j in us %}
+                        {% if j.id == i.repairman %}
+                            <a href="{% url 'info' j.id %}">
+                                <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col-sm-10" align="center">
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-7 pl-5">
-                    <h1>{{ i.job_title }}</h1>
-                    <small class="text-secondary text-muted">Required knowladges: {{ i.required_knowledges }}</small><br>
-                    <small class="text-secondary text-muted">Price: {{ i.price }} €</small><br>
-                    <small class="text-secondary text-muted">Address: {{ i.address }}</small><br>
+                    {% for j in us %}
+                        {% if j.id == i.repairman %}
+                            <h1>{{ j.first_name }} {{ j.last_name }}</h1>
+                        {% endif %}
+                    {% endfor %}
+                    {% if i.status == 'pending' %}
+                        <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
+                    {% else %}
+                        <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
+                    {% endif %}
+                    {% if not i.accepted %}
+                        <small class="text-secondary text-muted">Accepted: <span style="color: red">{{ i.accepted }}</span></small><br>
+                    {% else %}
+                        <small class="text-secondary text-muted">Accepted: <span style="color: green">{{ i.accepted }}</span></small><br>
+                    {% endif %}
+                    <small class="text-secondary text-muted">Date requested: {{ i.date }}</small><br>
+                    <small class="text-secondary text-muted">Price: 100000 €</small><br>
                 </div>
                 <div class="col-sm-2 pt-5" align="right">
-                    <a href="{% url 'request_delete' i.id %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i></a>
+                    <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                    <a href="#" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                 </div>
             </div>
             <hr width="100%">
@@ -125,5 +152,30 @@
         {% endif %}
 
     {% endif %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Filter By</strong></h5>
+            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4>Price: min - max</h4>
+            <div class="rating">
+                <h4>:Popularity </h4><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+            </div>
+            <h4>Knowledges: None</h4>
+            <h4>Address: -</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
 

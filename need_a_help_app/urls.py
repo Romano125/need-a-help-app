@@ -14,4 +14,6 @@ urlpatterns = [
     path('request/<int:pk>/update/', views.RequestUpdateView.as_view(), name='request_update'),
     path('request/<int:pk>/delete/', views.RequestDeleteView.as_view(), name='request_delete'),
     path('search/', views.search, name='search'),
+    path('hire_repairman/<int:user_id>/<int:rep_id>/', views.hire_repairman, name='hire_repairman'),
+    path('hired_user/<int:pk>', views.HiredListView.as_view(), name='hired_user'),
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.http import HttpResponse
 from django.views import generic
-from user.models import Profile, UserFavourite, Requests, SeenRequest
+from user.models import Profile, UserFavourite, Requests, SeenRequest, Hire
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -14,6 +14,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib import messages
 
 
 def home(request):
@@ -34,6 +35,17 @@ class AppMainView(LoginRequiredMixin, ListView):
         us = self.request.user
         reqq_seen = SeenRequest.objects.filter(user=us)
 
+        hired = Hire.objects.filter(user=us)
+        users = User.objects.all()
+
+        f_hired = []
+        for u in users:
+            for h in hired:
+                if h.user == us and h.repairman == u.id and h.status == 'pending':
+                    f_hired.append(u)
+
+        f_hired = Hire.objects.filter(user=us).count()
+        context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
 
         return context_data
@@ -56,7 +68,14 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
             if us.user == user.id and us.repairman == rep_id:
                 f = 1
 
+        hired = Hire.objects.all()
+        f_hired = 0
+        for h in hired:
+            if h.user == user and h.repairman == rep_id and h.status == 'pending':
+                f_hired = 1
+
         context_data['f'] = f
+        context_data['f_hired'] = f_hired
 
         return context_data
 
@@ -232,3 +251,40 @@ def search(request):
         f = 1
 
     return render(request, 'need_a_help_app/search_results.html', {'users': users, 'q': q, 'f': f, 'prof': prof})
+
+
+@login_required
+def hire_repairman(request, user_id, rep_id):
+    f = 0
+    hired = Hire.objects.all()
+    for h in hired:
+        if h.user.id == user_id and h.repairman == rep_id and h.status == 'pending':
+            f = 1
+
+    us = User.objects.filter(id=user_id).first()
+    if f == 0:
+        hire_rep = Hire(user=us, repairman=rep_id)
+        hire_rep.save()
+
+    messages.success(request, f'You\'ve hired repairman successfuly! Wait him to accept!')
+    return redirect('info', pk=rep_id)
+
+
+class HiredListView(LoginRequiredMixin, ListView):
+    model = Hire
+    template_name = 'need_a_help_app/hired_user.html'
+    context_object_name = 'hir'
+    paginate_by = 2
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return Hire.objects.filter(user=user).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(HiredListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+
+        context_data['us'] = users
+
+        return context_data
