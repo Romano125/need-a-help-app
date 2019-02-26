@@ -99,3 +99,13 @@ class Hire(models.Model):
     def __str__(self):
         rep = User.objects.filter(id=self.repairman).first()
         return f'{ self.user.username } hired { rep.username }'
+
+
+class RepairmanRequests(models.Model):
+    repairman = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.IntegerField()
+    request_message = models.CharField(max_length=1000, default='No request')
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{ self.repairman.username } Request'

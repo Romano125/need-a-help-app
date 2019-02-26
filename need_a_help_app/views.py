@@ -1,9 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.http import HttpResponse
 from django.views import generic
-from user.models import Profile, UserFavourite, Requests, SeenRequest, Hire
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.contrib import messages
+from user.models import (
+    Profile,
+    UserFavourite,
+    Requests,
+    SeenRequest,
+    Hire,
+    RepairmanRequests
+)
 from django.views.generic import (
     ListView,
     DetailView,
@@ -11,10 +22,6 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.contrib import messages
 
 
 def home(request):
@@ -261,9 +268,13 @@ def hire_repairman(request, user_id, rep_id):
             f = 1
 
     us = User.objects.filter(id=user_id).first()
+    rep = User.objects.filter(id=rep_id).first()
     if f == 0:
         hire_rep = Hire(user=us, repairman=rep_id)
         hire_rep.save()
+        mess = us.username + ' needs your help in solving a problem!'
+        req_mess = RepairmanRequests(repairman=rep, user=user_id, request_message=mess)
+        req_mess.save()
 
     messages.success(request, f'You\'ve hired repairman successfuly! Wait him to accept!')
     return redirect('info', pk=rep_id)
@@ -281,6 +292,26 @@ class HiredListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super(HiredListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+
+        context_data['us'] = users
+
+        return context_data
+
+
+class RepairmanRequestsListView(LoginRequiredMixin, ListView):
+    model = RepairmanRequests
+    template_name = 'need_a_help_app/requests_repairman.html'
+    context_object_name = 'req_rep'
+    paginate_by = 2
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return RepairmanRequests.objects.filter(repairman=user).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RepairmanRequestsListView, self).get_context_data(**kwargs)
 
         users = User.objects.all()
 

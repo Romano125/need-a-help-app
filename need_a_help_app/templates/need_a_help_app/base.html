@@ -84,9 +84,141 @@
             {% endblock %}
 
             {% if user.is_authenticated and user.profile.role == 'client' %}
-              {% block app_client %}{% endblock %}
+              {% block app_client %}
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                  <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                  </ol>
+                  <div class="carousel-inner">
+
+                        <div class="carousel-item active">
+                            <img class="slide-img" src="https://www.bing.com/th?id=OIP.GdOM_bEhNhmrmAG4XTVTiQHaE8&pid=Api" alt="First slide">
+                        </div>
+                        <div class="carousel-item">
+
+
+                                <img class="slide-img" src="https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX1829407.jpg" alt="Second slide">
+
+                        </div>
+                        <div class="carousel-item">
+
+
+                                <img class="slide-img" src="http://www.leevalley.com/us/images/item/Woodworking/Planes/05p5651s08.jpg" alt="Third slide">
+
+                        </div>
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+                <div class="container">
+                <br/>
+                <div class="container p-4">
+                    <div class="row" align="center">
+                        <div class="col-sm-3">
+                            <a href="#" class="btn btn-outline-danger"><i class="fas fa-medal fa-3x"></i></a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'requests_user' user.id %}" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'hired_user' user.id %}" class="btn btn-outline-warning"><i class="fas fa-handshake fa-3x"></i></a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="#" class="btn btn-outline-success"><i class="far fa-check-circle fa-3x"></i></a>
+                        </div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-sm-3">
+                            <h5>Top rated</h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <h5>My requests</h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <h5>Hired</h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <h5>Done jobs</h5>
+                        </div>
+                    </div>
+                </div>
+                <hr width="100%">
+              {% endblock %}
             {% elif user.is_authenticated and user.profile.role == 'repairman' %}
-              {% block app_repairman %}{% endblock %}
+              {% block app_repairman %}
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                  <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                  </ol>
+                  <div class="carousel-inner">
+
+                        <div class="carousel-item active">
+                            <img class="slide-img" src="https://www.bing.com/th?id=OIP.GdOM_bEhNhmrmAG4XTVTiQHaE8&pid=Api" alt="First slide">
+                        </div>
+                        <div class="carousel-item">
+
+
+                                <img class="slide-img" src="https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX1829407.jpg" alt="Second slide">
+
+                        </div>
+                        <div class="carousel-item">
+
+
+                                <img class="slide-img" src="http://www.leevalley.com/us/images/item/Woodworking/Planes/05p5651s08.jpg" alt="Third slide">
+
+                        </div>
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+                <div class="container p-4">
+                    <div class="row" align="center">
+                        <div class="col-sm-3">
+                            <a href="#" class="btn btn-outline-warning"><i class="fas fa-star fa-2x"></i></a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'requests_repairman' user.id %}" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="#" class="btn btn-outline-secondary"><i class="fas fa-handshake fa-3x"></i></a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="#" class="btn btn-outline-success"><i class="far fa-check-circle fa-3x"></i></a>
+                        </div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-sm-3">
+                            <h5>Popularity</h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <h5>Requests</h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <h5>Active</h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <h5>Done jobs</h5>
+                        </div>
+                    </div>
+                </div>
+                <hr width="100%">
+              {% endblock %}
             {% endif %}
 
             <main role="main" class="container">

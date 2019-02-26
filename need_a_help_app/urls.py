@@ -16,4 +16,5 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('hire_repairman/<int:user_id>/<int:rep_id>/', views.hire_repairman, name='hire_repairman'),
     path('hired_user/<int:pk>', views.HiredListView.as_view(), name='hired_user'),
+    path('requests_repairman/<int:pk>', views.RepairmanRequestsListView.as_view(), name='requests_repairman'),
 ]
