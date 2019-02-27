@@ -54,7 +54,7 @@
                     {% if i.status == 'pending' %}
                         <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="far fa-check-square"></i></a>
                     {% else %}
-                        <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                        <button type="button" class="btn btn-outline-success btn-sm mt-1 mb-1" data-toggle="modal" data-target="#done_job"><i class="far fa-check-square"></i></button>
                     {% endif %}
                     <a href="#" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                 </div>
@@ -108,6 +108,29 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-dark">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal done -->
+    <div class="modal fade" id="done_job" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Rate</strong></h5>
+            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="rating">
+                <h4>:My rate </h4><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+            </div>
+            <h4>Leave feedback: </h4> <a href="#" class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedback</a>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-success">Done</a>
           </div>
         </div>
       </div>
