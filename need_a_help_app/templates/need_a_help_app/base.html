@@ -22,11 +22,9 @@
                 <ul class="sidebar-nav">
                     <div class="list-group pt-2">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
-                      <a class="list-group-item sb" href="{% url 'info' user.id %}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; My profile</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="{% url 'favorites' %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My favourites</a>
-                      <a class="list-group-item sb" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>
                     </div>
                 </ul>
             </div>
@@ -35,11 +33,9 @@
                 <ul class="sidebar-nav">
                     <div class="list-group pt-2">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
-                      <a class="list-group-item sb" href="{% url 'info' user.id %}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; My profile</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
-                      <a class="list-group-item sb" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>
                     </div>
                 </ul>
             </div>
@@ -66,7 +62,11 @@
                   <!-- Navbar Right Side -->
                   <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                      <span class="nav-item nav-link">Welcome, {{ user.username }} <a href="{% url 'info' user.id %}"><img class="rounded-circle navbar-img" src="{{ user.profile.photo.url }}"></a></span>
+                      <span class="nav-item nav-link">Welcome, {{ user.username }}
+                        <img class="rounded-circle navbar-img popOver" data-title="Logged in as {{ user.profile.role }}" data-content="
+                            <a class='list-group-item sb' href='{% url 'info' user.id %}'><i class='fa fa-user fa-fw' aria-hidden='true'></i>&nbsp; My profile</a>
+                            <a class='list-group-item sb' href='{% url 'logout' %}'><i class='fas fa-power-off'></i>&nbsp Logout</a>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click" src="{{ user.profile.photo.url }}">
+                      </span>
                       <!-- <a class="nav-item nav-link" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>-->
                     {% else %}
                       <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
@@ -258,6 +258,10 @@
               e.preventDefault();
               document.getElementById('wrapper').classList.toggle('menuDisplayed');
           });
+          $(document).ready(function () {
+              $('.popOver').popover();
+          });
+          $('.tool1').tooltip({ boundary: 'window' })
         </script>
     </body>
 </html>

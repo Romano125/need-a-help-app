@@ -51,7 +51,15 @@
             <h4>Phone number: {{ info.profile.phone_number }}</h4>
             <h4>Birth_date: {{ info.profile.birth_date }}</h4>
             <h4>Number_hired(count): 55</h4>
-            <h4>Badges: None</h4>
+            <h4>Badges:
+              <i class="fas fa-user-check tool1" data-toggle="tooltip" data-placement="bottom" title="Rookie user - 5 hires"></i>
+              <i class="far fa-paper-plane tool1" data-toggle="tooltip" data-placement="bottom" title="Advance user - 25 hires"></i>
+              <span class="text-muted">
+                <i class="fas fa-user-ninja tool1" data-toggle="tooltip" data-placement="bottom" title="Ninja award - 100 hires"></i>
+                <i class="far fa-star tool1" data-toggle="tooltip" data-placement="bottom" title="Star user - 250 hires"></i>
+                <i class="fas fa-award tool1" data-toggle="tooltip" data-placement="bottom" title="Master user - >500 hires"></i>
+              </span>
+            </h4>
           {% endif %}
         </fieldset>
         {% if info.profile.role == 'repairman' and user.id != info.id %}
