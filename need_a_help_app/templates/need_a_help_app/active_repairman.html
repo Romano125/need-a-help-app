@@ -73,12 +73,12 @@
 {% block content %}
    <div class="row">
     <div class="col-sm-8">
-        <h2>My requests</h2>
+        <h2>Active jobs</h2>
     </div>
    </div>
    <hr width="100%">
-   {% if req_rep %}
-       {% for i in req_rep %}
+   {% if act_rep %}
+       {% for i in act_rep %}
             <div class="row">
                 <div class="col-sm-3">
                     {% for j in us %}
@@ -102,7 +102,7 @@
                 <div class="col-sm-2 pt-5" align="right">
                     {% for j in us %}
                         {% if i.user == j.id %}
-                            <a href="{% url 'job_accept' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                            <a href="{% url 'job_done' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
                         {% endif %}
                     {% endfor %}
                     <a href="#" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>

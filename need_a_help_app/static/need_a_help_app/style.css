@@ -288,3 +288,14 @@ header.masthead .masthead-content .masthead-subheading {
    position: absolute;
 }
 
+/*badge at top of the icon*/
+
+.badge-notify{
+   background: red;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -20px;
+   left: -28px;
+}
+

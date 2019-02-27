@@ -73,12 +73,12 @@
 {% block content %}
    <div class="row">
     <div class="col-sm-8">
-        <h2>My requests</h2>
+        <h2>Done jobs</h2>
     </div>
    </div>
    <hr width="100%">
-   {% if req_rep %}
-       {% for i in req_rep %}
+   {% if don_rep %}
+       {% for i in don_rep %}
             <div class="row">
                 <div class="col-sm-3">
                     {% for j in us %}
@@ -98,14 +98,6 @@
                     <small class="text-muted">{{ i.date|date:'F d, Y H:i' }}</small>&nbsp
                     <hr width="100%">
                     <h4 class="text-secondary">{{ i.request_message }}</h4><br>
-                </div>
-                <div class="col-sm-2 pt-5" align="right">
-                    {% for j in us %}
-                        {% if i.user == j.id %}
-                            <a href="{% url 'job_accept' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
-                        {% endif %}
-                    {% endfor %}
-                    <a href="#" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                 </div>
             </div>
             <hr width="100%">

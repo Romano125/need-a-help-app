@@ -53,6 +53,7 @@ class AppMainView(LoginRequiredMixin, ListView):
 
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
+        context_data['cnt'] = self.request.session.get('cnt')
 
         return context_data
 
@@ -308,10 +309,104 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-        return RepairmanRequests.objects.filter(repairman=user).order_by('-date')
+        return RepairmanRequests.objects.filter(repairman=user, seen=False).order_by('-date')
 
     def get_context_data(self, **kwargs):
         context_data = super(RepairmanRequestsListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+        us = self.request.user
+        req = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+
+        context_data['us'] = users
+        context_data['cnt'] = req
+        self.request.session['cnt'] = req
+
+        return context_data
+
+
+@login_required
+def job_accept(request, user_id, rep_id):
+    users = User.objects.all()
+    rep_req = RepairmanRequests.objects.filter(user=user_id).order_by('-date')
+
+    for i in rep_req:
+        f = 0
+        for j in users:
+            if i.repairman == j:
+                i.seen = True
+                i.active = True
+                i.save()
+                f = 1
+        if f:
+            break
+
+    us = User.objects.filter(id=user_id).first()
+    hir = Hire.objects.filter(user=us, repairman=rep_id).order_by('-date').first()
+    hir.accepted = True
+    hir.save()
+
+    messages.success(request, f'You\'ve accepted a job from { us.username }!')
+    return redirect('active_repairman', pk=rep_id)
+
+
+class RepairmanActiveListView(LoginRequiredMixin, ListView):
+    model = RepairmanRequests
+    template_name = 'need_a_help_app/active_repairman.html'
+    context_object_name = 'act_rep'
+    paginate_by = 2
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return RepairmanRequests.objects.filter(repairman=user, active=True).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RepairmanActiveListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+
+        context_data['us'] = users
+
+        return context_data
+
+
+@login_required
+def job_done(request, user_id, rep_id):
+    users = User.objects.all()
+    rep_req = RepairmanRequests.objects.filter(user=user_id).order_by('-date')
+
+    for i in rep_req:
+        f = 0
+        for j in users:
+            if i.repairman == j:
+                i.active = False
+                i.done = True
+                i.save()
+                f = 1
+        if f:
+            break
+
+    us = User.objects.filter(id=user_id).first()
+    hir = Hire.objects.filter(user=us, repairman=rep_id).order_by('-date').first()
+    hir.status = 'done'
+    hir.save()
+
+    messages.success(request, f'You\'ve finished a job for { us.username }!')
+    return redirect('done_repairman', pk=rep_id)
+
+
+class RepairmanDoneListView(LoginRequiredMixin, ListView):
+    model = RepairmanRequests
+    template_name = 'need_a_help_app/done_repairman.html'
+    context_object_name = 'don_rep'
+    paginate_by = 2
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return RepairmanRequests.objects.filter(repairman=user, done=True).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RepairmanDoneListView, self).get_context_data(**kwargs)
 
         users = User.objects.all()
 

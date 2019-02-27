@@ -106,6 +106,9 @@ class RepairmanRequests(models.Model):
     user = models.IntegerField()
     request_message = models.CharField(max_length=1000, default='No request')
     date = models.DateTimeField(auto_now_add=True)
+    seen = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    done = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{ self.repairman.username } Request'
