@@ -13,7 +13,8 @@ from user.models import (
     Requests,
     SeenRequest,
     Hire,
-    RepairmanRequests
+    RepairmanRequests,
+    Appliccation
 )
 from django.views.generic import (
     ListView,
@@ -208,7 +209,12 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
             req_to_save.seen = True
             req_to_save.save()
 
+        app = Appliccation.objects.filter(request=req.first())
+        cnt = Appliccation.objects.filter(request=req.first()).count()
+
         context_data['s'] = reqq_seen
+        context_data['app'] = app
+        context_data['cnt'] = cnt
 
         return context_data
 
@@ -413,3 +419,18 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         context_data['us'] = users
 
         return context_data
+
+def repairman_apply(request, us_id, req_id):
+    us = User.objects.filter(id=us_id).first()
+    req = Requests.objects.filter(id=req_id).first()
+    app = Appliccation.objects.filter(repairman=us, request=req)
+
+    if not app:
+        app_save = Appliccation(repairman=us, request=req)
+        app_save.save()
+        messages.success(request, f'You\'ve successfuly applied for a job { req.job_title }!')
+        return redirect('request_detail', pk=req.id)
+    else:
+        messages.warning(request, f'You\'ve already applied for a job { req.job_title }!')
+        return redirect('request_detail', pk=req.id)
+

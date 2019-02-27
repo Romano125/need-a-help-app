@@ -21,4 +21,5 @@ urlpatterns = [
     path('active_repairman/<int:pk>', views.RepairmanActiveListView.as_view(), name='active_repairman'),
     path('job_done_repairman/<int:user_id>/<int:rep_id>/', views.job_done, name='job_done'),
     path('done_repairman/<int:pk>', views.RepairmanDoneListView.as_view(), name='done_repairman'),
+    path('repairman_apply/<int:us_id>/<int:req_id>/', views.repairman_apply, name='repairman_apply'),
 ]

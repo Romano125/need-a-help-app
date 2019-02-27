@@ -112,3 +112,8 @@ class RepairmanRequests(models.Model):
 
     def __str__(self):
         return f'{ self.repairman.username } Request'
+
+
+class Appliccation(models.Model):
+    repairman = models.ForeignKey(User, on_delete=models.CASCADE)
+    request = models.ForeignKey(Requests, on_delete=models.CASCADE)
