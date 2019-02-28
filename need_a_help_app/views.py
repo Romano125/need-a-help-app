@@ -304,7 +304,7 @@ class HiredListView(LoginRequiredMixin, ListView):
         context_data = super(HiredListView, self).get_context_data(**kwargs)
 
         users = User.objects.all()
-        job = JobHire.objects.filter(status='pending').order_by('-date_hired')
+        job = JobHire.objects.order_by('-date_hired')
 
         context_data['us'] = users
         context_data['job'] = job
@@ -423,8 +423,11 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         context_data = super(RepairmanDoneListView, self).get_context_data(**kwargs)
 
         users = User.objects.all()
+        us = self.request.user
+        job_done = JobHire.objects.filter(repairman=us, status='done')
 
         context_data['us'] = users
+        context_data['done'] = job_done
 
         return context_data
 
@@ -459,3 +462,16 @@ def posted_job_hire(request, us_id, req_id):
         job_save.save()
         messages.success(request, f'You\'ve hired { us.username } for a job { req.job_title }!')
         return redirect('hired_user', pk=req.user.id)
+
+
+@login_required
+def posted_job_done(request, us_id, req_id):
+    us = User.objects.filter(id=us_id).first()
+    req = Requests.objects.filter(id=req_id).first()
+    job = JobHire.objects.filter(repairman=us, request=req).first()
+
+    job.status = 'done'
+    job.save()
+
+    messages.success(request, f'You\'ve finished a job { req.job_title } for { req.user.username }!')
+    return redirect('done_repairman', pk=us.id)

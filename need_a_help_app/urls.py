@@ -23,4 +23,5 @@ urlpatterns = [
     path('done_repairman/<int:pk>', views.RepairmanDoneListView.as_view(), name='done_repairman'),
     path('repairman_apply/<int:us_id>/<int:req_id>/', views.repairman_apply, name='repairman_apply'),
     path('posted_job_hire/<int:us_id>/<int:req_id>/', views.posted_job_hire, name='posted_job_hire'),
+    path('posted_job_done/<int:us_id>/<int:req_id>/', views.posted_job_done, name='posted_job_done'),
 ]
