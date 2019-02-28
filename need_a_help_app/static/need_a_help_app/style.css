@@ -299,3 +299,27 @@ header.masthead .masthead-content .masthead-subheading {
    left: -28px;
 }
 
+/*applications style*/
+
+.app-img {
+  height: 65px;
+  width: 65px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+/*menu at hired*/
+
+.hire {
+  color: #001a00;
+}
+
+.hire:hover {
+  color: #006000;
+}
+
+#pills-list-tab.active, #pills-jobs-tab.active, #pills-job-tab.active, #pills-req-tab.active {
+  background-color: #001a00;
+  color: #ccffcc;
+}
+

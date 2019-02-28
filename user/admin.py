@@ -6,7 +6,8 @@ from .models import (
     SeenRequest,
     Hire,
     RepairmanRequests,
-    Appliccation
+    Appliccation,
+    JobHire
 )
 
 # Register your models here.
@@ -17,3 +18,4 @@ admin.site.register(SeenRequest)
 admin.site.register(Hire)
 admin.site.register(RepairmanRequests)
 admin.site.register(Appliccation)
+admin.site.register(JobHire)

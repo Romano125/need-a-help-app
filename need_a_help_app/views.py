@@ -14,7 +14,8 @@ from user.models import (
     SeenRequest,
     Hire,
     RepairmanRequests,
-    Appliccation
+    Appliccation,
+    JobHire
 )
 from django.views.generic import (
     ListView,
@@ -211,10 +212,12 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
 
         app = Appliccation.objects.filter(request=req.first())
         cnt = Appliccation.objects.filter(request=req.first()).count()
+        vis = Requests.objects.filter(id=req_id).first()
 
         context_data['s'] = reqq_seen
         context_data['app'] = app
         context_data['cnt'] = cnt
+        context_data['vis'] = vis.visible
 
         return context_data
 
@@ -301,8 +304,10 @@ class HiredListView(LoginRequiredMixin, ListView):
         context_data = super(HiredListView, self).get_context_data(**kwargs)
 
         users = User.objects.all()
+        job = JobHire.objects.filter(status='pending').order_by('-date_hired')
 
         context_data['us'] = users
+        context_data['job'] = job
 
         return context_data
 
@@ -370,8 +375,11 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         context_data = super(RepairmanActiveListView, self).get_context_data(**kwargs)
 
         users = User.objects.all()
+        us = self.request.user
+        job = JobHire.objects.filter(repairman=us, status='pending')
 
         context_data['us'] = users
+        context_data['job'] = job
 
         return context_data
 
@@ -420,6 +428,8 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
 
         return context_data
 
+
+@login_required
 def repairman_apply(request, us_id, req_id):
     us = User.objects.filter(id=us_id).first()
     req = Requests.objects.filter(id=req_id).first()
@@ -434,3 +444,18 @@ def repairman_apply(request, us_id, req_id):
         messages.warning(request, f'You\'ve already applied for a job { req.job_title }!')
         return redirect('request_detail', pk=req.id)
 
+
+@login_required
+def posted_job_hire(request, us_id, req_id):
+    us = User.objects.filter(id=us_id).first()
+    req = Requests.objects.filter(id=req_id).first()
+    job = JobHire.objects.filter(repairman=us, request=req)
+
+    req.visible = False
+    req.save()
+
+    if not job:
+        job_save = JobHire(repairman=us, request=req)
+        job_save.save()
+        messages.success(request, f'You\'ve hired { us.username } for a job { req.job_title }!')
+        return redirect('hired_user', pk=req.user.id)

@@ -24,11 +24,13 @@
             <small class="text-muted">Address: {{ object.address }}</small><br><br>
             <h4>Description:</h4>
             <p class="article-content">{{ object.job_description }}</p>
-            {% if object.user == user %}
-                <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications ( {{ cnt }} )</button>
-            {% else %}
-                <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications ( {{ cnt }} )</button>
-                <a href="{% url 'repairman_apply' user.id object.id %}" class="btn btn-outline-success mt-1 mb-1"><i class="far fa-check-square"></i>&nbsp Apply</a>
+            {% if vis %}
+              {% if object.user == user %}
+                  <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications ( {{ cnt }} )</button>
+              {% else %}
+                  <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications ( {{ cnt }} )</button>
+                  <a href="{% url 'repairman_apply' user.id object.id %}" class="btn btn-outline-success mt-1 mb-1"><i class="far fa-check-square"></i>&nbsp Apply</a>
+              {% endif %}
             {% endif %}
           </div>
     </article>
@@ -49,33 +51,33 @@
                 <div class="row">
                   <div class="col-sm-3">
                       <a href="{% url 'info' a.repairman.id %}">
-                          <img class="rounded-circle account-img" src="{{ a.repairman.profile.photo.url }}">
+                          <img class="rounded-circle app-img" src="{{ a.repairman.profile.photo.url }}">
                       </a>
                       <div class="row">
                           <div class="col-sm-10" align="center">
-                              <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                              <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                              <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                              <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                              <i class="fas fa-star" aria-hidden="true"></i>
+                              <i class="fas fa-star" style="color: #ffd633; font-size: xx-small;" aria-hidden="true"></i>
+                              <i class="fas fa-star" style="color: #ffd633; font-size: xx-small;" aria-hidden="true"></i>
+                              <i class="fas fa-star" style="color: #ffd633; font-size: xx-small;" aria-hidden="true"></i>
+                              <i class="fas fa-star" style="color: #ffd633; font-size: xx-small;" aria-hidden="true"></i>
+                              <i class="fas fa-star" style="font-size: xx-small;" aria-hidden="true"></i>
                           </div>
                       </div>
                   </div>
                   <div class="col-sm-5 pl-5">
-                      <h1>{{ a.repairman.first_name }} {{ a.repairman.last_name }}</h1>
+                      <h5>{{ a.repairman.first_name }} {{ a.repairman.last_name }}</h5>
                       <small class="text-secondary text-muted">Profession: {{ a.repairman.profile.profession }}</small><br>
                       <small class="text-secondary text-muted">Cost: {{ a.repairman.profile.costs }} €</small><br>
                       <small class="text-secondary text-muted">Address: {{ a.repairman.profile.address }}</small><br>
                   </div>
-                  <div class="col-sm-4 pt-5" align="right">
+                  <div class="col-sm-4 pt-4" align="right">
                       <!--{% if rep in f_hired %}
                           <a href="hire" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
                       {% else %}
                           <a href="hire" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
                       {% endif %}-->
                       {% if user.profile.role == 'client' %}
-                        <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
-                        <a href="{% url 'info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
+                        <a href="{% url 'posted_job_hire' a.repairman.id object.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i>&nbsp Hire</a>
+                        <a href="{% url 'info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
                       {% endif %}
                   </div>
                 </div>
