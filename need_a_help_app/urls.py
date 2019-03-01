@@ -25,4 +25,6 @@ urlpatterns = [
     path('posted_job_hire/<int:us_id>/<int:req_id>/', views.posted_job_hire, name='posted_job_hire'),
     path('posted_job_done/<int:us_id>/<int:req_id>/', views.posted_job_done, name='posted_job_done'),
     path('repairman_apps/<int:pk>', views.RepairmanApplicationsListView.as_view(), name='repairman_apps'),
+    path('job_hire/<int:pk>/delete/', views.JobHireDeleteView.as_view(), name='job_hire_delete'),
+    path('cancel_application/<int:user_id>/<int:req_id>/', views.cancel_application, name='cancel_application'),
 ]

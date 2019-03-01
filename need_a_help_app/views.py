@@ -246,13 +246,20 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Requests
-    success_url = reverse_lazy('main')
 
     def test_func(self):
         req = self.get_object()
         if self.request.user == req.user:  # ako je ulogirani user isti kao onaj ciji post mijenjamo, ne zelimo da netko drugi ureduje sve druge postove
             return True
         return False
+
+    def get_success_url(self):
+        user = self.object.user
+        return reverse_lazy('requests_user', kwargs={'pk': user.id})
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, f'You\'ve deleted posted request successfuly!')
+        return super(RequestDeleteView, self).delete(request, *args, **kwargs)
 
 
 @login_required
@@ -499,3 +506,28 @@ def posted_job_done(request, us_id, req_id):
     return redirect('done_repairman', pk=us.id)
 
 
+class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Requests
+
+    def test_func(self):
+        req = self.get_object()
+        if self.request.user == req.user:  # ako je ulogirani user isti kao onaj ciji post mijenjamo, ne zelimo da netko drugi ureduje sve druge postove
+            return True
+        return False
+
+    def get_success_url(self):
+        user = self.object.user
+        return reverse_lazy('hired_user', kwargs={'pk': user.id})
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, f'You\'ve deleted posted request where you hired a repairman successfuly!')
+        return super(JobHireDeleteView, self).delete(request, *args, **kwargs)
+
+
+def cancel_application(request, user_id, req_id):
+    us = User.objects.filter(id=user_id).first()
+    req = Requests.objects.filter(id=req_id).first()
+    Appliccation.objects.filter(repairman=us, request=req).delete()
+
+    messages.success(request, f'You\'ve quit the job { req.job_title } that you have been applied for!')
+    return redirect('repairman_apps', pk=us.id)
