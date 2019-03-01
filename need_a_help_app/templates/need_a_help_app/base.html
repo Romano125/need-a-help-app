@@ -23,7 +23,7 @@
                     <div class="list-group pt-2">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
-                      <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
+                      <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="{% url 'favorites' %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My favourites</a>
                     </div>
                 </ul>
@@ -34,7 +34,7 @@
                     <div class="list-group pt-2">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
-                      <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
+                      <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
                       <a class="list-group-item sb" href="{% url 'repairman_apps' user.id %}"><i class="fas fa-pencil-alt"></i>&nbsp; My applications</a>
                     </div>

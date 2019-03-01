@@ -4,9 +4,11 @@ from .forms import (
     UserRegisterForm,
     ProfileRegisterForm,
     UserUpdateForm,
-    ProfileUpdateForm
+    RepairmanUpdateForm,
+    ClientUpdateForm
 )
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 def register(request):
@@ -35,20 +37,31 @@ def register(request):
 
 
 @login_required  # decorator dodaje funkcionalnost nasoj funkciji
-def profile(request):
+def profile(request, log):
+    user = User.objects.filter(id=log).first()
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
+        if user.profile.role == 'repairman':
+            p_form = RepairmanUpdateForm(request.POST,
+                                         request.FILES,
+                                         instance=request.user.profile)
+        else:
+            p_form = ClientUpdateForm(request.POST,
+                                      request.FILES,
+                                      instance=request.user.profile)
+
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
             messages.success(request, f'You have updated your account!')
-            return redirect('profile')
+            return redirect('profile', log=user.id)
     else:
         u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        if user.profile.role == 'repairman':
+            p_form = RepairmanUpdateForm(instance=request.user.profile)
+        else:
+            p_form = ClientUpdateForm(instance=request.user.profile)
 
     args = {
         'u_form': u_form,

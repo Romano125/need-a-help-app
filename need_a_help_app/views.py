@@ -524,6 +524,7 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return super(JobHireDeleteView, self).delete(request, *args, **kwargs)
 
 
+@login_required
 def cancel_application(request, user_id, req_id):
     us = User.objects.filter(id=user_id).first()
     req = Requests.objects.filter(id=req_id).first()
@@ -533,6 +534,7 @@ def cancel_application(request, user_id, req_id):
     return redirect('repairman_apps', pk=us.id)
 
 
+@login_required
 def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
     us = User.objects.filter(id=user_id).first()
     hir = Hire.objects.filter(user=us, repairman=rep_id)

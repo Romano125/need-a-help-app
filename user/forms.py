@@ -42,7 +42,7 @@ class UserUpdateForm(forms.ModelForm):
         ]
 
 
-class ProfileUpdateForm(forms.ModelForm):
+class RepairmanUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
@@ -53,6 +53,19 @@ class ProfileUpdateForm(forms.ModelForm):
             'costs',
             'profession',
             'knowledges',
+            'role',
+            'photo'
+        ]
+
+
+class ClientUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'gender',
+            'address',
+            'birth_date',
+            'phone_number',
             'role',
             'photo'
         ]
