@@ -59,8 +59,10 @@
                 <div class="collapse navbar-collapse" id="navbarToggle">
                   <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'home' %}">About</a>
-                    <i class="nav-item nav-link fas fa-bell mt-1"></i>
-                    <i class="nav-item nav-link fas fa-envelope mt-1"></i>
+                    {% if user.is_authenticated %}
+                      <i class="nav-item nav-link fas fa-bell mt-1"></i>
+                      <i class="nav-item nav-link fas fa-envelope mt-1"></i>
+                    {% endif %}
                   </div>
                   <!-- Navbar Right Side -->
                   <div class="navbar-nav">
