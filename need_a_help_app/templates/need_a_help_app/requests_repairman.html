@@ -103,9 +103,9 @@
                     {% for j in us %}
                         {% if i.user == j.id %}
                             <a href="{% url 'job_accept' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                            <a href="{% url 'client_repairman_job_delete' j.id i.repairman.id user.id 'req' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                         {% endif %}
                     {% endfor %}
-                    <a href="#" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                 </div>
             </div>
             <hr width="100%">

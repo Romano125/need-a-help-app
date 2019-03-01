@@ -62,7 +62,7 @@
                     <div class="col-sm-2 pt-5" align="right">
                         {% if i.status == 'pending' %}
                             <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="far fa-check-square"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                            <a href="{% url 'client_repairman_job_delete' user.id i.repairman user.id 'l' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                         {% else %}
                             <button type="button" class="btn btn-outline-success btn-sm mt-1 mb-1" data-toggle="modal" data-target="#done_job"><i class="far fa-check-square"></i></button>
                             <a href="#" class="btn btn-danger btn-sm mt-1 mb-1 disabled"><i class="fa fa-ban" aria-hidden="true"></i></a>

@@ -531,3 +531,33 @@ def cancel_application(request, user_id, req_id):
 
     messages.success(request, f'You\'ve quit the job { req.job_title } that you have been applied for!')
     return redirect('repairman_apps', pk=us.id)
+
+
+def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
+    us = User.objects.filter(id=user_id).first()
+    hir = Hire.objects.filter(user=us, repairman=rep_id)
+
+    for h in hir:
+        if h.status == 'pending':
+            h.delete()
+            break
+
+    rep = User.objects.filter(id=rep_id).first()
+    req = RepairmanRequests.objects.filter(repairman=rep, user=user_id)
+
+    log = User.objects.filter(id=log_id).first()
+
+    for r in req:
+        if not r.done:
+            r.delete()
+            break
+
+    if log.profile.role == 'client':
+        messages.success(request, f'You\'ve canceled the job for which you hired { rep.username }!')
+        return redirect('hired_user', pk=log.id)
+    else:
+        messages.success(request, f'You quit the job for which you were hired by { us.username }!')
+        if txt == 'req':
+            return redirect('requests_repairman', pk=rep_id)
+        elif txt == 'act':
+            return redirect('active_repairman', pk=rep_id)
