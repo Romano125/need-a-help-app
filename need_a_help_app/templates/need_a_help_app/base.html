@@ -36,6 +36,7 @@
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'profile' %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
+                      <a class="list-group-item sb" href="{% url 'repairman_apps' user.id %}"><i class="fas fa-pencil-alt"></i>&nbsp; My applications</a>
                     </div>
                 </ul>
             </div>
@@ -58,6 +59,8 @@
                 <div class="collapse navbar-collapse" id="navbarToggle">
                   <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'home' %}">About</a>
+                    <i class="nav-item nav-link fas fa-bell mt-1"></i>
+                    <i class="nav-item nav-link fas fa-envelope mt-1"></i>
                   </div>
                   <!-- Navbar Right Side -->
                   <div class="navbar-nav">
@@ -118,7 +121,30 @@
                     <span class="sr-only">Next</span>
                   </a>
                 </div>
-                <div class="container">
+                <div class="container pt-4">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <form class="card card-sm" action="{% url 'search' %}" method="GET">
+                                <div class="card-body row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <i class="fas fa-search h4 text-body"></i>&nbsp&nbsp
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input class="form-control form-control-lg form-control-borderless" name="q" type="text" placeholder="Where is a problem?">
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col-auto">
+                                        &nbsp<button class="btn btn-lg btn-success" type="submit">Search</button>
+                                    </div>
+                                    <!--end of col-->
+                                </div>
+                            </form>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </div>
+                <hr width="100%">
                 <br/>
                 <div class="container p-4">
                     <div class="row" align="center">

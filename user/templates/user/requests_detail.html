@@ -78,6 +78,10 @@
                       {% if user.profile.role == 'client' %}
                         <a href="{% url 'posted_job_hire' a.repairman.id object.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i>&nbsp Hire</a>
                         <a href="{% url 'info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                      {% else %}
+                        {% if a.repairman != user %}
+                          <a href="{% url 'info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                        {% endif %}
                       {% endif %}
                   </div>
                 </div>

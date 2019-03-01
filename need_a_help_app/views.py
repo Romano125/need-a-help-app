@@ -266,6 +266,17 @@ def search(request):
     if prof:
         f = 1
 
+    """
+    us = User.objects.filter(id=selfrequest.user)
+    hired = Hire.objects.filter(user=us)
+
+    f_hired = []
+    for u in users:
+        for h in hired:
+            if h.user == us and h.repairman == u.id and h.status == 'pending':
+                f_hired.append(u)
+    """
+
     return render(request, 'need_a_help_app/search_results.html', {'users': users, 'q': q, 'f': f, 'prof': prof})
 
 
@@ -448,6 +459,17 @@ def repairman_apply(request, us_id, req_id):
         return redirect('request_detail', pk=req.id)
 
 
+class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
+    model = Appliccation
+    template_name = 'need_a_help_app/repairman_apps.html'
+    context_object_name = 'app'
+    paginate_by = 2
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return Appliccation.objects.filter(repairman=user)
+
+
 @login_required
 def posted_job_hire(request, us_id, req_id):
     us = User.objects.filter(id=us_id).first()
@@ -475,3 +497,5 @@ def posted_job_done(request, us_id, req_id):
 
     messages.success(request, f'You\'ve finished a job { req.job_title } for { req.user.username }!')
     return redirect('done_repairman', pk=us.id)
+
+

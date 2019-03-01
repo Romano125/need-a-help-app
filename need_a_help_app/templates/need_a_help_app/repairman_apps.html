@@ -1,0 +1,63 @@
+{% extends 'need_a_help_app/base.html' %}
+
+{% block content %}
+   <div class="row">
+    <div class="col-sm-8">
+        <h2>My applications</h2>
+    </div>
+   </div>
+   <hr width="100%">
+   {% if app %}
+       {% for a in app %}
+            {% if a.request.visible %}
+                <div class="row">
+                    <div class="col-sm-3">
+                        <a href="{% url 'request_detail' a.request.id %}">
+                            <img class="rounded-circle account-img" src="{{ a.request.photo.url }}">
+                        </a>
+                    </div>
+                    <div class="col-sm-7 pl-5">
+                        <a class="mr-2" href="{% url 'info' a.request.user.id %}">{{ a.request.user }}</a>
+                        <small class="text-muted">{{ a.request.date|date:'F d, Y H:i' }}</small>&nbsp
+                        <hr width="100%">
+                        <h1>{{ u.job_title }}</h1>
+                        <small class="text-secondary text-muted">Required knowladges: {{ a.request.required_knowledges }}</small><br>
+                        <small class="text-secondary text-muted">Price: {{ a.request.price }} €</small><br>
+                        <small class="text-secondary text-muted">Address: {{ a.request.address }}</small><br>
+                    </div>
+                    <div class="col-sm-2 pt-5" align="right">
+                        <a href="{% url 'request_detail' a.request.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                        <a href="#" class="btn btn-outline-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i></a>
+                    </div>
+                </div>
+                <hr width="100%">
+            {% endif %}
+        {% endfor %}
+   {% else %}
+    <h3 class="text-secondary text-muted" align="center">No results</h3>
+   {% endif %}
+
+    {% if is_paginated %}
+
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+                <a class="btn btn-info mb-4" href="?page={{ i }}">{{ i }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ i }}">{{ i }}</a>
+            {% endif %}
+
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+
+    {% endif %}
+{% endblock %}
+
