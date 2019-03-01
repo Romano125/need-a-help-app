@@ -25,6 +25,7 @@ class ProfileRegisterForm(forms.ModelForm):
         fields = [
             'address',
             'birth_date',
+            'gender',
             'role'
         ]
 
