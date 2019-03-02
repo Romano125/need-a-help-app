@@ -20,7 +20,13 @@
           {% if user.is_authenticated and user.profile.role == 'client' %}
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
-                    <div class="list-group pt-2">
+                    <div class="list-group pt-2 d-none d-sm-none d-md-block d-lg-block">
+                      <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
+                      <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
+                      <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
+                      <a class="list-group-item sb" href="{% url 'favorites' %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My favourites</a>
+                    </div>
+                    <div class="list-group pt-2 d-block d-sm-block d-md-none d-lg-none">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
@@ -31,12 +37,19 @@
           {% elif user.is_authenticated and user.profile.role == 'repairman' %}
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
-                    <div class="list-group pt-2">
+                    <div class="list-group pt-2 d-none d-sm-none d-md-block d-lg-block">
                       <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Home</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
                       <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
                       <a class="list-group-item sb" href="{% url 'repairman_apps' user.id %}"><i class="fas fa-pencil-alt"></i>&nbsp; My applications</a>
+                    </div>
+                    <div class="list-group pt-2 d-block d-sm-block d-md-none d-lg-none">
+                      <a class="list-group-item sb" href="{% url 'main' %}"><i class="fa fa-home fa-fw" aria-hidden="true"></i></a>
+                      <a class="list-group-item sb" href="#"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i></a>
+                      <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></a>
+                      <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i></a>
+                      <a class="list-group-item sb" href="{% url 'repairman_apps' user.id %}"><i class="fas fa-pencil-alt"></i></a>
                     </div>
                 </ul>
             </div>

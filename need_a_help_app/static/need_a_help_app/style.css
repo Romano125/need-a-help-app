@@ -228,6 +228,18 @@ header.masthead .masthead-content .masthead-subheading {
   opacity: 0.9;
 }
 
+@media (max-width: 767px) {
+  #wrapper.menuDisplayed #sidebar-wrapper {
+    width: 65px;
+    opacity: 0.9;
+    text-align: center;
+  }
+
+  .popOver {
+    display: none;
+  }
+}
+
 #wrapper.menuDisplayed #page-content-wrapper {
   position: relative;
 }
