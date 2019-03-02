@@ -13,8 +13,8 @@
               <small class="text-muted">{{ object.date|date:'F d, Y H:i' }}</small>
                 {% if object.user == user %}
                     <div>
-                        <a href="{% url 'request_update' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Update</a>
-                        <a href="{% url 'request_delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i>&nbsp Delete</a>
+                        <a href="{% url 'request_update' object.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 upd">Update</a>
+                        <a href="{% url 'request_delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1 upd"><i class="fas fa-trash-alt"></i>&nbsp Delete</a>
                     </div>
                 {% endif %}
             </div>
@@ -50,7 +50,7 @@
               {% for a in app %}
                 <div class="row">
                   <div class="col-sm-3">
-                      <a href="{% url 'info' a.repairman.id %}">
+                      <a href="{% url 'modal_info' a.repairman.id %}">
                           <img class="rounded-circle app-img" src="{{ a.repairman.profile.photo.url }}">
                       </a>
                       <div class="row">
@@ -77,10 +77,10 @@
                       {% endif %}-->
                       {% if user.profile.role == 'client' %}
                         <a href="{% url 'posted_job_hire' a.repairman.id object.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i>&nbsp Hire</a>
-                        <a href="{% url 'info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                        <a href="{% url 'modal_info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
                       {% else %}
                         {% if a.repairman != user %}
-                          <a href="{% url 'info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                          <a href="{% url 'modal_info' a.repairman.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
                         {% endif %}
                       {% endif %}
                   </div>

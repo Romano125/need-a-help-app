@@ -89,6 +89,28 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         return context_data
 
 
+class ModalInfoDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    context_object_name = 'modal_info'
+    template_name = 'user/modal_info.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super(ModalInfoDetailView, self).get_context_data(**kwargs)
+
+        rep_id = self.kwargs['pk']
+        user = self.request.user
+        favs = UserFavourite.objects.all()
+
+        f = 0
+        for us in favs:
+            if us.user == user.id and us.repairman == rep_id:
+                f = 1
+
+        context_data['f'] = f
+
+        return context_data
+
+
 class UpdateUserView(LoginRequiredMixin, UpdateView):
     model = Profile
     context_object_name = 'repairman'

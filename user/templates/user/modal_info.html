@@ -1,0 +1,70 @@
+{% extends 'need_a_help_app/base.html' %}
+
+{% block title %}
+    <title>Info</title>
+{% endblock %}
+
+{% block app_client %}{% endblock %}
+{% block app_repairman %}{% endblock %}
+
+{% block content %}
+    <div class="content-section">
+        {% if error %}
+            <div class="alert alert-warning">
+                {{ error }}
+            </div>
+        {% endif %}
+
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{ modal_info.profile.photo.url }}">
+        <div class="media-body">
+          <h2 class="account-heading pt-5">{{ modal_info.first_name }} {{ modal_info.last_name }}</h2>
+          <p class="text-secondary text-muted">{{ modal_info.email }}</p>
+          <div align="right">
+            {% if user.id != modal_info.id %}
+              <a class="btn btn-outline-danger rounded-circle" href="#"><i class="fas fa-envelope fa-2x"></i></a>
+              {% if modal_info.profile.role == 'repairman' and user.profile.role != 'repairman' %}
+                {% if f %}
+                  <a class="btn btn-warning rounded-circle" style="color: yellow;" href="{% url 'del_favorite' user.id modal_info.id %}"><i class="fas fa-star fa-2x"></i></a>
+                {% else %}
+                  <a class="btn btn-outline-warning rounded-circle" style="color: yellow;" href="{% url 'add_favorite' user.id modal_info.id %}"><i class="fas fa-star fa-2x"></i></a>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <hr width="100%">
+      <div class="container">
+        <fieldset class="from-group">
+          {% if modal_info.profile.role == 'repairman' %}
+            <h4>Address: {{ modal_info.profile.address }}</h4>
+            <h4>Phone number: {{ modal_info.profile.phone_number }}</h4>
+            <h4>Birth_date: {{ modal_info.profile.birth_date }}</h4>
+            <h4>Profession: {{ modal_info.profile.profession }}</h4>
+            <h4>Knowledges: {{ modal_info.profile.knowledges }}</h4>
+            <h4>Hired(count): 55</h4>
+            <h4>Popularity: *****</h4>
+            <h4>Price: {{ modal_info.profile.costs }} €</h4>
+          {% else %}
+            <h4>Address: {{ modal_info.profile.address }}</h4>
+            <h4>Phone number: {{ modal_info.profile.phone_number }}</h4>
+            <h4>Birth_date: {{ modal_info.profile.birth_date }}</h4>
+            <h4>Number_hired(count): 55</h4>
+            <h4>Badges:
+              <i class="fas fa-user-check tool1" data-toggle="tooltip" data-placement="bottom" title="Rookie user - 5 hires"></i>
+              <i class="far fa-paper-plane tool1" data-toggle="tooltip" data-placement="bottom" title="Advance user - 25 hires"></i>
+              <span class="text-muted">
+                <i class="fas fa-user-ninja tool1" data-toggle="tooltip" data-placement="bottom" title="Ninja award - 100 hires"></i>
+                <i class="far fa-star tool1" data-toggle="tooltip" data-placement="bottom" title="Star user - 250 hires"></i>
+                <i class="fas fa-award tool1" data-toggle="tooltip" data-placement="bottom" title="Master user - >500 hires"></i>
+              </span>
+            </h4>
+          {% endif %}
+        </fieldset>
+        {% if modal_info.profile.role == 'repairman' and user.id != modal_info.id %}
+          <a href="#" class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedback</a>
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}
