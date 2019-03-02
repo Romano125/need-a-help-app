@@ -50,35 +50,53 @@
                                   <div class='menu-icon'></div>
                                   <div class='menu-icon'></div></a>
                   <a class="navbar-brand mr-4 ml-3" href="{% url 'main' %}">Need a help?!</a>
+                  <span class="navbar-toggler" style="border: none;" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                    <img class="rounded-circle navbar-img navbar-toggler-icon" src="{{ user.profile.photo.url }}"><i class="fas fa-caret-down" style="color: white"></i>
+                  </span>
                 {% else %}
                   <a class="navbar-brand mr-4" href="#">Need a help?!</a>
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
                 {% endif %}
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                   <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'home' %}">About</a>
                     {% if user.is_authenticated %}
-                      <i class="nav-item nav-link fas fa-bell mt-1"></i>
-                      <i class="nav-item nav-link fas fa-envelope mt-1"></i>
-                    {% endif %}
-                  </div>
-                  <!-- Navbar Right Side -->
-                  <div class="navbar-nav">
-                    {% if user.is_authenticated %}
-                      <span class="nav-item nav-link">Welcome, {{ user.username }}
-                        <img class="rounded-circle navbar-img popOver" data-title="Logged in as {{ user.profile.role }}" data-content="
-                            <a class='list-group-item sb' href='{% url 'info' user.id %}'><i class='fa fa-user fa-fw' aria-hidden='true'></i>&nbsp; My profile</a>
-                            <a class='list-group-item sb' href='{% url 'logout' %}'><i class='fas fa-power-off'></i>&nbsp Logout</a>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click" src="{{ user.profile.photo.url }}">
-                      </span>
-                      <!-- <a class="nav-item nav-link" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>-->
+                      <div class="d-sm-block d-md-none">
+                        <a class='nav-item nav-link' href='{% url 'info' user.id %}'><i class='fa fa-user fa-fw' aria-hidden='true'></i>&nbsp; My profile</a>
+                        <a class='nav-item nav-link' href='{% url 'logout' %}'><i class='fas fa-power-off'></i>&nbsp Logout</a>
+                      </div>
+                      <div  class="collapse navbar-collapse hidden-xs">
+                        <i class="nav-item nav-link fas fa-bell mt-1"></i>
+                        <i class="nav-item nav-link fas fa-envelope mt-1"></i>
+                      </div>
                     {% else %}
-                      <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                      <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                      <div class="d-sm-block d-md-none">
+                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                      </div>
                     {% endif %}
                   </div>
                 </div>
+                  <!-- Navbar Right Side -->
+                  <div class="navbar-nav">
+                    {% if user.is_authenticated %}
+                      <div class="collapse navbar-collapse hidden-xs">
+                          <span class="nav-item nav-link">Welcome, {{ user.username }}
+                            <img class="rounded-circle navbar-img popOver" data-title="Logged in as {{ user.profile.role }}" data-content="
+                                <a class='list-group-item sb' href='{% url 'info' user.id %}'><i class='fa fa-user fa-fw' aria-hidden='true'></i>&nbsp; My profile</a>
+                                <a class='list-group-item sb' href='{% url 'logout' %}'><i class='fas fa-power-off'></i>&nbsp Logout</a>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click" src="{{ user.profile.photo.url }}">
+                          </span>
+                          <!-- <a class="nav-item nav-link" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>-->
+                      </div>
+                    {% else %}
+                      <div class="collapse navbar-collapse">
+                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                      </div>
+                    {% endif %}
+                  </div>
               </div>
             </nav>
           </header>
