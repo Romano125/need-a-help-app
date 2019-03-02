@@ -140,9 +140,20 @@ def show_favs(request):
     favs = UserFavourite.objects.all()
     users = User.objects.all()
 
+    hired = Hire.objects.all()
+
+    f_hired = []
+    for u in favs:
+        for h in hired:
+            us = User.objects.filter(id=u.user).first()
+            rep = User.objects.filter(id=u.repairman).first()
+            if h.user == us and h.repairman == u.repairman and h.status == 'pending':
+                f_hired.append(rep)
+
     context = {
         'favs': favs,
-        'users': users
+        'users': users,
+        'f_hired': f_hired
     }
     return render(request, 'need_a_help_app/favorites.html', context)
 
