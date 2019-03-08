@@ -1,6 +1,14 @@
 {% extends 'need_a_help_app/base.html' %}
 {% load crispy_forms_tags %}
 
+{% block notify_client %}
+    {% if not_cli %}
+            <span class="badge badge-notify">{{ not_cli }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block app_client %}{% endblock %}
 {% block app_repairman %}{% endblock %}
 

@@ -311,6 +311,26 @@ header.masthead .masthead-content .masthead-subheading {
    left: -28px;
 }
 
+.badge-notify-bell{
+   background: red;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -7px;
+   left: -15px;
+   font-size: xx-small;
+}
+
+.badge-notify-mess{
+   background: red;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -7px;
+   left: -13px;
+   font-size: xx-small;
+}
+
 /*applications style*/
 
 .app-img {

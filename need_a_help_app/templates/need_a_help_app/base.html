@@ -82,7 +82,14 @@
                       </div>
                       <div  class="collapse navbar-collapse hidden-xs">
                         <i class="nav-item nav-link fas fa-bell mt-1"></i>
+
+                        <!-- blokovi za obavijesti ovisno o ulozi -->
+                        {% block notify_client %}{% endblock %}
+                        {% block notify_repairman %}{% endblock %}
+
                         <i class="nav-item nav-link fas fa-envelope mt-1"></i>
+                        {% block mess_client %}{% endblock %}
+                        {% block mess_repairman %}{% endblock %}
                       </div>
                     {% else %}
                       <div class="d-sm-block d-md-none">

@@ -1,5 +1,13 @@
 {% extends 'need_a_help_app/base.html' %}
 
+{% block notify_client %}
+    {% if not_cli %}
+            <span class="badge badge-notify">{{ not_cli }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
    <h2>My favorites</h2>
    <hr width="100%">

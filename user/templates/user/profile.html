@@ -5,6 +5,22 @@
     <title>Settings</title>
 {% endblock %}
 
+{% block notify_repairman %}
+    {% if not_rep %}
+            <span class="badge badge-notify">{{ not_rep }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block notify_client %}
+    {% if not_cli %}
+            <span class="badge badge-notify">{{ not_cli }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block app_client %}{% endblock %}
 {% block app_repairman %}{% endblock %}
 
