@@ -53,9 +53,11 @@ class AppMainView(LoginRequiredMixin, ListView):
                 if h.user == us and h.repairman == u.id and h.status == 'pending':
                     f_hired.append(u)
 
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
-        context_data['cnt'] = self.request.session.get('cnt')
+        context_data['cnt'] = cnt
 
         return context_data
 
@@ -429,8 +431,11 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         us = self.request.user
         job = JobHire.objects.filter(repairman=us, status='pending')
 
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+
         context_data['us'] = users
         context_data['job'] = job
+        context_data['cnt'] = cnt
 
         return context_data
 
@@ -476,9 +481,11 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         users = User.objects.all()
         us = self.request.user
         job_done = JobHire.objects.filter(repairman=us, status='done')
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
         context_data['done'] = job_done
+        context_data['cnt'] = cnt
 
         return context_data
 
@@ -508,6 +515,16 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
         return Appliccation.objects.filter(repairman=user)
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RepairmanApplicationsListView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+
+        context_data['cnt'] = cnt
+
+        return context_data
 
 
 @login_required

@@ -1,5 +1,13 @@
 {% extends 'need_a_help_app/base.html' %}
 
+{% block count %}
+    {% if cnt %}
+            <span class="badge badge-notify">{{ cnt }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
    <div class="row">
     <div class="col-sm-8">
