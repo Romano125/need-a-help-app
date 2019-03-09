@@ -4,22 +4,6 @@
     <title>Info</title>
 {% endblock %}
 
-{% block notify_client %}
-    {% if not_cli %}
-        <span class="badge badge-notify-bell">{{ not_cli }}</span>
-    {% else %}
-        {{ block.super }}
-    {% endif %}
-{% endblock %}
-
-{% block mess_client %}
-        <span class="badge badge-notify-mess">55</span>
-    {% if mess_cli %}
-    {% else %}
-        {{ block.super }}
-    {% endif %}
-{% endblock %}
-
 {% block app_client %}{% endblock %}
 {% block app_repairman %}{% endblock %}
 
