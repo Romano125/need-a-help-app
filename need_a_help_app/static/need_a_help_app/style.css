@@ -331,6 +331,25 @@ header.masthead .masthead-content .masthead-subheading {
    font-size: xx-small;
 }
 
+.badge-notify-hired-job{
+   background: red;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -42px;
+   left: 72px;
+   font-size: xx-small;
+}
+
+.badge-notify-hired-req{
+   background: red;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -2px;
+   font-size: xx-small;
+}
+
 /*applications style*/
 
 .app-img {

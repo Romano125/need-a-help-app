@@ -442,10 +442,14 @@ class HiredListView(LoginRequiredMixin, ListView):
 
         us = self.request.user
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        done_job = Hire.objects.filter(user=us, status='done', accepted=True).count()
+        done_req = JobHire.objects.filter(status='done').count()
 
         context_data['us'] = users
         context_data['job'] = job
         context_data['not_cli'] = not_cli
+        context_data['done_job'] = done_job
+        context_data['done_req'] = done_req
 
         return context_data
 
