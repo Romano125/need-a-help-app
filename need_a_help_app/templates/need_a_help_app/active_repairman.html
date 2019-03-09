@@ -1,27 +1,46 @@
 {% extends 'need_a_help_app/base.html' %}
 
 {% block notify_repairman %}
-    {% if not_rep %}
-        <span class="badge badge-notify-bell">{{ not_rep }}</span>
-    {% else %}
-        {{ block.super }}
-    {% endif %}
+  {% if not_rep %}
+      <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+          <div class='container'>
+              {% for n in not_r %}
+                  <div class='row'>
+                      <div class='col-sm-12 col-md-12 col-lg-12'>
+                          <small class='text-secondary text-muted'>{{ n.notification }}</small>
+                      </div>
+                  </div>
+                  <hr width=100%>
+              {% endfor %}
+          </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
+      <span class="badge badge-notify-bell">{{ not_rep }}</span>
+  {% else %}
+      <h3 class="text-secondary text-muted" align="center">No results</h3>
+  {% endif %}
 {% endblock %}
 
 {% block mess_repairman %}
-    {% if mess_rep %}
-        <span class="badge badge-notify-mess">{{ mess_rep }}</span>
-    {% else %}
-        {{ block.super }}
-    {% endif %}
+  {% if mess_rep %}
+    <span class="badge badge-notify-mess">{{ mess_rep }}</span>
+  {% else %}
+      {{ block.super }}
+  {% endif %}
 {% endblock %}
 
 {% block count %}
-    {% if cnt %}
-            <span class="badge badge-notify">{{ cnt }}</span>
-    {% else %}
-        {{ block.super }}
-    {% endif %}
+  {% if cnt %}
+    <span class="badge badge-notify">{{ cnt }}</span>
+  {% else %}
+      {{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block active %}
+  {% if act_cnt %}
+    <span class="badge badge-active">{{ act_cnt }}</span>
+  {% else %}
+      {{ block.super }}
+  {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -29,10 +48,10 @@
     <div class="col-sm-8">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active hire" id="pills-job-tab" data-toggle="pill" href="#pills-job" role="tab" aria-controls="pills-job" aria-selected="true">Active jobs</a>
+              <a class="nav-link active hire" id="pills-job-tab" data-toggle="pill" href="#pills-job" role="tab" aria-controls="pills-job" aria-selected="true">Active jobs ({{ act_job }})</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link hire" id="pills-req-tab" data-toggle="pill" href="#pills-req" role="tab" aria-controls="pills-req" aria-selected="false">Active requests</a>
+              <a class="nav-link hire" id="pills-req-tab" data-toggle="pill" href="#pills-req" role="tab" aria-controls="pills-req" aria-selected="false">Active requests ({{ act_req }})</a>
             </li>
         </ul>
     </div>

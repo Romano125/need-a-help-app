@@ -64,12 +64,16 @@ def profile(request, log):
         else:
             p_form = ClientUpdateForm(instance=request.user.profile)
 
+    not_r = RepairmanNotifications.objects.filter(repairman=user, seen=False)
+    not_c = ClientNotifications.objects.filter(client=user, seen=False)
     not_rep = RepairmanNotifications.objects.filter(repairman=user, seen=False).count()
     not_cli = ClientNotifications.objects.filter(client=user, seen=False).count()
 
     args = {
         'u_form': u_form,
         'p_form': p_form,
+        'not_c': not_c,
+        'not_r': not_r,
         'not_cli': not_cli,
         'not_rep': not_rep
     }

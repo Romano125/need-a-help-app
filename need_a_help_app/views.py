@@ -56,12 +56,20 @@ class AppMainView(LoginRequiredMixin, ListView):
                     f_hired.append(u)
 
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
         context_data['cnt'] = cnt
+        context_data['act_cnt'] = act_cnt
+        context_data['not_r'] = not_r
+        context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
 
@@ -92,11 +100,15 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
                 f_hired = 1
 
         us = self.request.user
+        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         context_data['f'] = f
         context_data['f_hired'] = f_hired
+        context_data['not_r'] = not_r
+        context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
 
@@ -179,12 +191,14 @@ def show_favs(request):
                 f_hired.append(rep)
 
     us = request.user
+    not_c = ClientNotifications.objects.filter(client=us, seen=False)
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
     context = {
         'favs': favs,
         'users': users,
         'f_hired': f_hired,
+        'not_c': not_c,
         'not_cli': not_cli
     }
 
@@ -205,8 +219,10 @@ class RequestsView(LoginRequiredMixin, ListView):
         context_data = super(RequestsView, self).get_context_data(**kwargs)
 
         us = self.request.user
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+        context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
 
         return context_data
@@ -231,8 +247,10 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         context_data = super(RequestCreateView, self).get_context_data(**kwargs)
 
         us = self.request.user
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+        context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
 
         return context_data
@@ -279,6 +297,8 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         vis = Requests.objects.filter(id=req_id).first()
 
         us = self.request.user
+        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
@@ -286,6 +306,8 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         context_data['app'] = app
         context_data['cnt'] = cnt
         context_data['vis'] = vis.visible
+        context_data['not_r'] = not_r
+        context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
 
@@ -317,8 +339,10 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context_data = super(RequestUpdateView, self).get_context_data(**kwargs)
 
         us = self.request.user
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+        context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
 
         return context_data
@@ -341,8 +365,10 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context_data = super(RequestDeleteView, self).get_context_data(**kwargs)
 
         us = self.request.user
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+        context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
 
         return context_data
@@ -355,7 +381,9 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         for u in us:
             for a in apps:
                 if u == a.repairman:
-                    notif = req.user.username + f' deleted posted job ( { req.job_title } ) for which you\'ve applied for!'
+                    notif = f'<a href="./info/{ req.user.id }/">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
+                    notif += '</a>' + f'<a href="./info/{ req.user.id }/">' + req.user.username + '</a>' + f' deleted posted job ( { req.job_title } ) for which you\'ve applied for!'
+                    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
                     rep_not = RepairmanNotifications(repairman=u, notification=notif)
                     rep_not.save()
 
@@ -386,9 +414,11 @@ def search(request):
     """
 
     us = request.user
+    not_c = ClientNotifications.objects.filter(client=us, seen=False)
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
     context = {
+        'not_c': not_c,
         'not_cli': not_cli,
         'users': users,
         'q': q,
@@ -416,7 +446,9 @@ def hire_repairman(request, user_id, rep_id):
         req_mess = RepairmanRequests(repairman=rep, user=user_id, request_message=mess)
         req_mess.save()
 
-    notif = us.username + ' hired you for a job!'
+    notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+    notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a> hired you for a job!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
     rep_not = RepairmanNotifications(repairman=rep, notification=notif)
     rep_not.save()
 
@@ -441,12 +473,14 @@ class HiredListView(LoginRequiredMixin, ListView):
         job = JobHire.objects.order_by('-date_hired')
 
         us = self.request.user
+        not_c = ClientNotifications.objects.filter(client=us, seen=False)
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         done_job = Hire.objects.filter(user=us, status='done', accepted=True).count()
         done_req = JobHire.objects.filter(status='done').count()
 
         context_data['us'] = users
         context_data['job'] = job
+        context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
         context_data['done_job'] = done_job
         context_data['done_req'] = done_req
@@ -470,11 +504,17 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
         users = User.objects.all()
         us = self.request.user
         req = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
         context_data['cnt'] = req
         self.request.session['cnt'] = req
+        context_data['act_cnt'] = act_cnt
+        context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
 
         return context_data
@@ -503,7 +543,9 @@ def job_accept(request, user_id, rep_id):
 
     rep = User.objects.filter(id=rep_id).first()
 
-    notif = rep.username + f' accepted a job you\'ve hired him for!'
+    notif = f'<a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
+    notif += '</a>' + f'<a href="./info/{ rep.id }/">' + rep.username + '</a> accepted a job you\'ve hired him for!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
     cli_not = ClientNotifications(client=us, notification=notif)
     cli_not.save()
 
@@ -529,11 +571,19 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         job = JobHire.objects.filter(repairman=us, status='pending')
 
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
         context_data['job'] = job
         context_data['cnt'] = cnt
+        context_data['act_job'] = act_job
+        context_data['act_req'] = act_req
+        context_data['act_cnt'] = act_cnt
+        context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
 
         return context_data
@@ -562,7 +612,9 @@ def job_done(request, user_id, rep_id):
 
     rep = User.objects.filter(id=rep_id).first()
 
-    notif = rep.username + f' finished a job you\'ve hired him for!'
+    notif = f'<a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
+    notif += '</a>' + f'<a href="./info/{ rep.id }/">' + rep.username + '</a> finished a job you\'ve hired him for!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
     cli_not = ClientNotifications(client=us, notification=notif)
     cli_not.save()
 
@@ -587,11 +639,17 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         us = self.request.user
         job_done = JobHire.objects.filter(repairman=us, status='done')
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
         context_data['done'] = job_done
         context_data['cnt'] = cnt
+        context_data['act_cnt'] = act_cnt
+        context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
 
         return context_data
@@ -628,10 +686,16 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
 
         us = self.request.user
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['cnt'] = cnt
+        context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
+        context_data['act_cnt'] = act_cnt
 
         return context_data
 
@@ -649,7 +713,9 @@ def posted_job_hire(request, us_id, req_id):
         job_save = JobHire(repairman=us, request=req)
         job_save.save()
 
-        notif = req.user.username + f'  hired you for a job { req.job_title }!'
+        notif = f'<a href="./info/{ req.user.id }/">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
+        notif += '</a>' + f'<a href="./info/{ req.user.id }/">' + req.user.username + '</a>' + f' hired you for a job { req.job_title }!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
         rep_not = RepairmanNotifications(repairman=us, notification=notif)
         rep_not.save()
 
@@ -666,7 +732,9 @@ def posted_job_done(request, us_id, req_id):
     job.status = 'done'
     job.save()
 
-    notif = us.username + f' finished the job { req.job_title } you\'ve hired him for!'
+    notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+    notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a>' + f' finished the job { req.job_title } you\'ve hired him for!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
     cli_not = ClientNotifications(client=req.user, notification=notif)
     cli_not.save()
 
@@ -693,7 +761,9 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         rep = hir.repairman
         us = self.object.user
 
-        notif = us.username + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
+        notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+        notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a>' + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
         rep_not = RepairmanNotifications(repairman=rep, notification=notif)
         rep_not.save()
 
@@ -732,14 +802,18 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
             break
 
     if log.profile.role == 'client':
-        notif = us.username + ' canceled the job for which you were hired!'
+        notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+        notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a> canceled the job for which you were hired!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
         rep_not = RepairmanNotifications(repairman=rep, notification=notif)
         rep_not.save()
 
         messages.success(request, f'You\'ve canceled the job for which you hired { rep.username }!')
         return redirect('hired_user', pk=log.id)
     else:
-        notif = rep.username + ' quit the job you\'ve hired him!'
+        notif = f'<a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
+        notif += '</a>' + f'<a href="./info/{ rep.id }/">' + rep.username + '</a> quit the job you\'ve hired him!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
         cli_not = ClientNotifications(client=us, notification=notif)
         cli_not.save()
 

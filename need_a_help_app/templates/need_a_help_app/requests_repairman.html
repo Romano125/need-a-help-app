@@ -2,9 +2,20 @@
 
 {% block notify_repairman %}
     {% if not_rep %}
+        <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+            <div class='container'>
+                {% for n in not_r %}
+                    <div class='row'>
+                        <div class='col-sm-12 col-md-12 col-lg-12'>
+                            <small class='text-secondary text-muted'>{{ n.notification }}</small>
+                        </div>
+                    </div>
+                    <hr width=100%>
+                {% endfor %}
+            </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
         <span class="badge badge-notify-bell">{{ not_rep }}</span>
     {% else %}
-        {{ block.super }}
+        <h3 class="text-secondary text-muted" align="center">No results</h3>
     {% endif %}
 {% endblock %}
 
@@ -19,6 +30,14 @@
 {% block count %}
     {% if cnt %}
             <span class="badge badge-notify">{{ cnt }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block active %}
+    {% if act_cnt %}
+            <span class="badge badge-active">{{ act_cnt }}</span>
     {% else %}
         {{ block.super }}
     {% endif %}

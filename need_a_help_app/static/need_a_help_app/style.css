@@ -350,6 +350,15 @@ header.masthead .masthead-content .masthead-subheading {
    font-size: xx-small;
 }
 
+.badge-active{
+   background: green;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -20px;
+   left: -28px;
+}
+
 /*applications style*/
 
 .app-img {
