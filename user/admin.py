@@ -7,7 +7,9 @@ from .models import (
     Hire,
     RepairmanRequests,
     Appliccation,
-    JobHire
+    JobHire,
+    ClientNotifications,
+    RepairmanNotifications
 )
 
 # Register your models here.
@@ -19,3 +21,5 @@ admin.site.register(Hire)
 admin.site.register(RepairmanRequests)
 admin.site.register(Appliccation)
 admin.site.register(JobHire)
+admin.site.register(ClientNotifications)
+admin.site.register(RepairmanNotifications)

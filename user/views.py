@@ -9,6 +9,7 @@ from .forms import (
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from .models import ClientNotifications, RepairmanNotifications
 
 
 def register(request):
@@ -63,9 +64,14 @@ def profile(request, log):
         else:
             p_form = ClientUpdateForm(instance=request.user.profile)
 
+    not_rep = RepairmanNotifications.objects.filter(repairman=user, seen=False).count()
+    not_cli = ClientNotifications.objects.filter(client=user, seen=False).count()
+
     args = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'not_cli': not_cli,
+        'not_rep': not_rep
     }
 
     return render(request, 'user/profile.html', args)

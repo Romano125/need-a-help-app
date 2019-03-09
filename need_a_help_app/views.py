@@ -15,7 +15,9 @@ from user.models import (
     Hire,
     RepairmanRequests,
     Appliccation,
-    JobHire
+    JobHire,
+    ClientNotifications,
+    RepairmanNotifications
 )
 from django.views.generic import (
     ListView,
@@ -54,10 +56,14 @@ class AppMainView(LoginRequiredMixin, ListView):
                     f_hired.append(u)
 
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
         context_data['cnt'] = cnt
+        context_data['not_rep'] = not_rep
+        context_data['not_cli'] = not_cli
 
         return context_data
 
@@ -85,8 +91,14 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
             if h.user == user and h.repairman == rep_id and h.status == 'pending':
                 f_hired = 1
 
+        us = self.request.user
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
         context_data['f'] = f
         context_data['f_hired'] = f_hired
+        context_data['not_rep'] = not_rep
+        context_data['not_cli'] = not_cli
 
         return context_data
 
@@ -108,25 +120,13 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
             if us.user == user.id and us.repairman == rep_id:
                 f = 1
 
+        us = self.request.user
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
         context_data['f'] = f
+        context_data['not_cli'] = not_cli
 
         return context_data
-
-
-class UpdateUserView(LoginRequiredMixin, UpdateView):
-    model = Profile
-    context_object_name = 'repairman'
-    fields = [
-        'email',
-        'address',
-        'birth_date',
-        'phone_number',
-        'profession',
-        'knowledges',
-        'photo'
-    ]
-
-    success_url = reverse_lazy('main')
 
 
 @login_required
@@ -140,6 +140,8 @@ def add_favorite(request, user_id, rep_id):
     if f == 0:
         add_fav = UserFavourite(user=user_id, repairman=rep_id)
         add_fav.save()
+
+    messages.success(request, f'You\'ve added repairman to favorites successfuly!')
 
     return redirect('info', pk=rep_id)
 
@@ -155,6 +157,8 @@ def del_favorite(request, user_id, rep_id):
 
     if f == 1:
         fav_to_del.delete()
+
+    messages.warning(request, f'You\'ve deleted repairman from favorites!')
 
     return redirect('info', pk=rep_id)
 
@@ -174,11 +178,16 @@ def show_favs(request):
             if h.user == us and h.repairman == u.repairman and h.status == 'pending':
                 f_hired.append(rep)
 
+    us = request.user
+    not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
     context = {
         'favs': favs,
         'users': users,
-        'f_hired': f_hired
+        'f_hired': f_hired,
+        'not_cli': not_cli
     }
+
     return render(request, 'need_a_help_app/favorites.html', context)
 
 
@@ -191,6 +200,16 @@ class RequestsView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
         return Requests.objects.filter(user=user).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RequestsView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+        context_data['not_cli'] = not_cli
+
+        return context_data
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
@@ -207,6 +226,16 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RequestCreateView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+        context_data['not_cli'] = not_cli
+
+        return context_data
 
 
 class RequestDetailView(LoginRequiredMixin, DetailView):
@@ -249,10 +278,16 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         cnt = Appliccation.objects.filter(request=req.first()).count()
         vis = Requests.objects.filter(id=req_id).first()
 
+        us = self.request.user
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
         context_data['s'] = reqq_seen
         context_data['app'] = app
         context_data['cnt'] = cnt
         context_data['vis'] = vis.visible
+        context_data['not_rep'] = not_rep
+        context_data['not_cli'] = not_cli
 
         return context_data
 
@@ -278,6 +313,16 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+    def get_context_data(self, **kwargs):
+        context_data = super(RequestUpdateView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+        context_data['not_cli'] = not_cli
+
+        return context_data
+
 
 class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Requests
@@ -292,7 +337,28 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         user = self.object.user
         return reverse_lazy('requests_user', kwargs={'pk': user.id})
 
+    def get_context_data(self, **kwargs):
+        context_data = super(RequestDeleteView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+        context_data['not_cli'] = not_cli
+
+        return context_data
+
     def delete(self, request, *args, **kwargs):
+        req = self.get_object()
+        apps = Appliccation.objects.filter(request=req)
+        us = User.objects.all()
+
+        for u in us:
+            for a in apps:
+                if u == a.repairman:
+                    notif = req.user.username + f' deleted posted job ( { req.job_title } ) for which you\'ve applied for!'
+                    rep_not = RepairmanNotifications(repairman=u, notification=notif)
+                    rep_not.save()
+
         messages.success(request, f'You\'ve deleted posted request successfuly!')
         return super(RequestDeleteView, self).delete(request, *args, **kwargs)
 
@@ -319,7 +385,18 @@ def search(request):
                 f_hired.append(u)
     """
 
-    return render(request, 'need_a_help_app/search_results.html', {'users': users, 'q': q, 'f': f, 'prof': prof})
+    us = request.user
+    not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+    context = {
+        'not_cli': not_cli,
+        'users': users,
+        'q': q,
+        'f': f,
+        'prof': prof
+    }
+
+    return render(request, 'need_a_help_app/search_results.html', context)
 
 
 @login_required
@@ -338,6 +415,10 @@ def hire_repairman(request, user_id, rep_id):
         mess = us.username + ' needs your help in solving a problem!'
         req_mess = RepairmanRequests(repairman=rep, user=user_id, request_message=mess)
         req_mess.save()
+
+    notif = us.username + ' hired you for a job!'
+    rep_not = RepairmanNotifications(repairman=rep, notification=notif)
+    rep_not.save()
 
     messages.success(request, f'You\'ve hired repairman successfuly! Wait him to accept!')
     return redirect('info', pk=rep_id)
@@ -359,8 +440,12 @@ class HiredListView(LoginRequiredMixin, ListView):
         users = User.objects.all()
         job = JobHire.objects.order_by('-date_hired')
 
+        us = self.request.user
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
         context_data['us'] = users
         context_data['job'] = job
+        context_data['not_cli'] = not_cli
 
         return context_data
 
@@ -381,10 +466,12 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
         users = User.objects.all()
         us = self.request.user
         req = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
         context_data['cnt'] = req
         self.request.session['cnt'] = req
+        context_data['not_rep'] = not_rep
 
         return context_data
 
@@ -410,6 +497,12 @@ def job_accept(request, user_id, rep_id):
     hir.accepted = True
     hir.save()
 
+    rep = User.objects.filter(id=rep_id).first()
+
+    notif = rep.username + f' accepted a job you\'ve hired him for!'
+    cli_not = ClientNotifications(client=us, notification=notif)
+    cli_not.save()
+
     messages.success(request, f'You\'ve accepted a job from { us.username }!')
     return redirect('active_repairman', pk=rep_id)
 
@@ -432,10 +525,12 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         job = JobHire.objects.filter(repairman=us, status='pending')
 
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
         context_data['job'] = job
         context_data['cnt'] = cnt
+        context_data['not_rep'] = not_rep
 
         return context_data
 
@@ -461,6 +556,12 @@ def job_done(request, user_id, rep_id):
     hir.status = 'done'
     hir.save()
 
+    rep = User.objects.filter(id=rep_id).first()
+
+    notif = rep.username + f' finished a job you\'ve hired him for!'
+    cli_not = ClientNotifications(client=us, notification=notif)
+    cli_not.save()
+
     messages.success(request, f'You\'ve finished a job for { us.username }!')
     return redirect('done_repairman', pk=rep_id)
 
@@ -482,10 +583,12 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         us = self.request.user
         job_done = JobHire.objects.filter(repairman=us, status='done')
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
         context_data['done'] = job_done
         context_data['cnt'] = cnt
+        context_data['not_rep'] = not_rep
 
         return context_data
 
@@ -521,8 +624,10 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
 
         us = self.request.user
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['cnt'] = cnt
+        context_data['not_rep'] = not_rep
 
         return context_data
 
@@ -539,6 +644,11 @@ def posted_job_hire(request, us_id, req_id):
     if not job:
         job_save = JobHire(repairman=us, request=req)
         job_save.save()
+
+        notif = req.user.username + f'  hired you for a job { req.job_title }!'
+        rep_not = RepairmanNotifications(repairman=us, notification=notif)
+        rep_not.save()
+
         messages.success(request, f'You\'ve hired { us.username } for a job { req.job_title }!')
         return redirect('hired_user', pk=req.user.id)
 
@@ -551,6 +661,10 @@ def posted_job_done(request, us_id, req_id):
 
     job.status = 'done'
     job.save()
+
+    notif = us.username + f' finished the job { req.job_title } you\'ve hired him for!'
+    cli_not = ClientNotifications(client=req.user, notification=notif)
+    cli_not.save()
 
     messages.success(request, f'You\'ve finished a job { req.job_title } for { req.user.username }!')
     return redirect('done_repairman', pk=us.id)
@@ -570,6 +684,15 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy('hired_user', kwargs={'pk': user.id})
 
     def delete(self, request, *args, **kwargs):
+        req = self.get_object()
+        hir = JobHire.objects.filter(request=req).first()
+        rep = hir.repairman
+        us = self.object.user
+
+        notif = us.username + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
+        rep_not = RepairmanNotifications(repairman=rep, notification=notif)
+        rep_not.save()
+
         messages.success(request, f'You\'ve deleted posted request where you hired a repairman successfuly!')
         return super(JobHireDeleteView, self).delete(request, *args, **kwargs)
 
@@ -605,9 +728,17 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
             break
 
     if log.profile.role == 'client':
+        notif = us.username + ' canceled the job for which you were hired!'
+        rep_not = RepairmanNotifications(repairman=rep, notification=notif)
+        rep_not.save()
+
         messages.success(request, f'You\'ve canceled the job for which you hired { rep.username }!')
         return redirect('hired_user', pk=log.id)
     else:
+        notif = rep.username + ' quit the job you\'ve hired him!'
+        cli_not = ClientNotifications(client=us, notification=notif)
+        cli_not.save()
+
         messages.success(request, f'You quit the job for which you were hired by { us.username }!')
         if txt == 'req':
             return redirect('requests_repairman', pk=rep_id)

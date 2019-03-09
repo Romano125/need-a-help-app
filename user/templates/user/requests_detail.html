@@ -2,7 +2,7 @@
 
 {% block notify_repairman %}
     {% if not_rep %}
-            <span class="badge badge-notify">{{ not_rep }}</span>
+        <span class="badge badge-notify-bell">{{ not_rep }}</span>
     {% else %}
         {{ block.super }}
     {% endif %}
@@ -10,7 +10,23 @@
 
 {% block notify_client %}
     {% if not_cli %}
-            <span class="badge badge-notify">{{ not_cli }}</span>
+        <span class="badge badge-notify-bell">{{ not_cli }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block mess_repairman %}
+    {% if mess_rep %}
+        <span class="badge badge-notify-mess">{{ mess_rep }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block mess_client %}
+        <span class="badge badge-notify-mess">55</span>
+    {% if mess_cli %}
     {% else %}
         {{ block.super }}
     {% endif %}

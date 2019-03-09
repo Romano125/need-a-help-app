@@ -55,6 +55,24 @@ class Profile(models.Model):
         return f'{ self.user.username } Profile'
 
 
+class ClientNotifications(models.Model):
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    notification = models.CharField(max_length=1000)
+    seen = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{ self.client } notification'
+
+
+class RepairmanNotifications(models.Model):
+    repairman = models.ForeignKey(User, on_delete=models.CASCADE)
+    notification = models.CharField(max_length=1000)
+    seen = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{ self.repairman } notification'
+
+
 class UserFavourite(models.Model):
     user = models.IntegerField()
     repairman = models.IntegerField()
