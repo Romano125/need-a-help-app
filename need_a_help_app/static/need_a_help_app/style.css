@@ -389,3 +389,9 @@ header.masthead .masthead-content .masthead-subheading {
   color: white;
 }
 
+/*notifications row hower*/
+
+.not_row:hover{
+   background: #f2f2f2;
+}
+
