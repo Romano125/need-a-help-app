@@ -58,7 +58,9 @@ class Profile(models.Model):
 class ClientNotifications(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.CharField(max_length=1000)
+    date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
+    remove = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{ self.client } notification'
@@ -67,7 +69,9 @@ class ClientNotifications(models.Model):
 class RepairmanNotifications(models.Model):
     repairman = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.CharField(max_length=1000)
+    date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
+    remove = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{ self.repairman } notification'

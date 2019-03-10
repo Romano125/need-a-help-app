@@ -59,10 +59,23 @@ class AppMainView(LoginRequiredMixin, ListView):
         act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
         act_req = JobHire.objects.filter(repairman=us, status='pending').count()
         act_cnt = act_job + act_req
-        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+        get_not = self.request.GET.get('not', -1)
+        get_not_c = self.request.GET.get('not_c', -1)
+
+        if get_not != -1:
+            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
+            not_seen.seen = True
+            not_seen.save()
+
+        if get_not_c != -1:
+            not_seen = ClientNotifications.objects.filter(id=get_not_c).first()
+            not_seen.seen = True
+            not_seen.save()
 
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
@@ -100,8 +113,8 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
                 f_hired = 1
 
         us = self.request.user
-        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
@@ -133,7 +146,7 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
                 f = 1
 
         us = self.request.user
-        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
 
         context_data['f'] = f
         context_data['not_cli'] = not_cli
@@ -191,7 +204,7 @@ def show_favs(request):
                 f_hired.append(rep)
 
     us = request.user
-    not_c = ClientNotifications.objects.filter(client=us, seen=False)
+    not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
     context = {
@@ -219,7 +232,7 @@ class RequestsView(LoginRequiredMixin, ListView):
         context_data = super(RequestsView, self).get_context_data(**kwargs)
 
         us = self.request.user
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         context_data['not_c'] = not_c
@@ -247,7 +260,7 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         context_data = super(RequestCreateView, self).get_context_data(**kwargs)
 
         us = self.request.user
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         context_data['not_c'] = not_c
@@ -297,8 +310,8 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         vis = Requests.objects.filter(id=req_id).first()
 
         us = self.request.user
-        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
@@ -339,7 +352,7 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context_data = super(RequestUpdateView, self).get_context_data(**kwargs)
 
         us = self.request.user
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         context_data['not_c'] = not_c
@@ -365,7 +378,7 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context_data = super(RequestDeleteView, self).get_context_data(**kwargs)
 
         us = self.request.user
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         context_data['not_c'] = not_c
@@ -381,9 +394,9 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         for u in us:
             for a in apps:
                 if u == a.repairman:
-                    notif = f'<a href="./info/{ req.user.id }/">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
-                    notif += '</a>' + f'<a href="./info/{ req.user.id }/">' + req.user.username + '</a>' + f' deleted posted job ( { req.job_title } ) for which you\'ve applied for!'
-                    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+                    notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ req.user.id }/">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
+                    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ req.user.id }/">' + req.user.username + '</a>' + f' deleted posted job ( { req.job_title } ) for which you\'ve applied for!'
+                    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
                     rep_not = RepairmanNotifications(repairman=u, notification=notif)
                     rep_not.save()
 
@@ -414,7 +427,7 @@ def search(request):
     """
 
     us = request.user
-    not_c = ClientNotifications.objects.filter(client=us, seen=False)
+    not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
     context = {
@@ -446,9 +459,9 @@ def hire_repairman(request, user_id, rep_id):
         req_mess = RepairmanRequests(repairman=rep, user=user_id, request_message=mess)
         req_mess.save()
 
-    notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
-    notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a> hired you for a job!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+    notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ us.id }/">' + us.username + '</a> hired you for a job!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
     rep_not = RepairmanNotifications(repairman=rep, notification=notif)
     rep_not.save()
 
@@ -473,7 +486,7 @@ class HiredListView(LoginRequiredMixin, ListView):
         job = JobHire.objects.order_by('-date_hired')
 
         us = self.request.user
-        not_c = ClientNotifications.objects.filter(client=us, seen=False)
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         done_job = Hire.objects.filter(user=us, status='done', accepted=True).count()
         done_req = JobHire.objects.filter(status='done').count()
@@ -507,8 +520,15 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
         act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
         act_req = JobHire.objects.filter(repairman=us, status='pending').count()
         act_cnt = act_job + act_req
-        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+
+        get_not = self.request.GET.get('not', -1)
+
+        if get_not != -1:
+            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
+            not_seen.seen = True
+            not_seen.save()
 
         context_data['us'] = users
         context_data['cnt'] = req
@@ -543,9 +563,9 @@ def job_accept(request, user_id, rep_id):
 
     rep = User.objects.filter(id=rep_id).first()
 
-    notif = f'<a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
-    notif += '</a>' + f'<a href="./info/{ rep.id }/">' + rep.username + '</a> accepted a job you\'ve hired him for!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+    notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
+    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ rep.id }/">' + rep.username + '</a> accepted a job you\'ve hired him for!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
     cli_not = ClientNotifications(client=us, notification=notif)
     cli_not.save()
 
@@ -574,7 +594,7 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
         act_req = JobHire.objects.filter(repairman=us, status='pending').count()
         act_cnt = act_job + act_req
-        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
@@ -612,9 +632,9 @@ def job_done(request, user_id, rep_id):
 
     rep = User.objects.filter(id=rep_id).first()
 
-    notif = f'<a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
-    notif += '</a>' + f'<a href="./info/{ rep.id }/">' + rep.username + '</a> finished a job you\'ve hired him for!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+    notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
+    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ rep.id }/">' + rep.username + '</a> finished a job you\'ve hired him for!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
     cli_not = ClientNotifications(client=us, notification=notif)
     cli_not.save()
 
@@ -642,7 +662,7 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
         act_req = JobHire.objects.filter(repairman=us, status='pending').count()
         act_cnt = act_job + act_req
-        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['us'] = users
@@ -689,7 +709,7 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
         act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
         act_req = JobHire.objects.filter(repairman=us, status='pending').count()
         act_cnt = act_job + act_req
-        not_r = RepairmanNotifications.objects.filter(repairman=us, seen=False)
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         context_data['cnt'] = cnt
@@ -713,9 +733,9 @@ def posted_job_hire(request, us_id, req_id):
         job_save = JobHire(repairman=us, request=req)
         job_save.save()
 
-        notif = f'<a href="./info/{ req.user.id }/">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
-        notif += '</a>' + f'<a href="./info/{ req.user.id }/">' + req.user.username + '</a>' + f' hired you for a job { req.job_title }!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+        notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ req.user.id }/">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ req.user.id }/">' + req.user.username + '</a>' + f' hired you for a job { req.job_title }!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
         rep_not = RepairmanNotifications(repairman=us, notification=notif)
         rep_not.save()
 
@@ -732,9 +752,9 @@ def posted_job_done(request, us_id, req_id):
     job.status = 'done'
     job.save()
 
-    notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
-    notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a>' + f' finished the job { req.job_title } you\'ve hired him for!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+    notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ us.id }/">' + us.username + '</a>' + f' finished the job { req.job_title } you\'ve hired him for!'
+    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
     cli_not = ClientNotifications(client=req.user, notification=notif)
     cli_not.save()
 
@@ -761,9 +781,9 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         rep = hir.repairman
         us = self.object.user
 
-        notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
-        notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a>' + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+        notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ us.id }/">' + us.username + '</a>' + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
         rep_not = RepairmanNotifications(repairman=rep, notification=notif)
         rep_not.save()
 
@@ -802,18 +822,18 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
             break
 
     if log.profile.role == 'client':
-        notif = f'<a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
-        notif += '</a>' + f'<a href="./info/{ us.id }/">' + us.username + '</a> canceled the job for which you were hired!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+        notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ us.id }/">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ us.id }/">' + us.username + '</a> canceled the job for which you were hired!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
         rep_not = RepairmanNotifications(repairman=rep, notification=notif)
         rep_not.save()
 
         messages.success(request, f'You\'ve canceled the job for which you hired { rep.username }!')
         return redirect('hired_user', pk=log.id)
     else:
-        notif = f'<a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
-        notif += '</a>' + f'<a href="./info/{ rep.id }/">' + rep.username + '</a> quit the job you\'ve hired him!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i>'
+        notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="./info/{ rep.id }/">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="./info/{ rep.id }/">' + rep.username + '</a> quit the job you\'ve hired him!'
+        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
         cli_not = ClientNotifications(client=us, notification=notif)
         cli_not.save()
 

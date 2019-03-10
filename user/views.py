@@ -64,8 +64,8 @@ def profile(request, log):
         else:
             p_form = ClientUpdateForm(instance=request.user.profile)
 
-    not_r = RepairmanNotifications.objects.filter(repairman=user, seen=False)
-    not_c = ClientNotifications.objects.filter(client=user, seen=False)
+    not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+    not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_rep = RepairmanNotifications.objects.filter(repairman=user, seen=False).count()
     not_cli = ClientNotifications.objects.filter(client=user, seen=False).count()
 

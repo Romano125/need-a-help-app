@@ -395,9 +395,10 @@ header.masthead .masthead-content .masthead-subheading {
    background: #f2f2f2;
 }
 
-.popOver .popover-body {
-  height: 10px;
+.popover-body {
+  height: 115px;
   overflow-y: auto;
+  margin: auto;
 }
 
 /*modal scroll*/
