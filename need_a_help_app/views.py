@@ -842,3 +842,53 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
             return redirect('requests_repairman', pk=rep_id)
         elif txt == 'act':
             return redirect('active_repairman', pk=rep_id)
+
+
+class NotificationsClientListView(LoginRequiredMixin, ListView):
+    model = ClientNotifications
+    template_name = 'need_a_help_app/notifications_client.html'
+    context_object_name = 'notif'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return ClientNotifications.objects.filter(client=user).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(NotificationsClientListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+        us = self.request.user
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+        context_data['us'] = users
+        context_data['not_c'] = not_c
+        context_data['not_cli'] = not_cli
+
+        return context_data
+
+
+class NotificationsRepairmanListView(LoginRequiredMixin, ListView):
+    model = RepairmanNotifications
+    template_name = 'need_a_help_app/notifications_repairman.html'
+    context_object_name = 'notif'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return RepairmanNotifications.objects.filter(repairman=user).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(NotificationsRepairmanListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+        us = self.request.user
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+
+        context_data['us'] = users
+        context_data['not_r'] = not_r
+        context_data['not_rep'] = not_rep
+
+        return context_data

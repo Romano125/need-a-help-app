@@ -4,7 +4,7 @@
     {% if not_r %}
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
-                {% for n in not_r %}
+                {% for n in not_r|slice:'5' %}
                     <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'requests_repairman' user.id %}?not={{ n.id }}&quot;;'>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
@@ -13,6 +13,11 @@
                     </div>
                     <hr width=100%>
                 {% endfor %}
+                <div class='row'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                        <a href='{% url 'notifications_repairman' user.id %}'>Show all notifications</a>
+                    </div>
+                </div>
             </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
         {% if not_rep %}
             <span class="badge badge-notify-bell">{{ not_rep }}</span>
@@ -27,7 +32,7 @@
     {% if not_c %}
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
-                {% for n in not_c %}
+                {% for n in not_c|slice:'5' %}
                     <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'main' %}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
@@ -36,6 +41,11 @@
                     </div>
                     <hr width=100%>
                 {% endfor %}
+                <div class='row'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                        <a href='{% url 'notifications_client' user.id %}'>Show all notifications</a>
+                    </div>
+                </div>
             </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
         {% if not_cli %}
             <span class="badge badge-notify-bell">{{ not_cli }}</span>
@@ -44,13 +54,6 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <h6 class='text-secondary text-muted' align='center'>No results</h6>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover"></i>
     {% endif %}
-{% endblock %}
-
-{% block not_content_client %}
-{% endblock %}
-
-{% block not_content_repairman %}
-
 {% endblock %}
 
 {% block mess_repairman %}
