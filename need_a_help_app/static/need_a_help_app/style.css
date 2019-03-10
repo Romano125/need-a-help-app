@@ -389,10 +389,19 @@ header.masthead .masthead-content .masthead-subheading {
   color: white;
 }
 
-/*notifications row hower*/
+/*notifications row hover*/
 
 .not_row:hover{
    background: #f2f2f2;
+}
+
+.not_seen{
+   background: #e6e6e6;
+   cursor: pointer;
+}
+
+.not_seen:hover{
+   background: #d9d9d9;
 }
 
 .popover-body {
