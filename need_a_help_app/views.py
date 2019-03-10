@@ -55,15 +55,6 @@ class AppMainView(LoginRequiredMixin, ListView):
                 if h.user == us and h.repairman == u.id and h.status == 'pending':
                     f_hired.append(u)
 
-        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
-        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
-        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
-        act_cnt = act_job + act_req
-        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
-        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
-        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
-        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
-
         get_not = self.request.GET.get('not', -1)
         get_not_c = self.request.GET.get('not_c', -1)
 
@@ -76,6 +67,16 @@ class AppMainView(LoginRequiredMixin, ListView):
             not_seen = ClientNotifications.objects.filter(id=get_not_c).first()
             not_seen.seen = True
             not_seen.save()
+
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
 
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
@@ -514,6 +515,13 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context_data = super(RepairmanRequestsListView, self).get_context_data(**kwargs)
 
+        get_not = self.request.GET.get('not', -1)
+
+        if get_not != -1:
+            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
+            not_seen.seen = True
+            not_seen.save()
+
         users = User.objects.all()
         us = self.request.user
         req = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
@@ -522,13 +530,6 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
-
-        get_not = self.request.GET.get('not', -1)
-
-        if get_not != -1:
-            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
-            not_seen.seen = True
-            not_seen.save()
 
         context_data['us'] = users
         context_data['cnt'] = req
