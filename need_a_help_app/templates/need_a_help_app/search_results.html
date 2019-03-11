@@ -87,28 +87,34 @@
         <h3 class="text-secondary text-muted" align="center">No results</h3>
     {% endif %}
 
-    {% if is_paginated %}
+    <div class="container" align="center">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 align-items-center justify-content" style="margin: auto">
+                {% if is_paginated %}
 
-        {% if page_obj.has_previous %}
-            <a class="btn btn-outline-info mb-4" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">First</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>
-        {% endif %}
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1"><span class="badge badge-pag"><i class="fas fa-angle-double-left"></i></span></a>
+                        <a href="?page={{ page_obj.previous_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-left"></i></span></a>
+                    {% endif %}
 
-        {% for i in page_obj.paginator.page_range %}
-            {% if page_obj.number == i %}
-                <a class="btn btn-info mb-4" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a class="btn btn-outline-info mb-4" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
-            {% endif %}
+                    {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
+                            <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
+                        {% endif %}
 
-        {% endfor %}
+                    {% endfor %}
 
-        {% if page_obj.has_next %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Last</a>
-        {% endif %}
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-right"></i></span></a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}"><span class="badge badge-pag"><i class="fas fa-angle-double-right"></i></span></a>
+                    {% endif %}
 
-    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+   </div>
 
     <!-- Modal -->
     <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

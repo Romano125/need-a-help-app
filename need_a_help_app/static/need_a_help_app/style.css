@@ -302,6 +302,18 @@ header.masthead .masthead-content .masthead-subheading {
 
 /*badge at top of the icon*/
 
+.badge-pag{
+   background: #001a00;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   font-size: medium;
+}
+
+.badge-pag:hover{
+   background: #113311;
+}
+
 .badge-notify{
    background: red;
    position: relative;
