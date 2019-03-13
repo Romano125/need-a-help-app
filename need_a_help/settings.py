@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'need_a_help_app.apps.NeedAHelpAppConfig',
     'crispy_forms',
     'betterforms',
-    'channels',  #dodali smo channel app u projekt
+    # channels',
     'chat',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -56,7 +56,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'need_a_help.urls'
-ASGI_APPLICATION = "need_a_help.routing.application"  #dodano radi routanja socketa i runservera, koristi se asinkroni web server
+ASGI_APPLICATION = "need_a_help.routing.application"  # dodano radi routanja socketa i runservera, koristi se asinkroni web server
 
 
 TEMPLATES = [
@@ -75,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'need_a_help.wsgi.application'
+# WSGI_APPLICATION = 'need_a_help.wsgi.application'
 
 
 # Database
@@ -141,7 +141,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],    
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }

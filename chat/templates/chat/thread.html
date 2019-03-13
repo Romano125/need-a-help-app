@@ -1,6 +1,89 @@
 {% extends "need_a_help_app/base.html" %}
 
+{% block notify_repairman %}
+    {% if not_r %}
+        <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+            <div class='container'>
+                {% for n in not_r|slice:'5' %}
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'requests_repairman' user.id %}?not={{ n.id }}&quot;;'>
+                        {{ n.notification }}
+                        <div class='col-sm-3 col-md-3 col-lg-3'>
+                            <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
+                        </div>
+                    </div>
+                    <hr width=100%>
+                {% endfor %}
+                <div class='row'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                        <a href='{% url 'notifications_repairman' user.id %}'>Show all notifications</a>
+                    </div>
+                </div>
+            </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
+        {% if not_rep %}
+            <span class="badge badge-notify-bell">{{ not_rep }}</span>
+        {% endif %}
+    {% else %}
+        <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+            <h6 class='text-secondary text-muted' align='center'>No results</h6>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover"></i>
+    {% endif %}
+{% endblock %}
+
+{% block notify_client %}
+    {% if not_c %}
+        <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+            <div class='container'>
+                {% for n in not_c|slice:'5' %}
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'main' %}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
+                        {{ n.notification }}
+                        <div class='col-sm-3 col-md-3 col-lg-3'>
+                            <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
+                        </div>
+                    </div>
+                    <hr width=100%>
+                {% endfor %}
+                <div class='row'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                        <a href='{% url 'notifications_client' user.id %}'>Show all notifications</a>
+                    </div>
+                </div>
+            </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
+        {% if not_cli %}
+            <span class="badge badge-notify-bell">{{ not_cli }}</span>
+        {% endif %}
+    {% else %}
+        <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+            <h6 class='text-secondary text-muted' align='center'>No results</h6>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover"></i>
+    {% endif %}
+{% endblock %}
+
+{% block mess_repairman %}
+    {% if mess_rep %}
+        <span class="badge badge-notify-mess">{{ mess_rep }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block mess_client %}
+        <span class="badge badge-notify-mess">55</span>
+    {% if mess_cli %}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block count %}
+    {% if cnt %}
+        <span class="badge badge-notify">{{ cnt }}</span>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block app_client %}
+{% endblock %}
+
+{% block app_repairman %}
 {% endblock %}
 
 {% block content %}
@@ -9,11 +92,16 @@
 	<div id='chat-items'>
 	{% for chat in object.chatmessage_set.all %}
 
-		<button type="button" class="btn btn-info" id = "text" style = "{% if user != chat.user %}
-		  float:right; display:block;{% else %}{% endif %}">{{ chat.message }} </button><br>
+        {% if user != chat.user %}
+    		<button type="button" class="btn btn-dark" id = "text" style = "{% if user != chat.user %}
+    		  float:right; display:block;{% else %}{% endif %}">{{ chat.message }} </button><br>
+        {% else %}
+            <button type="button" class="btn btn-info" id = "text" style = "{% if user != chat.user %}
+          float:right; display:block;{% else %}{% endif %}">{{ chat.message }} </button><br>
+        {% endif %}
 		{% if user != chat.user %} <br> {% else %}{% endif %}
-		<p {% if user != chat.user %} align = "right" {% else %}{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p> 
-		
+		<p {% if user != chat.user %} align = "right" {% else %}{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p>
+
 
 		{% endfor %}
 	</div>
@@ -31,7 +119,7 @@
 {% block script %}
 
 <script>
-	
+
 	$(document).ready(function () {
   		 $("#chat-items").animate({ scrollTop: $('chat-items').prop("scrollHeight")}, 1000);
 	})
@@ -58,7 +146,7 @@ var socket = new WebSocket(endpoint)
 
 socket.onmessage = function(e){
 	console.log("message", e)
-	var chatDataMsg = JSON.parse(e.data) 
+	var chatDataMsg = JSON.parse(e.data)
 	if (chatDataMsg.username == "{{user}}") {
 			chatHolder.append("<button type='button' class='btn btn-info' >" + chatDataMsg.message + "</button><br> <p style = 'font-size: 10px;'> "+ chatDataMsg.username + "</p>" )
 	} else {
@@ -67,7 +155,7 @@ socket.onmessage = function(e){
 }
 //"<li>" + chatDataMsg.message + " via " + chatDataMsg.username + "</li>"
 
-	
+
 socket.onopen = function(e){
 	console.log("message", e)
 	formData.submit(function(event){

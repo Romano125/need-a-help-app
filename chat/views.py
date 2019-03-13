@@ -5,6 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormMixin
 
 from django.views.generic import DetailView, ListView
+from django.contrib.auth.models import User
 
 from .forms import ComposeForm
 from .models import Thread, ChatMessage
@@ -12,6 +13,7 @@ from .models import Thread, ChatMessage
 
 class InboxView(LoginRequiredMixin, ListView):
     template_name = 'chat/inbox.html'
+
     def get_queryset(self):
         return Thread.objects.by_user(self.request.user)
 
@@ -19,7 +21,7 @@ class InboxView(LoginRequiredMixin, ListView):
 class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
     template_name = 'chat/thread.html'
     form_class = ComposeForm
-    
+
     def get_success_url(self):
         user = self.request.user
         return reverse_lazy('messages', kwargs={'username': user.username})
@@ -28,9 +30,9 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         return Thread.objects.by_user(self.request.user)
 
     def get_object(self):
-        other_username  = self.kwargs.get("username")
-        obj, created    = Thread.objects.get_or_new(self.request.user, other_username)
-        if obj == None:
+        other_username = self.kwargs.get("username")
+        obj, created = Thread.objects.get_or_new(self.request.user, other_username)
+        if obj is None:
             raise Http404
         return obj
 
@@ -55,5 +57,3 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         message = form.cleaned_data.get("message")
         ChatMessage.objects.create(user=user, thread=thread, message=message)
         return super().form_valid(form)
-
-
