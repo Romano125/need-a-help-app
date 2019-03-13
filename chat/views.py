@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormMixin
 
 from django.views.generic import DetailView, ListView
@@ -19,7 +19,10 @@ class InboxView(LoginRequiredMixin, ListView):
 class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
     template_name = 'chat/thread.html'
     form_class = ComposeForm
-    success_url = './'
+    
+    def get_success_url(self):
+        user = self.request.user
+        return reverse_lazy('messages', kwargs={'username': user.username})
 
     def get_queryset(self):
         return Thread.objects.by_user(self.request.user)

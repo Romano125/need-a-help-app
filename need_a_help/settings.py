@@ -25,7 +25,7 @@ SECRET_KEY = '%%p_w6w9&-gi$68_%z)nb^zt-uvdcj%#kbuq@*&e!b4_3pxu70'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'need_a_help_app.apps.NeedAHelpAppConfig',
     'crispy_forms',
     'betterforms',
+    'channels',  #dodali smo channel app u projekt
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +56,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'need_a_help.urls'
+ASGI_APPLICATION = "need_a_help.routing.application"  #dodano radi routanja socketa i runservera, koristi se asinkroni web server
+
 
 TEMPLATES = [
     {
@@ -71,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'need_a_help.wsgi.application'
+#WSGI_APPLICATION = 'need_a_help.wsgi.application'
 
 
 # Database
@@ -103,6 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'auth.User'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -130,3 +136,12 @@ MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = 'main'
 LOGIN_URL = 'login'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],    
+        },
+    },
+}

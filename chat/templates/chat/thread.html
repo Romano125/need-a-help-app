@@ -1,4 +1,7 @@
-{% extends "base.html" %}
+{% extends "need_a_help_app/base.html" %}
+
+{% block app_client %}
+{% endblock %}
 
 {% block content %}
 <h3 align = "center">{% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>

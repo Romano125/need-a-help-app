@@ -427,3 +427,24 @@ header.masthead .masthead-content .masthead-subheading {
   height: 317px;
   overflow-y: auto;
 }
+
+/*messages*/
+
+#form{
+   position: -webkit-sticky; /* Safari */
+  position: sticky;
+  bottom: 0;
+  width:100%;
+}
+
+#chat-items {
+  width: 100%;
+  overflow-y: scroll; 
+  height:700px;
+}
+
+#text {
+  word-wrap: break-word;
+  max-width: 300px;
+  white-space: normal;
+}

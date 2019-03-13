@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path, include
 from . import views
 
 urlpatterns = [
@@ -31,5 +31,5 @@ urlpatterns = [
     path('client_repairman_job_delete/<int:user_id>/<int:rep_id>/<int:log_id>/<str:txt>/', views.client_repairman_job_delete, name='client_repairman_job_delete'),
     path('notifications_client/<int:pk>', views.NotificationsClientListView.as_view(), name='notifications_client'),
     path('notifications_repairman/<int:pk>', views.NotificationsRepairmanListView.as_view(), name='notifications_repairman'),
-
+    path('chat/', include('chat.urls')),
 ]
