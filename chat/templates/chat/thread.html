@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 align = "center">{% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
+<div class = "row">
+	<div id='chat-items'>
+	{% for chat in object.chatmessage_set.all %}
+
+		<button type="button" class="btn btn-info" id = "text" style = "{% if user != chat.user %}
+		  float:right; display:block;{% else %}{% endif %}">{{ chat.message }} </button><br>
+		{% if user != chat.user %} <br> {% else %}{% endif %}
+		<p {% if user != chat.user %} align = "right" {% else %}{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p> 
+		
+
+		{% endfor %}
+	</div>
+</div>
+<div class = "row">
+	<form id='form' method='POST'  "> {% csrf_token %}
+		<input type = "hidden" id = "myUsername" value = '{{user.username}}'/>
+	{{form.as_p }}
+	<input type='submit' class='btn btn-primary'/>
+	</form>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+	
+	$(document).ready(function () {
+  		 $("#chat-items").animate({ scrollTop: $('chat-items').prop("scrollHeight")}, 1000);
+	})
+
+</script>
+
+<script>
+// websocket scripts
+console.log(window.location)
+var loc = window.location
+var formData = $("#form")
+var msgInput = $("#id_message")    //dohvat elementa stvarne poruke unutar forme
+var chatHolder = $("#chat-items")
+var me = $("#myUsername").val()
+
+var wsStart = 'ws://'
+if (loc.protocol == 'https:') {
+	wsStart = 'wss://'
+}
+
+var endpoint = wsStart + window.location.host + window.location.pathname + '/'
+
+var socket = new WebSocket(endpoint)
+
+socket.onmessage = function(e){
+	console.log("message", e)
+	var chatDataMsg = JSON.parse(e.data) 
+	if (chatDataMsg.username == "{{user}}") {
+			chatHolder.append("<button type='button' class='btn btn-info' >" + chatDataMsg.message + "</button><br> <p style = 'font-size: 10px;'> "+ chatDataMsg.username + "</p>" )
+	} else {
+		chatHolder.append("<button type='button' class='btn btn-info' style = 'float:right; display:block;' >" + chatDataMsg.message + "</button><br> <p align = 'right' style = 'font-size: 10px;'> <br>"+ chatDataMsg.username + "</p>" )
+	}
+}
+//"<li>" + chatDataMsg.message + " via " + chatDataMsg.username + "</li>"
+
+	
+socket.onopen = function(e){
+	console.log("message", e)
+	formData.submit(function(event){
+		event.preventDefault()
+		var msgText = msgInput.val()
+		//chatHolder.append("<li>" + msgText + " via " + me + "</li>")
+		var finalData = {
+			'message' : msgText
+		}
+		socket.send(JSON.stringify(finalData))
+		//socket.send("msgText")
+		msgInput.val('')			//prikupljanje poruke i resetiranje forme
+		formData[0].reset()
+	})
+}
+socket.onerror = function(e){
+	console.log("message", e)
+}
+socket.onclose = function(e){
+	console.log("message", e)
+}
+
+
+</script>
+
+{% endblock %}
