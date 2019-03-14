@@ -101,8 +101,45 @@
                             <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="far fa-check-square"></i></a>
                             <a href="{% url 'client_repairman_job_delete' user.id i.repairman user.id 'l' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                         {% else %}
-                            <button type="button" class="btn btn-outline-success btn-sm mt-1 mb-1" data-toggle="modal" data-target="#done_job"><i class="far fa-check-square"></i></button>
-                            <a href="#" class="btn btn-danger btn-sm mt-1 mb-1 disabled"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                          {% for j in us %}
+                            {% if j.id == i.repairman %}
+                              <button type="button" class="btn btn-outline-success btn-sm mt-1 mb-1" data-toggle="modal" data-target="#done_job{{ j.id }}"><i class="far fa-check-square"></i></button>
+                            {% endif %}
+                            <!-- Modal done -->
+                              <div class="modal fade" id="done_job{{ i.repairman }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle"><strong>Rate</strong></h5>
+                                      <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form id="rate_form" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" id="user" value="{{ i.repairman }}">
+                                        <div class="rating">
+
+                                            <h4>:My rating </h4>
+                                            <span class="rate" type="radio" name="star" id="r5"><input type="hidden" name="txt5" id="r55" value="5">☆</span>
+                                            <span class="rate" type="radio" name="star" id="r4"><input type="hidden" name="txt4" id="r44" value="4">☆</span>
+                                            <span class="rate" type="radio" name="star" id="r3"><input type="hidden" name="txt3" id="r33" value="3">☆</span>
+                                            <span class="rate" type="radio" name="star" id="r2"><input type="hidden" name="txt2" id="r22" value="2">☆</span>
+                                            <span class="rate" type="radio" name="star" id="r1"><input type="hidden" name="txt1" id="r11" value="1">☆</span>
+                                        </div>
+                                          <h4>Leave feedback: </h4>
+                                          <textarea name="feedback" id="feed" cols="50" rows="8"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="submit" id="btn-submit" class="btn btn-success">Done</button>
+                                        </div>
+                                      </form>
+                                  </div>
+                                </div>
+                              </div>
+                          {% endfor %}
+                          <a href="#" class="btn btn-danger btn-sm mt-1 mb-1 disabled"><i class="fa fa-ban" aria-hidden="true"></i></a>
                         {% endif %}
                     </div>
                 </div>
@@ -168,7 +205,40 @@
                         <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="far fa-check-square"></i></a>
                         <a href="{% url 'job_hire_delete' user.id %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
                       {% else %}
-                        <button type="button" class="btn btn-outline-success btn-sm mt-1 mb-1" data-toggle="modal" data-target="#done_job"><i class="far fa-check-square"></i></button>
+                        <button type="button" class="btn btn-outline-success btn-sm mt-1 mb-1" data-toggle="modal" data-target="#done_job{{ i.repairman.id }}"><i class="far fa-check-square"></i></button>
+                        <!-- Modal done -->
+                          <div class="modal fade" id="done_job{{ i.repairman.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLongTitle"><strong>Rate</strong></h5>
+                                  <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <form id="rate_form" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" id="user" value="{{ i.repairman.id }}">
+                                    <div class="rating">
+
+                                        <h4>:My rating </h4>
+                                        <span class="rate" type="radio" name="star" id="r5"><input type="hidden" name="txt5" id="r55" value="5">☆</span>
+                                        <span class="rate" type="radio" name="star" id="r4"><input type="hidden" name="txt4" id="r44" value="4">☆</span>
+                                        <span class="rate" type="radio" name="star" id="r3"><input type="hidden" name="txt3" id="r33" value="3">☆</span>
+                                        <span class="rate" type="radio" name="star" id="r2"><input type="hidden" name="txt2" id="r22" value="2">☆</span>
+                                        <span class="rate" type="radio" name="star" id="r1"><input type="hidden" name="txt1" id="r11" value="1">☆</span>
+                                    </div>
+                                      <h4>Leave feedback: </h4>
+                                      <textarea name="feedback" id="feed" cols="200" rows="10"></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" id="btn-submit" class="btn btn-success">Done</button>
+                                    </div>
+                                  </form>
+                              </div>
+                            </div>
+                          </div>
                         <a href="#" class="btn btn-danger btn-sm mt-1 mb-1 disabled"><i class="fa fa-ban" aria-hidden="true"></i></a>
                       {% endif %}
                   </div>
@@ -235,45 +305,13 @@
       </div>
     </div>
 
-    <!-- Modal done -->
-    <div class="modal fade" id="done_job" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Rate</strong></h5>
-            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="rate_form">
-              <div class="rating">
-
-                  <h4>:My rating </h4>
-                  <span class="rate" type="radio" name="star" id="r5" value="5">☆</span>
-                  <span class="rate" type="radio" name="star" id="r4" value="4">☆</span>
-                  <span class="rate" type="radio" name="star" id="r3" value="3">☆</span>
-                  <span class="rate" type="radio" name="star" id="r2" value="2">☆</span>
-                  <span class="rate" type="radio" name="star" id="r1" value="1">☆</span>
-              </div>
-                <h4>Leave feedback: </h4>
-                <textarea name="feedback" id="feed" cols="200" rows="10"></textarea>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Done</button>
-              </div>
-            </form>
-        </div>
-      </div>
-    </div>
-
     <script type="text/javascript">
       var val;
       document.getElementById('r1').addEventListener('click', (e) => {
         e.preventDefault();
 
-        if( document.getElementById('r1').checked === true ) val = document.getElementById('r1').value;
-        console.log(val);
+        val = document.getElementById('r11').value;
+
         document.getElementById('r1').classList.add('blocked');
         document.getElementById('r2').classList.remove('blocked');
         document.getElementById('r3').classList.remove('blocked');
@@ -292,9 +330,8 @@
       document.getElementById('r2').addEventListener('click', (e) => {
         e.preventDefault();
 
-        if( document.getElementById('r2').checked === true ) {
-          val = document.getElementById('r2').value;
-        }
+        val = document.getElementById('r22').value;
+
         document.getElementById('r1').classList.add('blocked');
         document.getElementById('r2').classList.add('blocked');
         document.getElementById('r3').classList.remove('blocked');
@@ -311,9 +348,8 @@
       document.getElementById('r3').addEventListener('click', (e) => {
         e.preventDefault();
 
-        if( document.getElementById('r3').checked === true ) {
-          val = document.getElementById('r3').value;
-        }
+        val = document.getElementById('r33').value;
+
         document.getElementById('r1').classList.add('blocked');
         document.getElementById('r2').classList.add('blocked');
         document.getElementById('r3').classList.add('blocked');
@@ -328,9 +364,8 @@
       document.getElementById('r4').addEventListener('click', (e) => {
         e.preventDefault();
 
-        if( document.getElementById('r4').checked === true ) {
-          val = document.getElementById('r4').value;
-        }
+        val = document.getElementById('r44').value;
+
         document.getElementById('r1').classList.add('blocked');
         document.getElementById('r2').classList.add('blocked');
         document.getElementById('r3').classList.add('blocked');
@@ -343,9 +378,8 @@
       document.getElementById('r5').addEventListener('click', (e) => {
         e.preventDefault();
 
-        if( document.getElementById('r5').checked === true ) {
-          val = document.getElementById('r5').value;
-        }
+        val = document.getElementById('r55').value;
+
         document.getElementById('r1').classList.add('blocked');
         document.getElementById('r2').classList.add('blocked');
         document.getElementById('r3').classList.add('blocked');
@@ -356,22 +390,40 @@
         e.preventDefault();
 
         txt = document.getElementById('feed').value;
-        console.log(val);
-        console.log(txt);
-      });
-      /*$(document).on('click', '#rating', function(e) {
-        e.preventDefault();
-
-        val = $('#rating').val();
-        console.log(val);
+        feed = '<img class="rounded-circle navbar-img" src="{{ user.profile.photo.url }}"> <a href="#">' + '{{ user.username }}';
+        feed += '</a> ' + txt;
+        id = document.getElementById('user').value;
 
         $.ajax({
           type: 'POST',
-          url: '/rate/',
+          url: '{% url "rate" %}',
           data: {
-            value: 5
+            id: $('#user').val(),
+            val: val,
+            feedback: feed,
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+          },
+          success: function() {
+            alert('Rate done!');
           }
         });
+      });
+      /*document.getElementById('rate_form').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        txt = document.getElementById('feed').value;
+        feed = '<img class="rounded-circle navbar-img" src="{{ user.profile.photo.url }}"> <a href="#">' + '{{ user.username }}';
+        feed += '</a> ' + txt;
+        id = document.getElementById('user').value;
+        console.log(id);
+        const form = {
+          val: val,
+          feedback: feed,
+          id: id,
+          submit: document.getElementById('btn-submit')
+        }
+
+        location.href=f'{ reverse("rate", kwargs={"rep_id": ${form.id}}) }' + `?val=${form.val}&feedback=${form.feedback}&id=${form.id}`;
       });*/
     </script>
 {% endblock %}

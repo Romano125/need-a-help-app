@@ -17,7 +17,8 @@ from user.models import (
     Appliccation,
     JobHire,
     ClientNotifications,
-    RepairmanNotifications
+    RepairmanNotifications,
+    Rate
 )
 from django.views.generic import (
     ListView,
@@ -418,7 +419,7 @@ def search(request):
     if prof:
         f = 1
 
-    #prof = User.objects.filter(Q(first_name__contains=q) | Q(last_name__contains=q))
+    # prof = User.objects.filter(Q(first_name__contains=q) | Q(last_name__contains=q))
 
     """
     us = User.objects.filter(id=selfrequest.user)
@@ -482,19 +483,19 @@ class HiredListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-        return Hire.objects.filter(user=user).order_by('-date')
+        return Hire.objects.filter(user=user, done=False).order_by('-date')
 
     def get_context_data(self, **kwargs):
         context_data = super(HiredListView, self).get_context_data(**kwargs)
 
         users = User.objects.all()
-        job = JobHire.objects.order_by('-date_hired')
+        job = JobHire.objects.filter(done=False).order_by('-date_hired')
 
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
-        done_job = Hire.objects.filter(user=us, status='done', accepted=True).count()
-        done_req = JobHire.objects.filter(status='done').count()
+        done_job = Hire.objects.filter(user=us, status='done', accepted=True, done=False).count()
+        done_req = JobHire.objects.filter(status='done', done=False).count()
 
         context_data['us'] = users
         context_data['job'] = job
@@ -895,5 +896,56 @@ class NotificationsRepairmanListView(LoginRequiredMixin, ListView):
         context_data['us'] = users
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
+
+        return context_data
+
+
+@login_required
+def rate(request):
+    if request.method == 'POST':
+        val = request.POST['val']
+        feed = request.POST['feedback']
+        id_r = request.POST['id']
+
+    rep = User.objects.filter(id=id_r).first()
+    Rate.objects.create(repairman=rep, rate=val, feedback=feed)
+
+    req = JobHire.objects.filter(repairman=rep, status='done').order_by('-date_hired').first()
+    req.done = True
+    req.save()
+
+    job = Hire.objects.filter(repairman=rep.id, status='done').order_by('-date').first()
+    job.done = True
+    job.save()
+
+
+class UserDoneListView(LoginRequiredMixin, ListView):
+    model = Hire
+    template_name = 'need_a_help_app/done_user.html'
+    context_object_name = 'hir'
+    paginate_by = 4
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return Hire.objects.filter(user=user, done=True).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(UserDoneListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+        job = JobHire.objects.filter(done=True).order_by('-date_hired')
+
+        us = self.request.user
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        done_job = Hire.objects.filter(user=us, status='done', accepted=True, done=True).count()
+        done_req = JobHire.objects.filter(status='done', done=True).count()
+
+        context_data['us'] = users
+        context_data['job'] = job
+        context_data['not_c'] = not_c
+        context_data['not_cli'] = not_cli
+        context_data['done_job'] = done_job
+        context_data['done_req'] = done_req
 
         return context_data

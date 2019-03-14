@@ -1,0 +1,220 @@
+{% extends 'need_a_help_app/base.html' %}
+
+{% block notify_client %}
+    {% if not_c %}
+        <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+            <div class='container'>
+                {% for n in not_c|slice:'5' %}
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'main' %}?not_c={{ n.id }}&quot;;'>
+                        {{ n.notification }}
+                        <div class='col-sm-3 col-md-3 col-lg-3'>
+                            <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
+                        </div>
+                    </div>
+                    <hr width=100%>
+                {% endfor %}
+                <div class='row'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                        <a href='{% url 'notifications_client' user.id %}'>Show all notifications</a>
+                    </div>
+                </div>
+            </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
+        {% if not_cli %}
+            <span class="badge badge-notify-bell">{{ not_cli }}</span>
+        {% endif %}
+    {% else %}
+        <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
+            <h6 class='text-secondary text-muted' align='center'>No results</h6>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover"></i>
+    {% endif %}
+{% endblock %}
+
+{% block mess_client %}
+        <span class="badge badge-notify-mess">55</span>
+    {% if mess_cli %}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+   <div class="row">
+    <div class="col-sm-8">
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active hire" id="pills-list-tab" data-toggle="pill" href="#pills-list" role="tab" aria-controls="pills-list" aria-selected="true">Done list</a>
+          <span class="badge badge-notify-hired-job">{% if done_job %} {{ done_job }} {% endif %}</span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link hire" id="pills-jobs-tab" data-toggle="pill" href="#pills-jobs" role="tab" aria-controls="pills-jobs" aria-selected="false">Jobs done list &nbsp<span class="badge badge-notify-hired-req">{% if done_req %} {{ done_req }} {% endif %}</span></a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-4" align="right">
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
+    </div>
+   </div>
+   <hr width="100%">
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
+        {% if hir %}
+           {% for i in hir %}
+                <div class="row">
+                    <div class="col-sm-3">
+                        {% for j in us %}
+                            {% if j.id == i.repairman %}
+                                <a href="{% url 'info' j.id %}">
+                                    <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="row">
+                            <div class="col-sm-10" align="center">
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
+                                <i class="fas fa-star" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 pl-5">
+                        {% for j in us %}
+                            {% if j.id == i.repairman %}
+                                <h1>{{ j.first_name }} {{ j.last_name }}</h1>
+                            {% endif %}
+                        {% endfor %}
+                        {% if i.status == 'pending' %}
+                            <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
+                        {% else %}
+                            <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
+                        {% endif %}
+                        {% if not i.accepted %}
+                            <small class="text-secondary text-muted">Accepted: <span style="color: red">{{ i.accepted }}</span></small><br>
+                        {% else %}
+                            <small class="text-secondary text-muted">Accepted: <span style="color: green">{{ i.accepted }}</span></small><br>
+                        {% endif %}
+                        <small class="text-secondary text-muted">Date requested: {{ i.date }}</small><br>
+                        <small class="text-secondary text-muted">Price: 100000 €</small><br>
+                    </div>
+                </div>
+                <hr width="100%">
+           {% endfor %}
+       {% else %}
+        <h3 class="text-secondary text-muted" align="center">No results</h3>
+       {% endif %}
+
+        <div class="container" align="center">
+          <div class="row">
+              <div class="col-sm-12 col-md-12 col-lg-12 align-items-center justify-content" style="margin: auto">
+                  {% if is_paginated %}
+
+                      {% if page_obj.has_previous %}
+                          <a href="?page=1"><span class="badge badge-pag"><i class="fas fa-angle-double-left"></i></span></a>
+                          <a href="?page={{ page_obj.previous_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-left"></i></span></a>
+                      {% endif %}
+
+                      {% for i in page_obj.paginator.page_range %}
+                          {% if page_obj.number == i %}
+                              <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
+                          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                              <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
+                          {% endif %}
+
+                      {% endfor %}
+
+                      {% if page_obj.has_next %}
+                          <a href="?page={{ page_obj.next_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-right"></i></span></a>
+                          <a href="?page={{ page_obj.paginator.num_pages }}"><span class="badge badge-pag"><i class="fas fa-angle-double-right"></i></span></a>
+                      {% endif %}
+
+                  {% endif %}
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="pills-jobs" role="tabpanel" aria-labelledby="pills-jobs-tab">
+          {% if job %}
+           {% for i in job %}
+                <div class="row">
+                  <div class="col-sm-3">
+                      <a href="{% url 'request_detail' i.request.id %}">
+                          <img class="rounded-circle account-img" src="{{ i.request.photo.url }}">
+                      </a>
+                  </div>
+                  <div class="col-sm-7 pl-5">
+                      <small class="text-muted">Repairman hired: </small><a class="mr-2" href="{% url 'info' i.repairman.id %}">{{ i.repairman }}</a>
+                      <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
+                      <hr width="100%">
+                      <h1>{{ i.request.job_title }}</h1>
+                      {% if i.status == 'pending' %}
+                          <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
+                      {% else %}
+                          <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
+                      {% endif %}
+                      <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
+                      <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
+                  </div>
+                </div>
+                <hr width="100%">
+           {% endfor %}
+       {% else %}
+        <h3 class="text-secondary text-muted" align="center">No results</h3>
+       {% endif %}
+
+        <div class="container" align="center">
+          <div class="row">
+              <div class="col-sm-12 col-md-12 col-lg-12 align-items-center justify-content" style="margin: auto">
+                  {% if is_paginated %}
+
+                      {% if page_obj.has_previous %}
+                          <a href="?page=1"><span class="badge badge-pag"><i class="fas fa-angle-double-left"></i></span></a>
+                          <a href="?page={{ page_obj.previous_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-left"></i></span></a>
+                      {% endif %}
+
+                      {% for i in page_obj.paginator.page_range %}
+                          {% if page_obj.number == i %}
+                              <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
+                          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                              <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
+                          {% endif %}
+
+                      {% endfor %}
+
+                      {% if page_obj.has_next %}
+                          <a href="?page={{ page_obj.next_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-right"></i></span></a>
+                          <a href="?page={{ page_obj.paginator.num_pages }}"><span class="badge badge-pag"><i class="fas fa-angle-double-right"></i></span></a>
+                      {% endif %}
+
+                  {% endif %}
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Filter By</strong></h5>
+            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4>Price: min - max</h4>
+            <div class="rating">
+                <h4>:Popularity </h4><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+            </div>
+            <h4>Knowledges: None</h4>
+            <h4>Address: -</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
