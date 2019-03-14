@@ -19,6 +19,12 @@ class InboxView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Thread.objects.by_user(self.request.user).order_by('-timestamp')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        chat = ChatMessage.objects.filter(user = self.request.user)
+        context['ch'] = chat
+        return context    
+
 
 class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
     template_name = 'chat/thread.html'
