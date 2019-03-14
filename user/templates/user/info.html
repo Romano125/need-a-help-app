@@ -116,7 +116,21 @@
             <h4>Profession: {{ info.profile.profession }}</h4>
             <h4>Knowledges: {{ info.profile.knowledges }}</h4>
             <h4>Hired(count): 55</h4>
-            <h4>Popularity: *****</h4>
+            <div class="row">
+              <div class="col-sm-3">
+                <h4>Popularity:</h4>
+              </div>
+              <div class="col-sm-7 pt-1" align="left">
+                <div class="{{ info }}">
+                  <div class="star-outer">
+                    <div class="star-inner"></div>
+                  </div>
+                  <span class="number-rating text-secondary"></span>
+                </div>
+                <input type="hidden" class="hid" name="name" id="name{{ info }}" value="{{ info }}">
+                <input type="hidden" class="hid" name="rate" id="rate{{ info.profile.rating }}" value="{{ info.profile.rating }}">
+              </div>
+            </div>
             <h4>Price: {{ info.profile.costs }} €</h4>
           {% else %}
             <h4>Address: {{ info.profile.address }}</h4>
@@ -144,4 +158,5 @@
         {% endif %}
       </div>
     </div>
+{% include 'need_a_help_app/stars_js.html' %}
 {% endblock %}

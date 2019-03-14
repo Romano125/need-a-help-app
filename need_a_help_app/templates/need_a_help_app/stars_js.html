@@ -1,0 +1,31 @@
+<script type="text/javascript">
+  ls = document.getElementsByClassName('hid');
+
+  var arr = []
+  for( let i = 0; i < ls.length; i += 2 ) {
+    arr.push({
+        key:   ls[i].value,
+        value: ls[i+1].value
+    });
+  }
+
+  const starsTotal = 5;
+
+  document.addEventListener('DOMContentLoaded', getRatings);
+
+  function getRatings() {
+    for( let r in arr ) {
+      console.log(arr[r].value);
+      const starPercentage = (arr[r].value / starsTotal) * 100;
+      // round to nearest 10
+      const starRounded = `${Math.round(starPercentage / 10) * 10}%`;
+
+      // set width of stars inner to perc
+      document.querySelector(`.${arr[r].key} .star-inner`).style.width = starRounded;
+      console.log(starRounded);
+
+      // add number rating
+      document.querySelector(`.${arr[r].key} .number-rating`).innerHTML = `&nbsp(${arr[r].value})`;
+    }
+  }
+</script>

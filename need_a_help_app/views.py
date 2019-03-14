@@ -27,6 +27,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+import json
 
 
 def home(request):
@@ -35,11 +36,11 @@ def home(request):
 
 class AppMainView(LoginRequiredMixin, ListView):
     template_name = 'need_a_help_app/app_main.html'
-    context_object_name = 'users'
-    paginate_by = 3
+    context_object_name = 'prof'
+    paginate_by = 5
 
     def get_queryset(self):
-        return User.objects.all()
+        return Profile.objects.filter(role='repairman').order_by('-rating')
 
     def get_context_data(self, **kwargs):
         context_data = super(AppMainView, self).get_context_data(**kwargs)
@@ -924,6 +925,22 @@ def rate(request):
         req.done = True
         req.save()
 
+    rat = Rate.objects.all()
+
+    sum_r = 0.0
+    cnt = 0.0
+    for r in rat:
+        if r.repairman == rep:
+            cnt += 1.0
+            sum_r += r.rate
+
+    total = sum_r / cnt
+
+    rate_save = Profile.objects.filter(user=rep).first()
+    rate_save.rating = total
+    rate_save.save()
+
+    messages.success(request, f'You\'ve successfully rated repairman { rep.username }!')
     return redirect('done_user', pk=us.id)
 
 
@@ -955,5 +972,6 @@ class UserDoneListView(LoginRequiredMixin, ListView):
         context_data['not_cli'] = not_cli
         context_data['done_job'] = done_job
         context_data['done_req'] = done_req
+        context_data['us_list'] = list(User.objects.all())
 
         return context_data

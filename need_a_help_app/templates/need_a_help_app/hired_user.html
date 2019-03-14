@@ -65,22 +65,25 @@
                                 <a href="{% url 'info' j.id %}">
                                     <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
                                 </a>
+                                <div class="row">
+                                    <div class="col-sm-12" align="center">
+                                      <div class="{{ j }}">
+                                        <div class="star-outer">
+                                          <div class="star-inner"></div>
+                                        </div>
+                                        <span class="number-rating text-secondary"></span>
+                                      </div>
+                                    </div>
+                                </div>
                             {% endif %}
                         {% endfor %}
-                        <div class="row">
-                            <div class="col-sm-10" align="center">
-                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                <i class="fas fa-star" style="color: #ffd633" aria-hidden="true"></i>
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                            </div>
-                        </div>
                     </div>
                     <div class="col-sm-7 pl-5">
                         {% for j in us %}
                             {% if j.id == i.repairman %}
                                 <h1>{{ j.first_name }} {{ j.last_name }}</h1>
+                                <input type="hidden" class="hid" name="name" id="name{{ j }}" value="{{ j }}">
+                                <input type="hidden" class="hid" name="rate" id="rate{{ j }}" value="{{ j.profile.rating }}">
                             {% endif %}
                         {% endfor %}
                         {% if i.status == 'pending' %}
@@ -307,6 +310,8 @@
       </div>
     </div>
 
+    <!-- dodajem block za js zvjezdi -->
+    {% include 'need_a_help_app/stars_js.html' %}
     <script type="text/javascript">
       var val;
       document.getElementById('r1').addEventListener('click', (e) => {
@@ -424,23 +429,6 @@
           }
         });*/
       });
-      /*document.getElementById('rate_form').addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        txt = document.getElementById('feed').value;
-        feed = '<img class="rounded-circle navbar-img" src="{{ user.profile.photo.url }}"> <a href="#">' + '{{ user.username }}';
-        feed += '</a> ' + txt;
-        id = document.getElementById('user').value;
-        console.log(id);
-        const form = {
-          val: val,
-          feedback: feed,
-          id: id,
-          submit: document.getElementById('btn-submit')
-        }
-
-        location.href=f'{ reverse("rate", kwargs={"rep_id": ${form.id}}) }' + `?val=${form.val}&feedback=${form.feedback}&id=${form.id}`;
-      });*/
     </script>
 {% endblock %}
 

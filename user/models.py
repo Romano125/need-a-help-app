@@ -49,7 +49,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=15, choices=ROLES, default='client')
     profession = models.CharField(max_length=250, choices=PROFESSION, default='Other')
     knowledges = models.TextField(max_length=1000, blank=True)
-    rating = models.IntegerField(default=0)
+    rating = models.FloatField(default=0.0)
     photo = models.ImageField(default='default_user.jpg', upload_to='profile_user')
 
     def __str__(self):
