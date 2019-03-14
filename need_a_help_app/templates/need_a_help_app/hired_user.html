@@ -246,16 +246,133 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="rating">
-                <h4>:My rate </h4><span id="1">☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-            </div>
-            <h4>Leave feedback: </h4> <a href="#" class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedback</a>
-          </div>
-          <div class="modal-footer">
-            <a href="#" class="btn btn-success">Done</a>
-          </div>
+            <form id="rate_form">
+              <div class="rating">
+
+                  <h4>:My rating </h4>
+                  <span class="rate" type="radio" name="star" id="r5" value="5">☆</span>
+                  <span class="rate" type="radio" name="star" id="r4" value="4">☆</span>
+                  <span class="rate" type="radio" name="star" id="r3" value="3">☆</span>
+                  <span class="rate" type="radio" name="star" id="r2" value="2">☆</span>
+                  <span class="rate" type="radio" name="star" id="r1" value="1">☆</span>
+              </div>
+                <h4>Leave feedback: </h4>
+                <textarea name="feedback" id="feed" cols="200" rows="10"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Done</button>
+              </div>
+            </form>
         </div>
       </div>
     </div>
+
+    <script type="text/javascript">
+      var val;
+      document.getElementById('r1').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if( document.getElementById('r1').checked === true ) val = document.getElementById('r1').value;
+        console.log(val);
+        document.getElementById('r1').classList.add('blocked');
+        document.getElementById('r2').classList.remove('blocked');
+        document.getElementById('r3').classList.remove('blocked');
+        document.getElementById('r4').classList.remove('blocked');
+        document.getElementById('r5').classList.remove('blocked');
+
+        document.getElementById('r2').classList.remove('rating');
+        document.getElementById('r3').classList.remove('rating');
+        document.getElementById('r4').classList.remove('rating');
+        document.getElementById('r5').classList.remove('rating');
+        document.getElementById('r2').classList.remove('rate');
+        document.getElementById('r3').classList.remove('rate');
+        document.getElementById('r4').classList.remove('rate');
+        document.getElementById('r5').classList.remove('rate');
+      });
+      document.getElementById('r2').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if( document.getElementById('r2').checked === true ) {
+          val = document.getElementById('r2').value;
+        }
+        document.getElementById('r1').classList.add('blocked');
+        document.getElementById('r2').classList.add('blocked');
+        document.getElementById('r3').classList.remove('blocked');
+        document.getElementById('r4').classList.remove('blocked');
+        document.getElementById('r5').classList.remove('blocked');
+
+        document.getElementById('r3').classList.remove('rating');
+        document.getElementById('r4').classList.remove('rating');
+        document.getElementById('r5').classList.remove('rating');
+        document.getElementById('r3').classList.remove('rate');
+        document.getElementById('r4').classList.remove('rate');
+        document.getElementById('r5').classList.remove('rate');
+      });
+      document.getElementById('r3').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if( document.getElementById('r3').checked === true ) {
+          val = document.getElementById('r3').value;
+        }
+        document.getElementById('r1').classList.add('blocked');
+        document.getElementById('r2').classList.add('blocked');
+        document.getElementById('r3').classList.add('blocked');
+        document.getElementById('r4').classList.remove('blocked');
+        document.getElementById('r5').classList.remove('blocked');
+
+        document.getElementById('r4').classList.remove('rating');
+        document.getElementById('r5').classList.remove('rating');
+        document.getElementById('r4').classList.remove('rate');
+        document.getElementById('r5').classList.remove('rate');
+      });
+      document.getElementById('r4').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if( document.getElementById('r4').checked === true ) {
+          val = document.getElementById('r4').value;
+        }
+        document.getElementById('r1').classList.add('blocked');
+        document.getElementById('r2').classList.add('blocked');
+        document.getElementById('r3').classList.add('blocked');
+        document.getElementById('r4').classList.add('blocked');
+        document.getElementById('r5').classList.remove('blocked');
+
+        document.getElementById('r5').classList.remove('rating');
+        document.getElementById('r5').classList.remove('rate');
+      });
+      document.getElementById('r5').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if( document.getElementById('r5').checked === true ) {
+          val = document.getElementById('r5').value;
+        }
+        document.getElementById('r1').classList.add('blocked');
+        document.getElementById('r2').classList.add('blocked');
+        document.getElementById('r3').classList.add('blocked');
+        document.getElementById('r4').classList.add('blocked');
+        document.getElementById('r5').classList.add('blocked');
+      });
+      document.getElementById('rate_form').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        txt = document.getElementById('feed').value;
+        console.log(val);
+        console.log(txt);
+      });
+      /*$(document).on('click', '#rating', function(e) {
+        e.preventDefault();
+
+        val = $('#rating').val();
+        console.log(val);
+
+        $.ajax({
+          type: 'POST',
+          url: '/rate/',
+          data: {
+            value: 5
+          }
+        });
+      });*/
+    </script>
 {% endblock %}
 

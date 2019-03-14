@@ -49,6 +49,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=15, choices=ROLES, default='client')
     profession = models.CharField(max_length=250, choices=PROFESSION, default='Other')
     knowledges = models.TextField(max_length=1000, blank=True)
+    rating = models.IntegerField(default=0)
     photo = models.ImageField(default='default_user.jpg', upload_to='profile_user')
 
     def __str__(self):
@@ -147,3 +148,10 @@ class JobHire(models.Model):
     request = models.ForeignKey(Requests, on_delete=models.CASCADE)
     status = models.CharField(max_length=100, default='pending')
     date_hired = models.DateTimeField(auto_now_add=True)
+
+
+class Rate(models.Model):
+    repairman = models.ForeignKey(User, on_delete=models.CASCADE)
+    rate = models.IntegerField()
+    feedback = models.CharField(max_length=1000)
+    date = models.DateTimeField(auto_now_add=True)

@@ -288,16 +288,24 @@ header.masthead .masthead-content .masthead-subheading {
   unicode-bidi: bidi-override;
   direction: rtl;
 }
-.rating > span {
+.rating > .rate {
   display: inline-block;
   position: relative;
   width: 1.1em;
 }
-.rating > span:hover:before,
-.rating > span:hover ~ span:before {
+.rating > .rate:hover:before,
+.rating > .rate:hover ~ .rate:before {
    content: "\2605";
    color: yellow;
    position: absolute;
+}
+
+.blocked {
+  content: "\2605";
+  color: yellow;
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
 }
 
 /*badge at top of the icon*/
@@ -439,7 +447,7 @@ header.masthead .masthead-content .masthead-subheading {
 
 #chat-items {
   width: 100%;
-  overflow-y: scroll; 
+  overflow-y: scroll;
   height:700px;
 }
 
