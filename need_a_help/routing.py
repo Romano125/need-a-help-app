@@ -6,14 +6,14 @@ from channels.security.websocket import AllowedHostsOriginValidator, OriginValid
 from chat.consumers import ChatConsumer
 
 application = ProtocolTypeRouter({
-	# Empty for now (http->django views is added by default)
-	'websocket': AllowedHostsOriginValidator(               ##wrapa sockete i provjerava da sve sto radi reqest mora biti u allowed hosts u setting.py
-		AuthMiddlewareStack(							##zelimo li da useri unutar chata budu unutar socketa
-			URLRouter(
-				[
-					url(r"^chat/messages/(?P<username>[\w.@+-]+)/$",ChatConsumer),
-				]
-			)
-		)
-	)
+    # Empty for now (http->django views is added by default)
+    'websocket': AllowedHostsOriginValidator(  # wrapa sockete i provjerava da sve sto radi reqest mora biti u allowed hosts u setting.py
+        AuthMiddlewareStack(  # zelimo li da useri unutar chata budu unutar socketa
+            URLRouter(
+                [
+                    url(r"^chat/messages/(?P<username>[\w.@+-]+)/$", ChatConsumer),
+                ]
+            )
+        )
+    )
 })
