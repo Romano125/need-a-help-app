@@ -287,17 +287,20 @@ header.masthead .masthead-content .masthead-subheading {
 .rating {
   unicode-bidi: bidi-override;
   direction: rtl;
+  cursor: pointer;
 }
 .rating > .rate {
   display: inline-block;
   position: relative;
   width: 1.1em;
+  cursor: pointer;
 }
 .rating > .rate:hover:before,
 .rating > .rate:hover ~ .rate:before {
    content: "\2605";
    color: yellow;
    position: absolute;
+   cursor: pointer;
 }
 
 .blocked {
@@ -306,6 +309,7 @@ header.masthead .masthead-content .masthead-subheading {
   display: inline-block;
   position: relative;
   width: 1.1em;
+  cursor: pointer;
 }
 
 /*badge at top of the icon*/

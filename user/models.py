@@ -118,6 +118,7 @@ class Hire(models.Model):
     repairman = models.IntegerField()
     status = models.CharField(max_length=100, default='pending')
     accepted = models.BooleanField(default=False)
+    done = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -147,6 +148,7 @@ class JobHire(models.Model):
     repairman = models.ForeignKey(User, on_delete=models.CASCADE)
     request = models.ForeignKey(Requests, on_delete=models.CASCADE)
     status = models.CharField(max_length=100, default='pending')
+    done = models.BooleanField(default=False)
     date_hired = models.DateTimeField(auto_now_add=True)
 
 
@@ -155,3 +157,6 @@ class Rate(models.Model):
     rate = models.IntegerField()
     feedback = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{ self.repairman.username } rate'
