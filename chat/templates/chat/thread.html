@@ -87,7 +87,13 @@
 {% endblock %}
 
 {% block content %}
-<h3 align = "center">{% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
+<h3 align = "center">
+    {% if user != object.first %}
+        <a href="{% url 'info' object.first.id %}"><img class="rounded-circle navbar-img" src="{ object.first.profile.photo.url }"></a>{{ object.first }}
+    {% else %}
+        <a href="{% url 'info' object.second.id %}"><img class="rounded-circle navbar-img" src="{ object.second.profile.photo.url }"></a>{{ object.second }}
+    {% endif %}
+</h3>
 <div class = "row">
 	<div id='chat-items'>
 	{% for chat in object.chatmessage_set.all %}

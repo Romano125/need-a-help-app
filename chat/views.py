@@ -13,9 +13,11 @@ from .models import Thread, ChatMessage
 
 class InboxView(LoginRequiredMixin, ListView):
     template_name = 'chat/inbox.html'
+    context_object_name = 'users'
+    paginate_by = 3
 
     def get_queryset(self):
-        return Thread.objects.by_user(self.request.user)
+        return Thread.objects.by_user(self.request.user).order_by('-timestamp')
 
 
 class ThreadView(LoginRequiredMixin, FormMixin, DetailView):

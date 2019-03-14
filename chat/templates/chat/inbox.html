@@ -92,6 +92,20 @@
     <div class="container mt-4">
 
         <h1>Ovdje radi inbox!!!!</h1>
+        {% if users %}
+            <div class='container'>
+               {% for u in users %}
+                    <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.first.username %}&quot;;">
+                        <a href="{% url 'info' u.first.id %}"><img class="rounded-circle navbar-img" src="{ u.first.profile.photo.url }"></a>
+                        <a href="{% url 'info' u.first.id %}">{{ u.first.username }}</a>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <small class="text-secondary text-muted">{{ u.timestamp|date:'d M H:i' }}</small>
+                        </div>
+                    </div>
+                    <hr width=100%>
+               {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}
