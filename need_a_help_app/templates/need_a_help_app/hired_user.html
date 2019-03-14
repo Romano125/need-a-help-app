@@ -119,6 +119,7 @@
                                       <form id="rate_form" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <input type="hidden" name="id" id="user" value="{{ i.repairman }}">
+                                        <input type="hidden" name="job" id="job" value="1">
                                         <div class="rating">
 
                                             <h4>:My rating </h4>
@@ -220,6 +221,7 @@
                                   <form id="rate_form" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <input type="hidden" name="id" id="user" value="{{ i.repairman.id }}">
+                                    <input type="hidden" name="req" id="req" value="1">
                                     <div class="rating">
 
                                         <h4>:My rating </h4>
@@ -386,27 +388,41 @@
         document.getElementById('r4').classList.add('blocked');
         document.getElementById('r5').classList.add('blocked');
       });
-      document.getElementById('rate_form').addEventListener('submit', (e) => {
+      document.getElementById('btn-submit').addEventListener('click', (e) => {
         e.preventDefault();
 
         txt = document.getElementById('feed').value;
-        feed = '<img class="rounded-circle navbar-img" src="{{ user.profile.photo.url }}"> <a href="#">' + '{{ user.username }}';
-        feed += '</a> ' + txt;
-        id = document.getElementById('user').value;
+        /*feed = '<img class="rounded-circle navbar-img" src="{{ user.profile.photo.url }}"> <a href="#">' + '{{ user.username }}';
+        feed += '</a> ' + txt;*/
+        feed = txt
+        rep_id = document.getElementById('user').value;
+        var job, req;
+        if( document.getElementById('req') == null ) req = 0;
+        else {
+          req = document.getElementById('req').value;
+        }
+        if( document.getElementById('job') == null ) job = 0;
+        else {
+          job = document.getElementById('job').value;
+        }
 
-        $.ajax({
+        location.href='{% url "rate" %}' + `?val=${val}&feedback=${feed}&rep_id=${rep_id}&req=${req}&job=${job}`;
+
+        /*$.ajax({
           type: 'POST',
           url: '{% url "rate" %}',
           data: {
-            id: $('#user').val(),
+            rep_id: $('#user').val(),
             val: val,
             feedback: feed,
+            req: req,
+            job: job,
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
           },
           success: function() {
             alert('Rate done!');
           }
-        });
+        });*/
       });
       /*document.getElementById('rate_form').addEventListener('submit', (e) => {
         e.preventDefault();

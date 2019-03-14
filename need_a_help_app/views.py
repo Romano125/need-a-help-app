@@ -902,21 +902,29 @@ class NotificationsRepairmanListView(LoginRequiredMixin, ListView):
 
 @login_required
 def rate(request):
-    if request.method == 'POST':
-        val = request.POST['val']
-        feed = request.POST['feedback']
-        id_r = request.POST['id']
+    if request.method == 'GET':
+        val = request.GET['val']
+        feed = request.GET['feedback']
+        id_r = request.GET.get('rep_id')
+        req = request.GET.get('req')
+        job = request.GET.get('job')
 
     rep = User.objects.filter(id=id_r).first()
-    Rate.objects.create(repairman=rep, rate=val, feedback=feed)
+    rate = Rate(repairman=rep, rate=val, feedback=feed)
+    rate.save()
 
-    req = JobHire.objects.filter(repairman=rep, status='done').order_by('-date_hired').first()
-    req.done = True
-    req.save()
+    us = request.user
 
-    job = Hire.objects.filter(repairman=rep.id, status='done').order_by('-date').first()
-    job.done = True
-    job.save()
+    if job == '1':
+        job = Hire.objects.filter(user=us, repairman=rep.id, status='done', done=False).order_by('-date').first()
+        job.done = True
+        job.save()
+    elif req == '1':
+        req = JobHire.objects.filter(repairman=rep, status='done', done=False).order_by('-date_hired').first()
+        req.done = True
+        req.save()
+
+    return redirect('done_user', pk=us.id)
 
 
 class UserDoneListView(LoginRequiredMixin, ListView):
