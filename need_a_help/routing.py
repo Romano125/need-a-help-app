@@ -11,7 +11,7 @@ application = ProtocolTypeRouter({
 		AuthMiddlewareStack(							##zelimo li da useri unutar chata budu unutar socketa
 			URLRouter(
 				[
-					url(r"^chat/messages/(?P<username>[\w.@+-]+)/$",ChatConsumer),
+					url(r"^chat/messages/<str:username>",ChatConsumer),
 				]
 			)
 		)
