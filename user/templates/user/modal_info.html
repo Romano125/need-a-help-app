@@ -112,14 +112,14 @@
                 <h4>Popularity:</h4>
               </div>
               <div class="col-sm-7 pt-1" align="left">
-                <div class="{{ info }}">
+                <div class="{{ modal_info }}">
                   <div class="star-outer">
                     <div class="star-inner"></div>
                   </div>
                   <span class="number-rating text-secondary"></span>
                 </div>
-                <input type="hidden" class="hid" name="name" id="name{{ info }}" value="{{ info }}">
-                <input type="hidden" class="hid" name="rate" id="rate{{ info.profile.rating }}" value="{{ info.profile.rating }}">
+                <input type="hidden" class="hid" name="name" id="name{{ modal_info }}" value="{{ modal_info }}">
+                <input type="hidden" class="hid" name="rate" id="rate{{ modal_info.profile.rating }}" value="{{ modal_info.profile.rating }}">
               </div>
             </div>
             <h4>Price: {{ modal_info.profile.costs }} €</h4>

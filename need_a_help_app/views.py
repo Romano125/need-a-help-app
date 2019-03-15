@@ -151,7 +151,7 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
 
         context_data['f'] = f
-        context_data['not_cli'] = not_cli
+        context_data['not_c'] = not_c
 
         return context_data
 
