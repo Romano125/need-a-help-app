@@ -66,7 +66,7 @@
                                 </a>
                                 <div class="row">
                                   <div class="col-sm-12" align="center">
-                                    <div class="{{ j }}">
+                                    <div class="{{ j }}{{ i.id }}">
                                       <div class="star-outer">
                                         <div class="star-inner"></div>
                                       </div>
@@ -74,7 +74,7 @@
                                     </div>
                                   </div>
                                 </div>
-                                <input type="hidden" class="hid" name="name" id="name{{ j }}" value="{{ j }}">
+                                <input type="hidden" class="hid" name="name" id="name{{ j }}{{ i.id }}" value="{{ j }}{{ i.id }}">
                                 <input type="hidden" class="hid" name="rate" id="rate{{ j.profile.rating }}" value="{{ j.profile.rating }}">
                             {% endif %}
                         {% endfor %}

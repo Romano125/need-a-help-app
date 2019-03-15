@@ -79,7 +79,6 @@ class AppMainView(LoginRequiredMixin, ListView):
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
-
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
         context_data['cnt'] = cnt
@@ -910,11 +909,15 @@ def rate(request):
         req = request.GET.get('req')
         job = request.GET.get('job')
 
+    us = request.user
     rep = User.objects.filter(id=id_r).first()
+
+    if val == '0' and job == '1':
+        messages.warning(request, f'You did not finished rating { rep.first_name }, do it again to move it to done list!')
+        return redirect('hired_user', pk=us.id)
+
     rate = Rate(repairman=rep, rate=val, feedback=feed)
     rate.save()
-
-    us = request.user
 
     if job == '1':
         job = Hire.objects.filter(user=us, repairman=rep.id, status='done', done=False).order_by('-date').first()

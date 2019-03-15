@@ -67,7 +67,7 @@
                                 </a>
                                 <div class="row">
                                     <div class="col-sm-12" align="center">
-                                      <div class="{{ j }}">
+                                      <div class="{{ j }}{{ i.id }}">
                                         <div class="star-outer">
                                           <div class="star-inner"></div>
                                         </div>
@@ -82,7 +82,7 @@
                         {% for j in us %}
                             {% if j.id == i.repairman %}
                                 <h1>{{ j.first_name }} {{ j.last_name }}</h1>
-                                <input type="hidden" class="hid" name="name" id="name{{ j }}" value="{{ j }}">
+                                <input type="hidden" class="hid" name="name" id="name{{ j }}{{ i.id }}" value="{{ j }}{{ i.id }}">
                                 <input type="hidden" class="hid" name="rate" id="rate{{ j }}" value="{{ j.profile.rating }}">
                             {% endif %}
                         {% endfor %}
@@ -410,6 +410,8 @@
         else {
           job = document.getElementById('job').value;
         }
+
+        if( val == undefined ) val = 0;
 
         location.href='{% url "rate" %}' + `?val=${val}&feedback=${feed}&rep_id=${rep_id}&req=${req}&job=${job}`;
 
