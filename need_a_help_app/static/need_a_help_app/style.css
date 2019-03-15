@@ -320,10 +320,12 @@ header.masthead .masthead-content .masthead-subheading {
    color: white;
    border-radius: 50%;
    font-size: medium;
+   transition: background 0.2s, transform 0.2s;
 }
 
 .badge-pag:hover{
-   background: #113311;
+   background: #335533;
+   transform: scale(1.3);
 }
 
 .badge-notify{
