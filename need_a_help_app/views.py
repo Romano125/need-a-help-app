@@ -978,3 +978,60 @@ class UserDoneListView(LoginRequiredMixin, ListView):
         context_data['us_list'] = list(User.objects.all())
 
         return context_data
+
+
+class TopRatedView(LoginRequiredMixin, ListView):
+    template_name = 'need_a_help_app/top_rated.html'
+    context_object_name = 'prof'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return Profile.objects.filter(role='repairman', profession='Other').order_by('-rating')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(TopRatedView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        reqq_seen = SeenRequest.objects.filter(user=us)
+
+        hired = Hire.objects.filter(user=us)
+        uss = User.objects.all()
+
+        f_hired = []
+        for u in uss:
+            for h in hired:
+                if h.user == us and h.repairman == u.id and h.status == 'pending':
+                    f_hired.append(u)
+
+        get_not = self.request.GET.get('not', -1)
+        get_not_c = self.request.GET.get('not_c', -1)
+
+        if get_not != -1:
+            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
+            not_seen.seen = True
+            not_seen.save()
+
+        if get_not_c != -1:
+            not_seen = ClientNotifications.objects.filter(id=get_not_c).first()
+            not_seen.seen = True
+            not_seen.save()
+
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+        context_data['f_hired'] = f_hired
+        context_data['seen_r'] = reqq_seen
+        context_data['cnt'] = cnt
+        context_data['act_cnt'] = act_cnt
+        context_data['not_r'] = not_r
+        context_data['not_c'] = not_c
+        context_data['not_rep'] = not_rep
+        context_data['not_cli'] = not_cli
+
+        return context_data

@@ -383,6 +383,15 @@ header.masthead .masthead-content .masthead-subheading {
    left: -28px;
 }
 
+.badge-popularity{
+   background: #001a00;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: 10px;
+   left: 5px;
+}
+
 /*applications style*/
 
 .app-img {

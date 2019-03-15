@@ -196,7 +196,7 @@
                 <div class="container p-4">
                     <div class="row" align="center">
                         <div class="col-3 col-sm-3">
-                            <a href="#" class="btn btn-outline-danger"><i class="fas fa-medal fa-3x"></i></a>
+                            <a href="{% url 'top_rated' %} " class="btn btn-outline-danger"><i class="fas fa-medal fa-3x"></i></a>
                         </div>
                         <div class="col-3 col-sm-3">
                             <a href="{% url 'requests_user' user.id %}" class="btn btn-info"><i class="fas fa-clipboard-list fa-3x"></i></a>
@@ -263,7 +263,7 @@
                 <div class="container p-4">
                     <div class="row" align="center">
                         <div class="col-3 col-sm-3">
-                            <a href="#" class="btn btn-outline-warning"><i class="fas fa-star fa-3x"></i></a>
+                            <a href="{% url 'top_rated' %}" class="btn btn-outline-warning"><i class="fas fa-star fa-3x"></i></a>
                         </div>
                         <div class="col-3 col-sm-3">
                               <a href="{% url 'requests_repairman' user.id %}" class="btn btn-info">
