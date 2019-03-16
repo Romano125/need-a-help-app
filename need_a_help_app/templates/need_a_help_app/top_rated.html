@@ -95,14 +95,15 @@
         <h2><b>Top Rated</b></h2>
     {% endif %}
     <hr width="100%">
-    <h3><i>{{ prof.first.profession }}</i></h3>
+    <select>
+        <option>Select profession:</option>
+        <option>{{ prof.first.profession }}</option>
+    </select>
     <hr width="15%" align="left">
     {% for p in prof %}
         <div class="row">
             <div class="col-sm-3">
-                {% if user.profile.role == 'repairman' %}
-                    <span class="badge badge-popularity">{{ forloop.counter }}.</span>
-                {% endif %}
+                <span class="badge badge-popularity">{{ forloop.counter }}.</span>
                 <a href="{% url 'modal_info' p.user.id %}">
                     <img class="rounded-circle account-img" src="{{ p.photo.url }}">
                 </a>

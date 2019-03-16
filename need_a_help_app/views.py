@@ -78,6 +78,7 @@ class AppMainView(LoginRequiredMixin, ListView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        vis = Requests.objects.filter(visible=True).count()
 
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
@@ -87,6 +88,8 @@ class AppMainView(LoginRequiredMixin, ListView):
         context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
+        context_data['vis'] = vis
+        context_data['users'] = uss
 
         return context_data
 
@@ -228,7 +231,7 @@ class RequestsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-        return Requests.objects.filter(user=user).order_by('-date')
+        return Requests.objects.filter(user=user, visible=True).order_by('-date')
 
     def get_context_data(self, **kwargs):
         context_data = super(RequestsView, self).get_context_data(**kwargs)
@@ -465,6 +468,12 @@ def hire_repairman(request, user_id, rep_id):
         req_mess = RepairmanRequests(repairman=rep, user=user_id, request_message=mess)
         req_mess.save()
 
+    # ako zaposlim majstora povecavam broj zaposlenja
+    us.profile.num_hires += 1
+    us.save()
+    rep.profile.hired += 1
+    rep.save()
+
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a> hired you for a job!'
     notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
@@ -549,7 +558,8 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
 @login_required
 def job_accept(request, user_id, rep_id):
     users = User.objects.all()
-    rep_req = RepairmanRequests.objects.filter(user=user_id).order_by('-date')
+    rep = User.objects.filter(id=rep_id).first()
+    rep_req = RepairmanRequests.objects.filter(user=user_id, repairman=rep).order_by('-date')
 
     for i in rep_req:
         f = 0
@@ -566,8 +576,6 @@ def job_accept(request, user_id, rep_id):
     hir = Hire.objects.filter(user=us, repairman=rep_id).order_by('-date').first()
     hir.accepted = True
     hir.save()
-
-    rep = User.objects.filter(id=rep_id).first()
 
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + rep.username + '</a> accepted a job you\'ve hired him for!'
@@ -735,6 +743,13 @@ def posted_job_hire(request, us_id, req_id):
     req.visible = False
     req.save()
 
+    # ako zaposlim majstora povecavam broj zaposlenja
+    logged = request.user
+    us.profile.hired += 1
+    us.save()
+    logged.profile.num_hires += 1
+    logged.save()
+
     if not job:
         job_save = JobHire(repairman=us, request=req)
         job_save.save()
@@ -773,7 +788,7 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         req = self.get_object()
-        if self.request.user == req.user:  # ako je ulogirani user isti kao onaj ciji post mijenjamo, ne zelimo da netko drugi ureduje sve druge postove
+        if self.request.user == req.user:
             return True
         return False
 
@@ -786,6 +801,14 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         hir = JobHire.objects.filter(request=req).first()
         rep = hir.repairman
         us = self.object.user
+
+        # ako klijent otkaže posao brisu se zaposlenja majstora i klijenta, ne smije ispod nule
+        if us.profile.num_hires > 0:
+            us.profile.num_hires -= 1
+            us.save()
+        if rep.profile.hired > 0:
+            rep.profile.hired -= 1
+            rep.save()
 
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
         notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
@@ -812,20 +835,34 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
     us = User.objects.filter(id=user_id).first()
     hir = Hire.objects.filter(user=us, repairman=rep_id)
 
+    h_to_del = hir
     for h in hir:
         if h.status == 'pending':
-            h.delete()
+            h_to_del = h
             break
+
+    h_to_del.delete()
 
     rep = User.objects.filter(id=rep_id).first()
     req = RepairmanRequests.objects.filter(repairman=rep, user=user_id)
 
     log = User.objects.filter(id=log_id).first()
 
+    r_to_del = req
     for r in req:
-        if not r.done:
-            r.delete()
+        if r.done is False:
+            r_to_del = r
             break
+
+    r_to_del.delete()
+
+    # ako klijent otkaže posao brisu se zaposlenja majstora i klijenta, ne smije ispod nule
+    if us.profile.num_hires > 0:
+        us.profile.num_hires -= 1
+        us.save()
+    if rep.profile.hired > 0:
+        rep.profile.hired -= 1
+        rep.save()
 
     if log.profile.role == 'client':
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
@@ -919,6 +956,10 @@ def rate(request):
     rate = Rate(repairman=rep, rate=val, feedback=feed)
     rate.save()
 
+    # povecava se broj rateova za majstora
+    rep.profile.rated += 1
+    rep.save()
+
     if job == '1':
         job = Hire.objects.filter(user=us, repairman=rep.id, status='done', done=False).order_by('-date').first()
         job.done = True
@@ -938,6 +979,7 @@ def rate(request):
             sum_r += r.rate
 
     total = sum_r / cnt
+    total = round(total, 1)
 
     rate_save = Profile.objects.filter(user=rep).first()
     rate_save.rating = total

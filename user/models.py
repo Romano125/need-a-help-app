@@ -42,14 +42,17 @@ PROFESSION = (
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=10, choices=GENDER, default='male')
-    address = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
-    phone_number = models.CharField(max_length=100, blank=True)
+    address = models.CharField(max_length=30, default='-')
+    birth_date = models.DateField(null=True, default='-')
+    phone_number = models.CharField(max_length=100, default='-')
     costs = models.IntegerField(default=100)
     role = models.CharField(max_length=15, choices=ROLES, default='client')
     profession = models.CharField(max_length=250, choices=PROFESSION, default='Other')
     knowledges = models.TextField(max_length=1000, blank=True)
     rating = models.FloatField(default=0.0)
+    rated = models.IntegerField(default=0)
+    hired = models.IntegerField(default=0)
+    num_hires = models.IntegerField(default=0)
     photo = models.ImageField(default='default_user.jpg', upload_to='profile_user')
 
     def __str__(self):

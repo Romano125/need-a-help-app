@@ -115,7 +115,6 @@
             <h4>Birth_date: {{ info.profile.birth_date }}</h4>
             <h4>Profession: {{ info.profile.profession }}</h4>
             <h4>Knowledges: {{ info.profile.knowledges }}</h4>
-            <h4>Hired(count): 55</h4>
             <div class="row">
               <div class="col-sm-3">
                 <h4>Popularity:</h4>
@@ -132,19 +131,23 @@
               </div>
             </div>
             <h4>Price: {{ info.profile.costs }} €</h4>
+            <h4>Badges:
+              <i class="fas fa-user-check tool1 {% if info.profile.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>
+              <i class="far fa-paper-plane tool1 {% if info.profile.hired >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance - 25 times hired"></i>
+              <i class="fas fa-user-ninja tool1 {% if info.profile.hired >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja - 100 times hired"></i>
+              <i class="far fa-star tool1 {% if info.profile.hired >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Pro repairman - 250 times hired"></i>
+              <i class="fas fa-award tool1 {% if info.profile.hired >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master repairman - >500 times hired"></i>
+            </h4>
           {% else %}
             <h4>Address: {{ info.profile.address }}</h4>
             <h4>Phone number: {{ info.profile.phone_number }}</h4>
             <h4>Birth_date: {{ info.profile.birth_date }}</h4>
-            <h4>Number_hired(count): 55</h4>
             <h4>Badges:
-              <i class="fas fa-user-check tool1" data-toggle="tooltip" data-placement="bottom" title="Rookie user - 5 hires"></i>
-              <i class="far fa-paper-plane tool1" data-toggle="tooltip" data-placement="bottom" title="Advance user - 25 hires"></i>
-              <span class="text-muted">
-                <i class="fas fa-user-ninja tool1" data-toggle="tooltip" data-placement="bottom" title="Ninja award - 100 hires"></i>
-                <i class="far fa-star tool1" data-toggle="tooltip" data-placement="bottom" title="Star user - 250 hires"></i>
-                <i class="fas fa-award tool1" data-toggle="tooltip" data-placement="bottom" title="Master user - >500 hires"></i>
-              </span>
+              <i class="fas fa-user-check tool1 {% if info.profile.num_hires >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Rookie user - 5 hires"></i>
+              <i class="far fa-paper-plane tool1{% if info.profile.num_hires >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance user - 25 hires"></i>
+              <i class="fas fa-user-ninja tool1 {% if info.profile.num_hires >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja award - 100 hires"></i>
+              <i class="far fa-star tool1 {% if info.profile.num_hires >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Star user - 250 hires"></i>
+              <i class="fas fa-award tool1 {% if info.profile.num_hires >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master user - >500 hires"></i>
             </h4>
           {% endif %}
         </fieldset>
