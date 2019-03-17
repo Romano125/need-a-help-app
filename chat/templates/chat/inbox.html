@@ -96,7 +96,7 @@
         {% if users %}
              
             <div class='container'>
-               {% for u in users %}
+               {% for u in users|slice:'1' %}
                     {% if u.user == user %}
                         {% if u.user == u.thread.first %}
                              <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.thread.second %}&quot;;">
