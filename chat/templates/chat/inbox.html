@@ -1,4 +1,5 @@
 {% extends "need_a_help_app/base.html" %}
+{% load static %}
 
 {% block notify_repairman %}
     {% if not_r %}
@@ -91,23 +92,55 @@
 
     <div class="container mt-4">
 
-        <h1>Ovdje radi inbox!!!!</h1>
+        <h1 align="center">Need a help?! inbox</h1>
         {% if users %}
+             
             <div class='container'>
                {% for u in users %}
-                    <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.first.username %}&quot;;">
-                        <a href="{% url 'info' u.first.id %}"><img class="rounded-circle navbar-img" src="{ u.first.profile.photo.url }"></a>
-                        <a href="{% url 'info' u.first.id %}">{{ u.first.username }}</a>
+                    {% if u.user == user %}
+                        {% if u.user == u.thread.first %}
+                             <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.thread.second %}&quot;;">
+                        {% else %}
+                             <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.thread.first %}&quot;;">
+                        {% endif %}  
+                    {% else %}
+
+                        <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.user %}&quot;;">
+
+                    {% endif %}
+                        {% if u.user == user %}
+                            {% if u.user == u.thread.first %}
+                                <a href="{% url 'info' u.thread.second.id %}"><img class="rounded-circle navbar-img" src="{ u.thread.second.profile.photo.url }"></a>
+                            {% else %}
+                                <a href="{% url 'info' u.thread.first.id %}"><img class="rounded-circle navbar-img" src="{ u.thread.first.profile.photo.url }"></a>
+                            {% endif %}  
+                    {% else %} 
+                        <a href="{% url 'info' u.user.id %}"><img class="rounded-circle navbar-img" src="{ u.user.profile.photo.url }"></a>
+                    {% endif %}  
+                        
+                    {% if u.user == user %}
+                        {% if u.user == u.thread.first %}
+                            <a href="{% url 'info' u.thread.second.id %}">{{ u.thread.second }}</a>
+                        {% else  %}
+                            <a href="{% url 'info' u.thread.first.id %}">{{ u.thread.first }}</a>
+                        {% endif %}  
+                    {% else %}
+                            <a href="{% url 'info' u.user.id %}">{{ u.user }}</a>
+                    {% endif %}      
                         <div class="col-sm-3 col-md-3 col-lg-3">
                             <small class="text-secondary text-muted">{{ u.timestamp|date:'d M H:i' }}</small>
                         </div>
                     </div>
                      <div class="row">
-                            <small class="text-secondary text-muted">{{ch.message}}</small>
+                            {% if u.user == user %}
+                                 <small class="text-secondary text-muted">You : {{u.message}}</small>
+                            {% else %}
+                                 <small class="text-secondary text-muted">{{u.user}} : {{u.message}}</small>
+                            {% endif %}
                         </div>
                     <hr width=100%>
                {% endfor %}
-            </div>
+            </div> 
         {% endif %}
     </div>
 

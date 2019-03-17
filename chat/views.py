@@ -3,6 +3,7 @@ from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormMixin
+from django.db.models import Q
 
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.models import User
@@ -14,16 +15,18 @@ from .models import Thread, ChatMessage
 class InboxView(LoginRequiredMixin, ListView):
     template_name = 'chat/inbox.html'
     context_object_name = 'users'
-    paginate_by = 3
+    #paginate_by = 3
 
     def get_queryset(self):
-        return Thread.objects.by_user(self.request.user).order_by('-timestamp')
-
+       # return Thread.objects.by_user(self.request.user).order_by('-timestamp')
+       #return Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-timestamp').distinct()
+       return ChatMessage.objects.filter(Q(thread__first=self.request.user)|Q(thread__second=self.request.user)).order_by('-timestamp').distinct()
+       
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        chat = ChatMessage.objects.filter(user = self.request.user)
-        context['ch'] = chat
-        return context    
+        thrd = Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user))
+        context['th'] = thrd
+        return context   
 
 
 class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
@@ -40,7 +43,7 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
     def get_object(self):
         other_username = self.kwargs.get("username")
         obj, created = Thread.objects.get_or_new(self.request.user, other_username)
-        if obj is None:
+        if obj == None:    #is?
             raise Http404
         return obj
 
