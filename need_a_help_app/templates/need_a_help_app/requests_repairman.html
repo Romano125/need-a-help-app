@@ -61,36 +61,39 @@
    <hr width="100%">
    {% if req_rep %}
        {% for i in req_rep %}
-            <div class="row">
-                <div class="col-sm-3">
-                    {% for j in us %}
-                        {% if i.user == j.id %}
-                            <a href="{% url 'info' j.id %}">
-                                <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
-                            </a>
-                        {% endif %}
-                    {% endfor %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            {% for j in us %}
+                                {% if i.user == j.id %}
+                                    <a href="{% url 'info' j.id %}">
+                                        <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="col-sm-7 pl-5">
+                            {% for j in us %}
+                                {% if i.user == j.id %}
+                                    <a class="mr-2" href="{% url 'info' j.id %}">{{ j }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            <small class="text-muted">{{ i.date|date:'F d, Y H:i' }}</small>&nbsp
+                            <hr width="100%">
+                            <h4 class="text-secondary">{{ i.request_message }}</h4><br>
+                        </div>
+                        <div class="col-sm-2 pt-5" align="right">
+                            {% for j in us %}
+                                {% if i.user == j.id %}
+                                    <a href="{% url 'job_accept' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                                    <a href="{% url 'client_repairman_job_delete' j.id i.repairman.id user.id 'req' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-7 pl-5">
-                    {% for j in us %}
-                        {% if i.user == j.id %}
-                            <a class="mr-2" href="{% url 'info' j.id %}">{{ j }}</a>
-                        {% endif %}
-                    {% endfor %}
-                    <small class="text-muted">{{ i.date|date:'F d, Y H:i' }}</small>&nbsp
-                    <hr width="100%">
-                    <h4 class="text-secondary">{{ i.request_message }}</h4><br>
-                </div>
-                <div class="col-sm-2 pt-5" align="right">
-                    {% for j in us %}
-                        {% if i.user == j.id %}
-                            <a href="{% url 'job_accept' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
-                            <a href="{% url 'client_repairman_job_delete' j.id i.repairman.id user.id 'req' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <hr width="100%">
+            </article>
        {% endfor %}
    {% else %}
     <h3 class="text-secondary text-muted" align="center">No results</h3>

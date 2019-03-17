@@ -151,15 +151,43 @@
             </h4>
           {% endif %}
         </fieldset>
-        {% if info.profile.role == 'repairman' and user.id != info.id %}
-          <a href="#" class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedback</a>
-          {% if f_hired %}
-            <a href="{% url 'hire_repairman' user.id info.id %}" class="btn btn-outline-success disabled"><i class="fas fa-handshake"></i>&nbsp&nbspHire</a>
-          {% else %}
-            <a href="{% url 'hire_repairman' user.id info.id %}" class="btn btn-outline-success"><i class="fas fa-handshake"></i>&nbsp&nbspHire</a>
-          {% endif %}
-        {% endif %}
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12" align="center">
+            {% if info.profile.role == 'repairman' and user.id != info.id %}
+              <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#feedbacks"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedbacks</button>
+              {% if f_hired %}
+                <a href="{% url 'hire_repairman' user.id info.id %}" class="btn btn-outline-success disabled"><i class="fas fa-handshake"></i>&nbsp&nbspHire</a>
+              {% else %}
+                <a href="{% url 'hire_repairman' user.id info.id %}" class="btn btn-outline-success"><i class="fas fa-handshake"></i>&nbsp&nbspHire</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
 {% include 'need_a_help_app/stars_js.html' %}
+
+<!-- Modal feedbacks -->
+  <div class="modal fade" id="feedbacks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle"><strong>Feedbacks</strong></h5>
+          <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <article class="media content-section">
+            <div class="media-body">
+              <div class="article-metadata">
+                <a class="mr-2" href="#">Ime</a>
+                <small class="text-muted">datum</small>
+              </div>
+              <p class="article-content">sadrzaj</p>
+            </div>
+          </article>
+      </div>
+    </div>
+  </div>
 {% endblock %}

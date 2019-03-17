@@ -49,23 +49,26 @@
    {% if req %}
        {% for i in req %}
             {% if i.visible %}
-                <div class="row">
-                    <div class="col-sm-3">
-                        <a href="{% url 'request_detail' i.id %}">
-                            <img class="rounded-circle account-img" src="{{ i.photo.url }}">
-                        </a>
+                <article class="media content-section">
+                    <div class="media-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <a href="{% url 'request_detail' i.id %}">
+                                    <img class="rounded-circle account-img" src="{{ i.photo.url }}">
+                                </a>
+                            </div>
+                            <div class="col-sm-7 pl-5">
+                                <h1>{{ i.job_title }}</h1>
+                                <small class="text-secondary text-muted">Required knowladges: {{ i.required_knowledges }}</small><br>
+                                <small class="text-secondary text-muted">Price: {{ i.price }} €</small><br>
+                                <small class="text-secondary text-muted">Address: {{ i.address }}</small><br>
+                            </div>
+                            <div class="col-sm-2" align="right">
+                                <a href="{% url 'request_delete' i.id %}" class="btn btn-danger btn-sm mt-5 mb-1"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-7 pl-5">
-                        <h1>{{ i.job_title }}</h1>
-                        <small class="text-secondary text-muted">Required knowladges: {{ i.required_knowledges }}</small><br>
-                        <small class="text-secondary text-muted">Price: {{ i.price }} €</small><br>
-                        <small class="text-secondary text-muted">Address: {{ i.address }}</small><br>
-                    </div>
-                    <div class="col-sm-2" align="right">
-                        <a href="{% url 'request_delete' i.id %}" class="btn btn-danger btn-sm mt-5 mb-1"><i class="fas fa-trash-alt"></i></a>
-                    </div>
-                </div>
-                <hr width="100%">
+                </article>
             {% endif %}
        {% endfor %}
    {% else %}

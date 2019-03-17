@@ -843,7 +843,7 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             rep.save()
 
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
-        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' canceled/deleted the posted job ( <a href="{ reverse("request_detail", kwargs={"pk": req.id}) }">{ req.job_title }</a> ) for which you were hired!'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
         notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
         url = f'{ reverse("info", kwargs={"pk": us.id}) }'
         rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
