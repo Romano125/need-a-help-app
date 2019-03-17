@@ -27,7 +27,6 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-import json
 
 
 def home(request):
@@ -56,19 +55,6 @@ class AppMainView(LoginRequiredMixin, ListView):
             for h in hired:
                 if h.user == us and h.repairman == u.id and h.status == 'pending':
                     f_hired.append(u)
-
-        get_not = self.request.GET.get('not', -1)
-        get_not_c = self.request.GET.get('not_c', -1)
-
-        if get_not != -1:
-            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
-            not_seen.seen = True
-            not_seen.save()
-
-        if get_not_c != -1:
-            not_seen = ClientNotifications.objects.filter(id=get_not_c).first()
-            not_seen.seen = True
-            not_seen.save()
 
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
         act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
@@ -116,6 +102,19 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         for h in hired:
             if h.user == user and h.repairman == rep_id and h.status == 'pending':
                 f_hired = 1
+
+        get_not = self.request.GET.get('not', -1)
+        get_not_c = self.request.GET.get('not_c', -1)
+
+        if get_not != -1:
+            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
+            not_seen.seen = True
+            not_seen.save()
+
+        if get_not_c != -1:
+            not_seen = ClientNotifications.objects.filter(id=get_not_c).first()
+            not_seen.seen = True
+            not_seen.save()
 
         us = self.request.user
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
@@ -314,6 +313,19 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         cnt = Appliccation.objects.filter(request=req.first()).count()
         vis = Requests.objects.filter(id=req_id).first()
 
+        get_not = self.request.GET.get('not', -1)
+        get_not_c = self.request.GET.get('not_c', -1)
+
+        if get_not != -1:
+            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
+            not_seen.seen = True
+            not_seen.save()
+
+        if get_not_c != -1:
+            not_seen = ClientNotifications.objects.filter(id=get_not_c).first()
+            not_seen.seen = True
+            not_seen.save()
+
         us = self.request.user
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
@@ -402,9 +414,10 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
                     notif = '<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto">'
                     notif += f'<a href="{ reverse("info", kwargs={"pk": req.user.id}) }">'
                     notif += f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
-                    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + req.user.username + '</a>' + f' deleted posted job ( { req.job_title } ) for which you\'ve applied for!'
+                    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + req.user.username + '</a>' + f' deleted posted job (<a href="{ reverse("request_detail", kwargs={"pk": req.id}) }"> { req.job_title } </a>) for which you\'ve applied for!'
                     notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-                    rep_not = RepairmanNotifications(repairman=u, notification=notif)
+                    url = f'{ reverse("info", kwargs={"pk": req.user.id}) }'
+                    rep_not = RepairmanNotifications(repairman=u, notification=notif, url_to_go=url)
                     rep_not.save()
 
         messages.success(request, f'You\'ve deleted posted request successfuly!')
@@ -477,7 +490,8 @@ def hire_repairman(request, user_id, rep_id):
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a> hired you for a job!'
     notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-    rep_not = RepairmanNotifications(repairman=rep, notification=notif)
+    url = f'{ reverse("requests_repairman", kwargs={"pk": rep_id}) }'
+    rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
     rep_not.save()
 
     messages.success(request, f'You\'ve hired repairman successfuly! Wait him to accept!')
@@ -499,6 +513,13 @@ class HiredListView(LoginRequiredMixin, ListView):
 
         users = User.objects.all()
         job = JobHire.objects.filter(done=False).order_by('-date_hired')
+
+        get_not_c = self.request.GET.get('not_c', -1)
+
+        if get_not_c != -1:
+            not_seen = ClientNotifications.objects.filter(id=get_not_c).first()
+            not_seen.seen = True
+            not_seen.save()
 
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
@@ -580,7 +601,8 @@ def job_accept(request, user_id, rep_id):
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + rep.username + '</a> accepted a job you\'ve hired him for!'
     notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-    cli_not = ClientNotifications(client=us, notification=notif)
+    url = f'{ reverse("hired_user", kwargs={"pk": us.id}) }'
+    cli_not = ClientNotifications(client=us, notification=notif, url_to_go=url)
     cli_not.save()
 
     messages.success(request, f'You\'ve accepted a job from { us.username }!')
@@ -603,6 +625,13 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         users = User.objects.all()
         us = self.request.user
         job = JobHire.objects.filter(repairman=us, status='pending')
+
+        get_not = self.request.GET.get('not', -1)
+
+        if get_not != -1:
+            not_seen = RepairmanNotifications.objects.filter(id=get_not).first()
+            not_seen.seen = True
+            not_seen.save()
 
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
         act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
@@ -649,7 +678,8 @@ def job_done(request, user_id, rep_id):
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + rep.username + '</a> finished a job you\'ve hired him for!'
     notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-    cli_not = ClientNotifications(client=us, notification=notif)
+    url = f'{ reverse("hired_user", kwargs={"pk": us.id}) }'
+    cli_not = ClientNotifications(client=us, notification=notif, url_to_go=url)
     cli_not.save()
 
     messages.success(request, f'You\'ve finished a job for { us.username }!')
@@ -755,9 +785,10 @@ def posted_job_hire(request, us_id, req_id):
         job_save.save()
 
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
-        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + req.user.username + '</a>' + f' hired you for a job { req.job_title }!'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + req.user.username + '</a>' + f' hired you for a job <a href="{ reverse("request_detail", kwargs={"pk": req.id}) }">{ req.job_title }</a>!'
         notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-        rep_not = RepairmanNotifications(repairman=us, notification=notif)
+        url = f'{ reverse("active_repairman", kwargs={"pk": us.id}) }'
+        rep_not = RepairmanNotifications(repairman=us, notification=notif, url_to_go=url)
         rep_not.save()
 
         messages.success(request, f'You\'ve hired { us.username } for a job { req.job_title }!')
@@ -774,9 +805,10 @@ def posted_job_done(request, us_id, req_id):
     job.save()
 
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
-    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' finished the job { req.job_title } you\'ve hired him for!'
+    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' finished the job <a href="{ reverse("request_detail", kwargs={"pk": req.id}) }">{ req.job_title }</a> you\'ve hired him for!'
     notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-    cli_not = ClientNotifications(client=req.user, notification=notif)
+    url = f'{ reverse("hired_user", kwargs={"pk": req.user.id}) }'
+    cli_not = ClientNotifications(client=req.user, notification=notif, url_to_go=url)
     cli_not.save()
 
     messages.success(request, f'You\'ve finished a job { req.job_title } for { req.user.username }!')
@@ -811,9 +843,10 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             rep.save()
 
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
-        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' canceled/deleted the posted job ( <a href="{ reverse("request_detail", kwargs={"pk": req.id}) }">{ req.job_title }</a> ) for which you were hired!'
         notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-        rep_not = RepairmanNotifications(repairman=rep, notification=notif)
+        url = f'{ reverse("info", kwargs={"pk": us.id}) }'
+        rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
         rep_not.save()
 
         messages.success(request, f'You\'ve deleted posted request where you hired a repairman successfuly!')
@@ -868,7 +901,8 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
         notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a> canceled the job for which you were hired!'
         notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-        rep_not = RepairmanNotifications(repairman=rep, notification=notif)
+        url = f'{ reverse("info", kwargs={"pk": us.id}) }'
+        rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
         rep_not.save()
 
         messages.success(request, f'You\'ve canceled the job for which you hired { rep.username }!')
@@ -877,7 +911,8 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
         notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + rep.username + '</a> quit the job you\'ve hired him!'
         notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
-        cli_not = ClientNotifications(client=us, notification=notif)
+        url = f'{ reverse("info", kwargs={"pk": rep.id}) }'
+        cli_not = ClientNotifications(client=us, notification=notif, url_to_go=url)
         cli_not.save()
 
         messages.success(request, f'You quit the job for which you were hired by { us.username }!')
