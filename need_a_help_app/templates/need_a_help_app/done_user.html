@@ -5,7 +5,7 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_c|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'main' %}?not_c={{ n.id }}&quot;;'>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;'>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -57,52 +57,55 @@
       <div class="tab-pane fade show active" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
         {% if hir %}
            {% for i in hir %}
-                <div class="row">
-                    <div class="col-sm-3">
-                        {% for j in us %}
-                            {% if j.id == i.repairman %}
-                                <a href="{% url 'info' j.id %}">
-                                    <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
-                                </a>
-                                <div class="row">
-                                  <div class="col-sm-12" align="center">
-                                    <div class="{{ j }}{{ i.id }}">
-                                      <div class="star-outer">
-                                        <div class="star-inner"></div>
+              <article class="media content-section">
+                <div class="media-body">
+                  <div class="row">
+                      <div class="col-sm-3">
+                          {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                  <a href="{% url 'info' j.id %}">
+                                      <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
+                                  </a>
+                                  <div class="row">
+                                    <div class="col-sm-12" align="center">
+                                      <div class="{{ j }}{{ i.id }}">
+                                        <div class="star-outer">
+                                          <div class="star-inner"></div>
+                                        </div>
+                                        <span class="number-rating text-secondary"></span>
                                       </div>
-                                      <span class="number-rating text-secondary"></span>
                                     </div>
                                   </div>
-                                </div>
-                                <input type="hidden" class="hid" name="name" id="name{{ j }}{{ i.id }}" value="{{ j }}{{ i.id }}">
-                                <input type="hidden" class="hid" name="rate" id="rate{{ j.profile.rating }}" value="{{ j.profile.rating }}">
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="col-sm-7 pl-5">
-                        {% for j in us %}
-                            {% if j.id == i.repairman %}
-                                <h1>{{ j.first_name }} {{ j.last_name }}</h1>
-                            {% endif %}
-                        {% endfor %}
-                        {% if i.status == 'pending' %}
-                            <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
-                        {% else %}
-                            <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
-                        {% endif %}
-                        {% if not i.accepted %}
-                            <small class="text-secondary text-muted">Accepted: <span style="color: red">{{ i.accepted }}</span></small><br>
-                        {% else %}
-                            <small class="text-secondary text-muted">Accepted: <span style="color: green">{{ i.accepted }}</span></small><br>
-                        {% endif %}
-                        <small class="text-secondary text-muted">Date requested: {{ i.date }}</small><br>
-                        <small class="text-secondary text-muted">Price: 100000 €</small><br>
-                    </div>
-                    <div class="col-sm-2 pt-5" align="right">
-                          <a href="#" class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspMy Feedback</a>
-                    </div>
+                                  <input type="hidden" class="hid" name="name" id="name{{ j }}{{ i.id }}" value="{{ j }}{{ i.id }}">
+                                  <input type="hidden" class="hid" name="rate" id="rate{{ j.profile.rating }}" value="{{ j.profile.rating }}">
+                              {% endif %}
+                          {% endfor %}
+                      </div>
+                      <div class="col-sm-7 pl-5">
+                          {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                  <h1>{{ j.first_name }} {{ j.last_name }}</h1>
+                              {% endif %}
+                          {% endfor %}
+                          {% if i.status == 'pending' %}
+                              <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
+                          {% else %}
+                              <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
+                          {% endif %}
+                          {% if not i.accepted %}
+                              <small class="text-secondary text-muted">Accepted: <span style="color: red">{{ i.accepted }}</span></small><br>
+                          {% else %}
+                              <small class="text-secondary text-muted">Accepted: <span style="color: green">{{ i.accepted }}</span></small><br>
+                          {% endif %}
+                          <small class="text-secondary text-muted">Date requested: {{ i.date }}</small><br>
+                          <small class="text-secondary text-muted">Price: 100000 €</small><br>
+                      </div>
+                      <div class="col-sm-2 pt-5" align="right">
+                            <a href="#" class="btn btn-outline-info"><i class="far fa-comment-alt"></i>&nbsp&nbspMy Feedback</a>
+                      </div>
+                  </div>
                 </div>
-                <hr width="100%">
+              </article>
            {% endfor %}
        {% else %}
         <h3 class="text-secondary text-muted" align="center">No results</h3>
@@ -140,17 +143,19 @@
       <div class="tab-pane fade" id="pills-jobs" role="tabpanel" aria-labelledby="pills-jobs-tab">
           {% if job %}
            {% for i in job %}
-                <div class="row">
-                  <div class="col-sm-3">
-                      <a href="{% url 'request_detail' i.request.id %}">
-                          <img class="rounded-circle account-img" src="{{ i.request.photo.url }}">
-                      </a>
+              <article class="media content-section">
+                <div class="media-body">
+                  <div class="article-metadata">
+                    <small class="text-muted">Repairman hired: </small>
+                    <a class="mr-2" href="{% url 'info' i.repairman.id %}">{{ i.repairman }}</a>
+                    <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
                   </div>
-                  <div class="col-sm-7 pl-5">
-                      <small class="text-muted">Repairman hired: </small><a class="mr-2" href="{% url 'info' i.repairman.id %}">{{ i.repairman }}</a>
-                      <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
-                      <hr width="100%">
-                      <h1>{{ i.request.job_title }}</h1>
+                  <h2><a class="article-title" href="{% url 'request_detail' i.request.id %}">{{ i.request.job_title }}</a></h2>
+                  <div class="row">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                      <img class="rounded-circle app-img" src="{{ i.request.photo.url }}">
+                    </div>
+                    <div class="col-sm-8 col-md-8 col-lg-8">
                       {% if i.status == 'pending' %}
                           <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
                       {% else %}
@@ -158,9 +163,10 @@
                       {% endif %}
                       <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
                       <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
+                    </div>
                   </div>
                 </div>
-                <hr width="100%">
+              </article>
            {% endfor %}
        {% else %}
         <h3 class="text-secondary text-muted" align="center">No results</h3>

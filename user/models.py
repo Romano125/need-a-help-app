@@ -43,7 +43,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=10, choices=GENDER, default='male')
     address = models.CharField(max_length=30, default='-')
-    birth_date = models.DateField(null=True, default='-')
+    birth_date = models.DateField(null=True)
     phone_number = models.CharField(max_length=100, default='-')
     costs = models.IntegerField(default=100)
     role = models.CharField(max_length=15, choices=ROLES, default='client')
@@ -62,6 +62,7 @@ class Profile(models.Model):
 class ClientNotifications(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.CharField(max_length=1000)
+    url_to_go = models.CharField(max_length=200, default='-')
     date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
     remove = models.BooleanField(default=False)
@@ -73,6 +74,7 @@ class ClientNotifications(models.Model):
 class RepairmanNotifications(models.Model):
     repairman = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.CharField(max_length=1000)
+    url_to_go = models.CharField(max_length=200, default='-')
     date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
     remove = models.BooleanField(default=False)
@@ -156,10 +158,13 @@ class JobHire(models.Model):
 
 
 class Rate(models.Model):
-    repairman = models.ForeignKey(User, on_delete=models.CASCADE)
+    repairman = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repairman')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     rate = models.IntegerField()
     feedback = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{ self.repairman.username } rate'
+        return f'{ self.repairman.username } rate and feedback'
+
+# https://github.com/furious-luke/django-address --> link za addres fieldove zajedno s google mapsom

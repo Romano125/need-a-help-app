@@ -34,5 +34,6 @@ urlpatterns = [
     path('notifications_repairman/<int:pk>', views.NotificationsRepairmanListView.as_view(), name='notifications_repairman'),
     path('rate/', views.rate, name='rate'),
     path('done_user/<int:pk>', views.UserDoneListView.as_view(), name='done_user'),
+    path('repairman_feedbacks/<int:pk>', views.RepairmanFeedbacksListView.as_view(), name='repairman_feedbacks'),
     path('chat/', include('chat.urls')),
 ]

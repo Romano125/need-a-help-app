@@ -1,11 +1,11 @@
 {% extends 'need_a_help_app/base.html' %}
 
-{% block notify_client %}
-    {% if not_c %}
+{% block notify_repairman %}
+    {% if not_r %}
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
-                {% for n in not_c|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;'>
+                {% for n in not_r|slice:'5' %}
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not={{ n.id }}&quot;;'>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -19,8 +19,8 @@
                     </div>
                 </div>
             </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
-        {% if not_cli %}
-            <span class="badge badge-notify-bell">{{ not_cli }}</span>
+        {% if not_rep %}
+            <span class="badge badge-notify-bell">{{ not_rep }}</span>
         {% endif %}
     {% else %}
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
@@ -36,38 +36,34 @@
     {% endif %}
 {% endblock %}
 
-{% block app_client %}
+{% block app_repairman %}
 {% endblock %}
 
 {% block content %}
-   <h2 class="pt-4">My notifications</h2>
+   <h2 class="pt-4">My feedbacks</h2>
    <hr width="100%">
-   {% if notif %}
-        <div class='container'>
-           {% for n in notif %}
-                {% if not n.seen %}
-                    <div class="row not_seen" onclick="location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;">
-                        {% autoescape off %}{{ n.notification }}{% endautoescape %}
-                        <div class="col-sm-3 col-md-3 col-lg-3">
-                            <small class="text-secondary text-muted">{{ n.date|date:'d M H:i' }}</small>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class='row not_row' style='cursor: pointer;' onclick="location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;">
-                        {% autoescape off %}{{ n.notification }}{% endautoescape %}
-                        <div class="col-sm-3 col-md-3 col-lg-3">
-                            <small class="text-secondary text-muted">{{ n.date|date:'d M H:i' }}</small>
-                        </div>
-                    </div>
-                {% endif %}
-                <hr width=100%>
-           {% endfor %}
-        </div>
-    {% else %}
+   {% if feeds %}
+    {% for f in feeds %}
+      {% if f.repairman == user and f.feedback != '' %}
+        <article class="media content-section" onclick="location.href=&quot;{% url 'done_repairman' user.id %}&quot;;" style="cursor: pointer;">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a href="{% url 'info' f.user.id %}">
+                  <img class="rounded-circle navbar-img" src="{{ f.user.profile.photo.url }}">
+              </a>
+              <a class="mr-2" href="{% url 'info' f.user.id %} ">{{ f.user }}</a>
+              <small class="text-muted">{{ f.date|date:'F d, Y H:i' }}</small>
+            </div>
+            <p class="article-content">{{ f.feedback }}</p>
+          </div>
+        </article>
+      {% endif %}
+    {% endfor %}
+  {% else %}
     <h3 class="text-secondary text-muted" align="center">No results</h3>
-   {% endif %}
+  {% endif %}
 
-    <div class="container" align="center">
+   <div class="container" align="center">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 align-items-center justify-content" style="margin: auto">
                 {% if is_paginated %}

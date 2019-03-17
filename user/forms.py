@@ -54,7 +54,6 @@ class RepairmanUpdateForm(forms.ModelForm):
             'costs',
             'profession',
             'knowledges',
-            'role',
             'photo'
         ]
 
@@ -67,6 +66,5 @@ class ClientUpdateForm(forms.ModelForm):
             'address',
             'birth_date',
             'phone_number',
-            'role',
             'photo'
         ]

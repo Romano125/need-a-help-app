@@ -5,7 +5,7 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_r|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'requests_repairman' user.id %}?not={{ n.id }}&quot;;'>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not={{ n.id }}&quot;;'>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -33,7 +33,7 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_c|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'main' %}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -101,48 +101,52 @@
     </select>
     <hr width="15%" align="left">
     {% for p in prof %}
-        <div class="row">
-            <div class="col-sm-3">
-                <span class="badge badge-popularity">{{ forloop.counter }}.</span>
-                <a href="{% url 'modal_info' p.user.id %}">
-                    <img class="rounded-circle account-img" src="{{ p.photo.url }}">
-                </a>
+        <article class="media content-section">
+            <div class="media-body">
                 <div class="row">
-                    <div class="col-sm-12" align="center">
-                      <div class="{{ p.user.username }}">
-                        <div class="star-outer">
-                          <div class="star-inner"></div>
+                    <div class="col-sm-3">
+                        <span class="badge badge-popularity">{{ forloop.counter }}.</span>
+                        <a href="{% url 'modal_info' p.user.id %}">
+                            <img class="rounded-circle account-img" src="{{ p.photo.url }}">
+                        </a>
+                        <div class="row">
+                            <div class="col-sm-12" align="center">
+                              <div class="{{ p.user.username }}">
+                                <div class="star-outer">
+                                  <div class="star-inner"></div>
+                                </div>
+                                <span class="number-rating text-secondary"></span>
+                              </div>
+                            </div>
                         </div>
-                        <span class="number-rating text-secondary"></span>
-                      </div>
+                        <input type="hidden" class="hid" name="name" id="name{{ p.user.username }}" value="{{ p.user.username }}">
+                        <input type="hidden" class="hid" name="rate" id="rate{{ p.user.profile.rating }}" value="{{ p.user.profile.rating }}">
                     </div>
-                </div>
-                <input type="hidden" class="hid" name="name" id="name{{ p.user.username }}" value="{{ p.user.username }}">
-                <input type="hidden" class="hid" name="rate" id="rate{{ p.user.profile.rating }}" value="{{ p.user.profile.rating }}">
-            </div>
-            <div class="col-sm-5 pl-5 pt-4">
-                <h1>{{ p.user.first_name }} {{ p.user.last_name }}</h1>
-                <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
-                <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
-                <small class="text-secondary text-muted">Address: {{ p.address }}</small><br>
-            </div>
-            {% if user.profile.role == 'client' %}
-                <div class="col-sm-4 pt-5" align="right">
-                    {% if p.user in f_hired %}
-                        <a href="{% url 'hire_repairman' user.id p.user.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
+                    <div class="col-sm-5 pl-5 pt-4">
+                        <h1>{{ p.user.first_name }} {{ p.user.last_name }}</h1>
+                        <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
+                        <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
+                        <small class="text-secondary text-muted">Being hired: {{ p.hired }}</small><br>
+                        <small class="text-secondary text-muted">Badges</small><br>
+                    </div>
+                    {% if user.profile.role == 'client' %}
+                        <div class="col-sm-4 pt-5" align="right">
+                            {% if p.user in f_hired %}
+                                <a href="{% url 'hire_repairman' user.id p.user.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
+                            {% else %}
+                                <a href="{% url 'hire_repairman' user.id p.user.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                            {% endif %}
+                            <a href="{% url 'info' p.user.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
+                        </div>
                     {% else %}
-                        <a href="{% url 'hire_repairman' user.id p.user.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                        <div class="col-sm-4 pt-5" align="right">
+                            <a href="#" class="btn btn-info btn-sm"><i class="far fa-comment-alt"></i></a>
+                            <a href="{% url 'modal_info' p.user.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                        </div>
                     {% endif %}
-                    <a href="{% url 'info' p.user.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
                 </div>
-            {% else %}
-                <div class="col-sm-4 pt-5" align="right">
-                    <a href="#" class="btn btn-info btn-sm"><i class="far fa-comment-alt"></i></a>
-                    <a href="{% url 'modal_info' p.user.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
-                </div>
-            {% endif %}
-        </div>
-        <hr width="100%">
+            </div>
+        </article>
     {% endfor %}
 
     <div class="container" align="center">

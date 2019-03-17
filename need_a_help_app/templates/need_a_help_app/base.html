@@ -47,7 +47,7 @@
                       <a class="list-group-item sb" href="{% url 'inbox' user.id %}"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp; Messages</a>
                       <a class="list-group-item sb" href="{% url 'notifications_repairman' user.id %}"><i class="fa fa-bell fa-fw"></i>&nbsp; My notifications</a>
                       <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp; Settings</a>
-                      <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
+                      <a class="list-group-item sb" href="{% url 'repairman_feedbacks' user.id %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp; My feedbacks</a>
                       <a class="list-group-item sb" href="{% url 'repairman_apps' user.id %}"><i class="fas fa-pencil-alt"></i>&nbsp; My applications</a>
                     </div>
                     <div class="list-group pt-2 d-block d-sm-block d-md-none d-lg-none">
@@ -55,7 +55,7 @@
                       <a class="list-group-item sb" href="{% url 'inbox' user.id %}"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i></a>
                       <a class="list-group-item sb" href="{% url 'notifications_repairman' user.id %}"><i class="fa fa-bell fa-fw"></i></a>
                       <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></a>
-                      <a class="list-group-item sb" href="#"><i class="fa fa-star fa-fw" aria-hidden="true"></i></a>
+                      <a class="list-group-item sb" href="{% url 'repairman_feedbacks' user.id %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i></a>
                       <a class="list-group-item sb" href="{% url 'repairman_apps' user.id %}"><i class="fas fa-pencil-alt"></i></a>
                     </div>
                 </ul>

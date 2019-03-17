@@ -5,7 +5,7 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_r|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'requests_repairman' user.id %}?not={{ n.id }}&quot;;'>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not={{ n.id }}&quot;;'>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -70,36 +70,39 @@
         <div class="tab-pane fade show active" id="pills-job" role="tabpanel" aria-labelledby="pills-job-tab">
             {% if act_rep %}
                {% for i in act_rep %}
-                    <div class="row">
-                        <div class="col-sm-3">
-                            {% for j in us %}
-                                {% if i.user == j.id %}
-                                    <a href="{% url 'info' j.id %}">
-                                        <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
-                                    </a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        <div class="col-sm-7 pl-5">
-                            {% for j in us %}
-                                {% if i.user == j.id %}
-                                    <a class="mr-2" href="{% url 'info' j.id %}">{{ j }}</a>
-                                {% endif %}
-                            {% endfor %}
-                            <small class="text-muted">{{ i.date|date:'F d, Y H:i' }}</small>&nbsp
-                            <hr width="100%">
-                            <h4 class="text-secondary">{{ i.request_message }}</h4><br>
-                        </div>
-                        <div class="col-sm-2 pt-5" align="right">
-                            {% for j in us %}
-                                {% if i.user == j.id %}
-                                    <a href="{% url 'job_done' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
-                                    <a href="{% url 'client_repairman_job_delete' j.id i.repairman.id user.id 'act' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                  <article class="media content-section">
+                    <div class="media-body">
+                      <div class="row">
+                          <div class="col-sm-3">
+                              {% for j in us %}
+                                  {% if i.user == j.id %}
+                                      <a href="{% url 'info' j.id %}">
+                                          <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
+                                      </a>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+                          <div class="col-sm-7 pl-5">
+                              {% for j in us %}
+                                  {% if i.user == j.id %}
+                                      <a class="mr-2" href="{% url 'info' j.id %}">{{ j }}</a>
+                                  {% endif %}
+                              {% endfor %}
+                              <small class="text-muted">{{ i.date|date:'F d, Y H:i' }}</small>&nbsp
+                              <hr width="100%">
+                              <h4 class="text-secondary">{{ i.request_message }}</h4><br>
+                          </div>
+                          <div class="col-sm-2 pt-5" align="right">
+                              {% for j in us %}
+                                  {% if i.user == j.id %}
+                                      <a href="{% url 'job_done' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                                      <a href="{% url 'client_repairman_job_delete' j.id i.repairman.id user.id 'act' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+                      </div>
                     </div>
-                    <hr width="100%">
+                  </article>
                {% endfor %}
            {% else %}
             <h3 class="text-secondary text-muted" align="center">No results</h3>
@@ -137,31 +140,34 @@
         <div class="tab-pane fade" id="pills-req" role="tabpanel" aria-labelledby="pills-req-tab">
             {% if job %}
                 {% for i in job %}
-                    <div class="row">
-                      <div class="col-sm-3">
-                          <a href="{% url 'request_detail' i.request.id %}">
-                              <img class="rounded-circle account-img" src="{{ i.request.photo.url }}">
-                          </a>
-                      </div>
-                      <div class="col-sm-7 pl-5">
-                          <small class="text-muted">Hired by: </small><a class="mr-2" href="{% url 'info' i.request.user.id %}">{{ i.request.user }}</a>
-                          <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
-                          <hr width="100%">
-                          <h1>{{ i.request.job_title }}</h1>
-                          {% if i.status == 'pending' %}
-                              <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
-                          {% else %}
-                              <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
-                          {% endif %}
-                          <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
-                          <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
-                      </div>
-                      <div class="col-sm-2 pt-5" align="right">
-                            <a href="{% url 'posted_job_done' i.repairman.id i.request.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
-                            <a href="#" class="btn btn-outline-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i></a>
+                  <article class="media content-section">
+                    <div class="media-body">
+                      <div class="row">
+                        <div class="col-sm-3">
+                            <a href="{% url 'request_detail' i.request.id %}">
+                                <img class="rounded-circle account-img" src="{{ i.request.photo.url }}">
+                            </a>
+                        </div>
+                        <div class="col-sm-7 pl-5">
+                            <small class="text-muted">Hired by: </small><a class="mr-2" href="{% url 'info' i.request.user.id %}">{{ i.request.user }}</a>
+                            <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
+                            <hr width="100%">
+                            <h1>{{ i.request.job_title }}</h1>
+                            {% if i.status == 'pending' %}
+                                <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
+                            {% else %}
+                                <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
+                            {% endif %}
+                            <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
+                            <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
+                        </div>
+                        <div class="col-sm-2 pt-5" align="right">
+                              <a href="{% url 'posted_job_done' i.repairman.id i.request.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                              <a href="#" class="btn btn-outline-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i></a>
+                        </div>
                       </div>
                     </div>
-                    <hr width="100%">
+                  </article>
                 {% endfor %}
             {% else %}
                 <h3 class="text-secondary text-muted" align="center">No results</h3>
