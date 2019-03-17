@@ -230,7 +230,7 @@ class RequestsView(LoginRequiredMixin, ListView):
     model = Requests
     template_name = 'user/requests_user.html'
     context_object_name = 'req'
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
@@ -742,12 +742,11 @@ def repairman_apply(request, us_id, req_id):
 class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
     model = Appliccation
     template_name = 'need_a_help_app/repairman_apps.html'
-    context_object_name = 'app'
-    paginate_by = 2
+    context_object_name = 'req'
+    paginate_by = 4
 
     def get_queryset(self):
-        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-        return Appliccation.objects.filter(repairman=user)
+        return Requests.objects.filter(visible=True).order_by('-date')
 
     def get_context_data(self, **kwargs):
         context_data = super(RepairmanApplicationsListView, self).get_context_data(**kwargs)
@@ -759,11 +758,13 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        app = Appliccation.objects.filter(repairman=us)
 
         context_data['cnt'] = cnt
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
         context_data['act_cnt'] = act_cnt
+        context_data['app'] = app
 
         return context_data
 
