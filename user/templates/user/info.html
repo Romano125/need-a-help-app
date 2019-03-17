@@ -178,15 +178,27 @@
           </button>
         </div>
         <div class="modal-body">
-          <article class="media content-section">
-            <div class="media-body">
-              <div class="article-metadata">
-                <a class="mr-2" href="#">Ime</a>
-                <small class="text-muted">datum</small>
-              </div>
-              <p class="article-content">sadrzaj</p>
-            </div>
-          </article>
+          {% if feeds %}
+            {% for f in feeds %}
+              {% if f.repairman == info and f.feedback != '' %}
+                <article class="media content-section">
+                  <div class="media-body">
+                    <div class="article-metadata">
+                      <a href="{% url 'info' f.user.id %}">
+                          <img class="rounded-circle navbar-img" src="{{ f.user.profile.photo.url }}">
+                      </a>
+                      <a class="mr-2" href="{% url 'info' f.user.id %} ">{{ f.user }}</a>
+                      <small class="text-muted">{{ f.date|date:'F d, Y H:i' }}</small>
+                    </div>
+                    <p class="article-content">{{ f.feedback }}</p>
+                  </div>
+                </article>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <h3 class="text-secondary text-muted" align="center">No results</h3>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>

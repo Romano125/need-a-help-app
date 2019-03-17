@@ -84,6 +84,7 @@ a.article-title:hover {
   height: 32px;
   width: 32px;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .account-heading {
@@ -508,5 +509,13 @@ header.masthead .masthead-content .masthead-subheading {
 
 .tool2 {
   color: grey;
+}
+
+.fa-bell {
+  cursor: pointer;
+}
+
+.fa-envelope {
+  cursor: pointer;
 }
 

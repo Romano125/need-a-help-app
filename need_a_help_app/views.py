@@ -121,6 +121,7 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        feeds = Rate.objects.all().order_by('-date')
 
         context_data['f'] = f
         context_data['f_hired'] = f_hired
@@ -128,6 +129,7 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
+        context_data['feeds'] = feeds
 
         return context_data
 
@@ -151,9 +153,11 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
 
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        feeds = Rate.objects.all().order_by('-date')
 
         context_data['f'] = f
         context_data['not_c'] = not_c
+        context_data['feeds'] = feeds
 
         return context_data
 
@@ -988,7 +992,7 @@ def rate(request):
         messages.warning(request, f'You did not finished rating { rep.first_name }, do it again to move it to done list!')
         return redirect('hired_user', pk=us.id)
 
-    rate = Rate(repairman=rep, rate=val, feedback=feed)
+    rate = Rate(repairman=rep, user=us, rate=val, feedback=feed)
     rate.save()
 
     # povecava se broj rateova za majstora
@@ -1110,5 +1114,30 @@ class TopRatedView(LoginRequiredMixin, ListView):
         context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
+
+        return context_data
+
+
+class RepairmanFeedbacksListView(LoginRequiredMixin, ListView):
+    model = Rate
+    template_name = 'need_a_help_app/repairman_feedbacks.html'
+    context_object_name = 'feeds'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return Rate.objects.filter(repairman=user).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RepairmanFeedbacksListView, self).get_context_data(**kwargs)
+
+        users = User.objects.all()
+        us = self.request.user
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+
+        context_data['us'] = users
+        context_data['not_r'] = not_r
+        context_data['not_rep'] = not_rep
 
         return context_data
