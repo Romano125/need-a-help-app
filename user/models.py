@@ -166,3 +166,5 @@ class Rate(models.Model):
 
     def __str__(self):
         return f'{ self.repairman.username } rate and feedback'
+
+# https://github.com/furious-luke/django-address --> link za addres fieldove zajedno s google mapsom
