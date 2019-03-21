@@ -1,0 +1,19 @@
+<script type="text/javascript">
+    $(function() {
+
+        $('#q').keyup(function() {
+            $.ajax({
+                type: 'GET',
+                url: '{% url "search" %}',
+                data: {
+                    'q': $('#q').val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+
+                }
+            });
+        });
+    });
+
+</script>

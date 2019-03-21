@@ -27,6 +27,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from django.middleware import csrf
 
 
 def home(request):
@@ -432,9 +433,11 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 def search(request):
     q = request.GET.get('q')
     users = User.objects.all()
+    prof = ''
+    name = ''
     if q:
         prof = Profile.objects.filter(Q(profession__contains=q))
-        name = User.objects.filter(Q(first_name__contains=q)|Q(last_name__contains=q))
+        name = User.objects.filter(Q(first_name__contains=q) | Q(last_name__contains=q))
 
     f = 0
     if prof or name:
@@ -466,6 +469,8 @@ def search(request):
         'prof': prof,
         'name': name
     }
+
+    # context.update(csrf(request))
 
     return render(request, 'need_a_help_app/search_results.html', context)
 
