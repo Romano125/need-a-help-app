@@ -48,7 +48,7 @@
    <hr width="100%">
    {% if f %}
        {% for us in users %}
-            {% if us.profile.profession == prof.first.profession and us.profile.role == 'repairman' %}
+            {% if us.profile.profession == prof.first.profession or us.first_name == name.first.first_name or us.last_name == name.first.last_name and us.profile.role == 'repairman' %}
                 <article class="media content-section">
                     <div class="media-body">
                         <div class="row">

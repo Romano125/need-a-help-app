@@ -434,9 +434,10 @@ def search(request):
     users = User.objects.all()
     if q:
         prof = Profile.objects.filter(Q(profession__contains=q))
+        name = User.objects.filter(Q(first_name__contains=q)|Q(last_name__contains=q))
 
     f = 0
-    if prof:
+    if prof or name:
         f = 1
 
     # prof = User.objects.filter(Q(first_name__contains=q) | Q(last_name__contains=q))
@@ -462,7 +463,8 @@ def search(request):
         'users': users,
         'q': q,
         'f': f,
-        'prof': prof
+        'prof': prof,
+        'name': name
     }
 
     return render(request, 'need_a_help_app/search_results.html', context)
