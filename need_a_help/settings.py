@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'need_a_help_app.apps.NeedAHelpAppConfig',
     'crispy_forms',
     'betterforms',
-    #'channels',
+    # 'channels',
     'chat',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -152,3 +152,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+GOOGLE_API_KEY = os.environ.get('MAPS_KEY')
