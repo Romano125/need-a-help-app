@@ -124,6 +124,35 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         feeds = Rate.objects.all().order_by('-date')
 
+        rep = User.objects.filter(id=rep_id).first()
+        num_rates = Rate.objects.filter(repairman=rep).count()
+        five_num = Rate.objects.filter(repairman=rep, rate=5).count()
+        four_num = Rate.objects.filter(repairman=rep, rate=4).count()
+        three_num = Rate.objects.filter(repairman=rep, rate=3).count()
+        two_num = Rate.objects.filter(repairman=rep, rate=2).count()
+        one_num = Rate.objects.filter(repairman=rep, rate=1).count()
+
+        if five_num and num_rates:
+            five_per = (five_num / num_rates) * 100
+        else:
+            five_per = 0
+        if four_num and num_rates:
+            four_per = (four_num / num_rates) * 100
+        else:
+            four_per = 0
+        if three_num and num_rates:
+            three_per = (three_num / num_rates) * 100
+        else:
+            three_per = 0
+        if two_num and num_rates:
+            two_per = (two_num / num_rates) * 100
+        else:
+            two_per = 0
+        if one_num and num_rates:
+            one_per = (one_num / num_rates) * 100
+        else:
+            one_per = 0
+
         context_data['f'] = f
         context_data['f_hired'] = f_hired
         context_data['not_r'] = not_r
@@ -131,6 +160,12 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
         context_data['feeds'] = feeds
+        context_data['num_rates'] = num_rates
+        context_data['five_per'] = five_per
+        context_data['four_per'] = four_per
+        context_data['three_per'] = three_per
+        context_data['two_per'] = two_per
+        context_data['one_per'] = one_per
 
         return context_data
 
@@ -156,9 +191,44 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         feeds = Rate.objects.all().order_by('-date')
 
+        rep = User.objects.filter(id=rep_id).first()
+        num_rates = Rate.objects.filter(repairman=rep).count()
+        five_num = Rate.objects.filter(repairman=rep, rate=5).count()
+        four_num = Rate.objects.filter(repairman=rep, rate=4).count()
+        three_num = Rate.objects.filter(repairman=rep, rate=3).count()
+        two_num = Rate.objects.filter(repairman=rep, rate=2).count()
+        one_num = Rate.objects.filter(repairman=rep, rate=1).count()
+
+        if five_num and num_rates:
+            five_per = (five_num / num_rates) * 100
+        else:
+            five_per = 0
+        if four_num and num_rates:
+            four_per = (four_num / num_rates) * 100
+        else:
+            four_per = 0
+        if three_num and num_rates:
+            three_per = (three_num / num_rates) * 100
+        else:
+            three_per = 0
+        if two_num and num_rates:
+            two_per = (two_num / num_rates) * 100
+        else:
+            two_per = 0
+        if one_num and num_rates:
+            one_per = (one_num / num_rates) * 100
+        else:
+            one_per = 0
+
         context_data['f'] = f
         context_data['not_c'] = not_c
         context_data['feeds'] = feeds
+        context_data['num_rates'] = num_rates
+        context_data['five_per'] = five_per
+        context_data['four_per'] = four_per
+        context_data['three_per'] = three_per
+        context_data['two_per'] = two_per
+        context_data['one_per'] = one_per
 
         return context_data
 
