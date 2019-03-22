@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'need_a_help_app.apps.NeedAHelpAppConfig',
     'crispy_forms',
     'betterforms',
-    'channels',
+    # 'channels',
     'chat',
     'django.contrib.admin',
     'django.contrib.auth',
