@@ -12,6 +12,7 @@ from .forms import ComposeForm
 from .models import Thread, ChatMessage
 
 
+
 class InboxView(LoginRequiredMixin, ListView):
     template_name = 'chat/inbox.html'
     context_object_name = 'users'
@@ -34,8 +35,9 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
     form_class = ComposeForm
 
     def get_success_url(self):
-        user = self.request.user
-        return reverse_lazy('messages', kwargs={'username': user.username})
+        #user = self.request.user
+        other_username = self.kwargs.get("username")
+        return reverse_lazy('messages', kwargs={'username': other_username})
 
     def get_queryset(self):
         return Thread.objects.by_user(self.request.user)

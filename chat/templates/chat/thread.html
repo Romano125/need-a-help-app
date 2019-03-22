@@ -89,9 +89,9 @@
 {% block content %}
 <h3 align = "center">
     {% if user != object.first %}
-        <a href="{% url 'info' object.first.id %}"><img class="rounded-circle navbar-img" src="{ object.first.profile.photo.url }"></a>{{ object.first }}
+        <a href="{% url 'info' object.first.id %}"><img class="rounded-circle navbar-img" src="{{ object.first.profile.photo.url }}"></a>{{ object.first }}
     {% else %}
-        <a href="{% url 'info' object.second.id %}"><img class="rounded-circle navbar-img" src="{ object.second.profile.photo.url }"></a>{{ object.second }}
+        <a href="{% url 'info' object.second.id %}"><img class="rounded-circle navbar-img" src="{{ object.second.profile.photo.url }}"></a>{{ object.second }}
     {% endif %}
 </h3>
 <div class = "row">
@@ -124,6 +124,9 @@
 
 {% block script %}
 
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
 
 <script>
@@ -153,7 +156,7 @@ socket.onmessage = function(e){
 		chatHolder.append("<button type='button' class='btn btn-info' style = 'float:right; display:block;' >" + chatDataMsg.message + "</button><br> <p align = 'right' style = 'font-size: 10px;'> <br>"+ chatDataMsg.username + "</p>" )
 	}
 }
-//"<li>" + chatDataMsg.message + " via " + chatDataMsg.username + "</li>"
+
 
 
 socket.onopen = function(e){
@@ -161,12 +164,12 @@ socket.onopen = function(e){
 	formData.submit(function(event){
 		event.preventDefault()
 		var msgText = msgInput.val()
-		//chatHolder.append("<li>" + msgText + " via " + me + "</li>")
+		
 		var finalData = {
 			'message' : msgText
 		}
 		socket.send(JSON.stringify(finalData))
-		//socket.send("msgText")
+		
 		msgInput.val('')			//prikupljanje poruke i resetiranje forme
 		formData[0].reset()
 	})

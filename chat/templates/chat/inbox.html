@@ -110,12 +110,12 @@
                     {% endif %}
                         {% if u.user == user %}
                             {% if u.user == u.thread.first %}
-                                <a href="{% url 'info' u.thread.second.id %}"><img class="rounded-circle navbar-img" src="{ u.thread.second.profile.photo.url }"></a>
+                                <a href="{% url 'info' u.thread.second.id %}"><img class="rounded-circle navbar-img" src="{{ u.thread.second.profile.photo.url }}"></a>
                             {% else %}
-                                <a href="{% url 'info' u.thread.first.id %}"><img class="rounded-circle navbar-img" src="{ u.thread.first.profile.photo.url }"></a>
+                                <a href="{% url 'info' u.thread.first.id %}"><img class="rounded-circle navbar-img" src="{{ u.thread.first.profile.photo.url }}"></a>
                             {% endif %}  
                     {% else %} 
-                        <a href="{% url 'info' u.user.id %}"><img class="rounded-circle navbar-img" src="{ u.user.profile.photo.url }"></a>
+                        <a href="{% url 'info' u.user.id %}"><img class="rounded-circle navbar-img" src="{{u.user.profile.photo.url }}"></a>
                     {% endif %}  
                         
                     {% if u.user == user %}
