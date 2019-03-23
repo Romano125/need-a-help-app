@@ -30,6 +30,7 @@ from django.views.generic import (
 from user.forms import RequestsForm
 import json
 import urllib.request, urllib.parse
+from need_a_help import settings
 
 
 def home(request):
@@ -69,11 +70,13 @@ class AppMainView(LoginRequiredMixin, ListView):
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         vis = Requests.objects.filter(visible=True).count()
 
+        api_key = settings.GOOGLE_MAPS_API_KEY
+
         origin = us.profile.address
         distance = [None] * (uss.count() + 1)
         for users in uss:
             if users.profile.role == 'repairman':
-                api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(users.profile.address) }&key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg').read(1000)
+                api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(users.profile.address) }&key={ api_key }').read(1000)
                 data = json.loads(api.decode('utf-8'))
                 # time = data['rows'].0.['elements'].0.distance.text
 
@@ -167,8 +170,10 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         else:
             one_per = 0
 
+        api_key = settings.GOOGLE_MAPS_API_KEY
+
         origin = us.profile.address
-        api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg').read(1000)
+        api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key={ api_key }').read(1000)
         dist = json.loads(api.decode('utf-8'))
 
         context_data['f'] = f
@@ -239,8 +244,10 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
         else:
             one_per = 0
 
+        api_key = settings.GOOGLE_MAPS_API_KEY
+
         origin = us.profile.address
-        api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg').read(1000)
+        api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key={ api_key }').read(1000)
         dist = json.loads(api.decode('utf-8'))
 
         context_data['f'] = f
@@ -362,6 +369,7 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['api_key'] = settings.GOOGLE_MAPS_API_KEY
 
         return context_data
 

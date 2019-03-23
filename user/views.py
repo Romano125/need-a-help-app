@@ -10,6 +10,7 @@ from .forms import (
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import ClientNotifications, RepairmanNotifications
+from need_a_help import settings
 
 
 def register(request):
@@ -31,7 +32,8 @@ def register(request):
 
     context = {
         'form': form,
-        'form_p': form_p
+        'form_p': form_p,
+        'api_key': settings.GOOGLE_MAPS_API_KEY
     }
 
     return render(request, 'user/register.html', context)
