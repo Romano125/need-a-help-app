@@ -1,0 +1,24 @@
+<script>
+
+var placeSearch, autocomplete, autocomplete2;
+
+var componentForm = {
+  street_number: 'short_name',
+  route: 'long_name',
+  locality: 'long_name',
+  administrative_area_level_1: 'short_name',
+  country: 'long_name',
+  postal_code: 'short_name'
+};
+
+function initAutocomplete() {
+  autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById('address'), {types: ['geocode']});
+  autocomplete.setFields('address_components');
+  autocomplete2 = new google.maps.places.Autocomplete(
+      document.getElementById('address'), {types: ['geocode']});
+  autocomplete2.setFields('address_components');
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg&libraries=places&callback=initAutocomplete"
+    async defer></script>

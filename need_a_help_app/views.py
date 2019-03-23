@@ -27,7 +27,9 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.middleware import csrf
+from user.forms import RequestsForm
+import json
+import urllib.request, urllib.parse
 
 
 def home(request):
@@ -67,6 +69,17 @@ class AppMainView(LoginRequiredMixin, ListView):
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         vis = Requests.objects.filter(visible=True).count()
 
+        origin = us.profile.address
+        distance = []
+        for users in uss:
+            if users.profile.role == 'repairman':
+                api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(users.profile.address) }&key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg').read(1000)
+                data = json.loads(api.decode('utf-8'))
+                # time = data.rows.first().elements.first().duration.text
+
+                distance.append(data)
+
+
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
         context_data['cnt'] = cnt
@@ -77,6 +90,7 @@ class AppMainView(LoginRequiredMixin, ListView):
         context_data['not_cli'] = not_cli
         context_data['vis'] = vis
         context_data['users'] = uss
+        context_data['dist'] = distance
 
         return context_data
 
@@ -153,6 +167,10 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         else:
             one_per = 0
 
+        origin = us.profile.address
+        api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg').read(1000)
+        dist = json.loads(api.decode('utf-8'))
+
         context_data['f'] = f
         context_data['f_hired'] = f_hired
         context_data['not_r'] = not_r
@@ -166,6 +184,7 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         context_data['three_per'] = three_per
         context_data['two_per'] = two_per
         context_data['one_per'] = one_per
+        context_data['dist'] = dist
 
         return context_data
 
@@ -220,6 +239,10 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
         else:
             one_per = 0
 
+        origin = us.profile.address
+        api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg').read(1000)
+        dist = json.loads(api.decode('utf-8'))
+
         context_data['f'] = f
         context_data['not_c'] = not_c
         context_data['feeds'] = feeds
@@ -229,6 +252,7 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
         context_data['three_per'] = three_per
         context_data['two_per'] = two_per
         context_data['one_per'] = one_per
+        context_data['dist'] = dist
 
         return context_data
 
@@ -322,14 +346,8 @@ class RequestsView(LoginRequiredMixin, ListView):
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
     model = Requests
-    fields = [
-        'job_title',
-        'price',
-        'required_knowledges',
-        'address',
-        'job_description',
-        'photo'
-    ]
+
+    form_class = RequestsForm
 
     def form_valid(self, form):
         form.instance.user = self.request.user

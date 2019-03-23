@@ -117,7 +117,16 @@
       <div class="container">
         <fieldset class="from-group">
           {% if modal_info.profile.role == 'repairman' %}
-            <h4><b>Address: </b>{{ modal_info.profile.address }}</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><b>Address: </b>{{ modal_info.profile.address }}</h4>
+                </div>
+                <div class="col-sm-4">
+                    {% if user.profile.role != 'repairman' %}
+                      <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist.rows.0.elements.0.distance.text }}</h5>
+                    {% endif %}
+                </div>
+            </div>
             <h4><b>Phone number: </b>{{ modal_info.profile.phone_number }}</h4>
             <h4><b>Birth_date: </b>{{ modal_info.profile.birth_date }}</h4>
             <h4><b>Profession: </b>{{ modal_info.profile.profession }}</h4>
@@ -221,7 +230,14 @@
                 </div>
             </div>
           {% else %}
-            <h4>Address: {{ modal_info.profile.address }}</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><b>Address: </b>{{ modal_info.profile.address }}</h4>
+                </div>
+                <div class="col-sm-4">
+                    <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist.rows.0.elements.0.distance.text }}</h5>
+                </div>
+            </div>
             <h4>Phone number: {{ modal_info.profile.phone_number }}</h4>
             <h4>Birth_date: {{ modal_info.profile.birth_date }}</h4>
             <h4>Badges:
