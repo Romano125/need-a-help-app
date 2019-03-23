@@ -78,7 +78,8 @@ def profile(request, log):
         'not_c': not_c,
         'not_r': not_r,
         'not_cli': not_cli,
-        'not_rep': not_rep
+        'not_rep': not_rep,
+        'api_key': settings.GOOGLE_MAPS_API_KEY
     }
 
     return render(request, 'user/profile.html', args)
