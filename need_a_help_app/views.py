@@ -70,14 +70,14 @@ class AppMainView(LoginRequiredMixin, ListView):
         vis = Requests.objects.filter(visible=True).count()
 
         origin = us.profile.address
-        distance = []
+        distance = [None] * (uss.count() + 1)
         for users in uss:
             if users.profile.role == 'repairman':
                 api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(users.profile.address) }&key=AIzaSyC-VZr0aGS2wU13D4lSSMNbNw2egUozbOg').read(1000)
                 data = json.loads(api.decode('utf-8'))
-                # time = data.rows.first().elements.first().duration.text
+                # time = data['rows'].0.['elements'].0.distance.text
 
-                distance.append(data)
+                distance[0] = data
 
 
         context_data['f_hired'] = f_hired

@@ -196,7 +196,14 @@
                                     <h1>{{ u.job_title }}</h1>
                                     <small class="text-secondary text-muted">Required knowladges: {{ u.required_knowledges }}</small><br>
                                     <small class="text-secondary text-muted">Price: {{ u.price }} €</small><br>
-                                    <small class="text-secondary text-muted">Address: {{ u.address }}</small><br>
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            <small class="text-secondary text-muted">Address: {{ p.address }}</small><br>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <small class="text-secondary text-muted distance"><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist.0.rows.0.elements.0.distance.text }}</small><br>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-2 pt-5" align="right">
                                     <a href="{% url 'repairman_apply' user.id u.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
