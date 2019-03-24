@@ -469,6 +469,21 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+        origin = us.profile.address
+        api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(req.first().address) }&key={ api_key }').read(1000)
+        data = json.loads(api.decode('utf-8'))
+        dist = data['rows'][0]['elements'][0]['distance']['text']
+
+        uss = User.objects.all()
+        distance = [None] * (uss.count() + 1)
+        for u in uss:
+            if u.profile.role == 'repairman':
+                api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(u.profile.address) }&destinations={ urllib.parse.quote(req.first().address) }&key={ api_key }').read(1000)
+                data = json.loads(api.decode('utf-8'))
+                dist2 = data['rows'][0]['elements'][0]['distance']['text']
+
+                distance[u.id] = dist2
+
         context_data['s'] = reqq_seen
         context_data['app'] = app
         context_data['cnt'] = cnt
@@ -477,20 +492,15 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
+        context_data['dist'] = dist
+        context_data['dist2'] = distance
 
         return context_data
 
 
 class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Requests
-    fields = [
-        'job_title',
-        'price',
-        'required_knowledges',
-        'address',
-        'job_description',
-        'photo'
-    ]
+    form_class = RequestsForm
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -511,6 +521,7 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['api_key'] = settings.GOOGLE_MAPS_API_KEY
 
         return context_data
 

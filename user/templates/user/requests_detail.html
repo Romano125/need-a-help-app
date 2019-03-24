@@ -1,4 +1,5 @@
 {% extends 'need_a_help_app/base.html' %}
+{% load maps_tags %}
 
 {% block notify_repairman %}
     {% if not_r %}
@@ -93,7 +94,16 @@
             <h2 class="article-title">{{ object.job_title }}</h2>
             <small class="text-muted">Required knowledges: {{ object.required_knowledges }}</small><br>
             <small class="text-muted">Price: {{ object.price }} €</small><br>
-            <small class="text-muted">Address: {{ object.address }}</small><br><br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <small class="text-muted">Address: {{ object.address }}</small><br><br>
+                </div>
+                <div class="col-sm-4">
+                    {% if user.profile.role != 'client' %}
+                      <small class="text-muted"><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</small><br>
+                    {% endif %}
+                </div>
+            </div>
             <h4>Description:</h4>
             <p class="article-content">{{ object.job_description }}</p>
             {% if vis %}
@@ -142,7 +152,17 @@
                       <h5>{{ a.repairman.first_name }} {{ a.repairman.last_name }}</h5>
                       <small class="text-secondary text-muted">Profession: {{ a.repairman.profile.profession }}</small><br>
                       <small class="text-secondary text-muted">Cost: {{ a.repairman.profile.costs }} €</small><br>
-                      <small class="text-secondary text-muted">Address: {{ a.repairman.profile.address }}</small><br>
+                      <div class="row">
+                          <div class="col-sm-6">
+                              <small class="text-muted">Address: {{ a.repairman.profile.address }}</small><br><br>
+                          </div>
+                          <div class="col-sm-4">
+                              {% if user.profile.role != 'repairman' %}
+                                {% resolve dist2 a.repairman.id as value %}
+                                <small class="text-muted"><i class="fas fa-map-marker-alt" style="color: red"></i> {{ value }}</small><br>
+                              {% endif %}
+                          </div>
+                      </div>
                   </div>
                   <div class="col-sm-4 pt-4" align="right">
                       <!--{% if rep in f_hired %}
