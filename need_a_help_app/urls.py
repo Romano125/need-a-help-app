@@ -3,7 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('main', views.AppMainView.as_view(), name='main'),
+    path('main_client/', views.AppMainClientView.as_view(), name='main_client'),
+    path('main_repairman/', views.AppMainRepairmanView.as_view(), name='main_repairman'),
     path('top_rated', views.TopRatedView.as_view(), name='top_rated'),
     path('info/<int:pk>/', views.InfoDetailView.as_view(), name='info'),
     path('modal_info/<int:pk>/', views.ModalInfoDetailView.as_view(), name='modal_info'),

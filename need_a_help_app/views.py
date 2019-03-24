@@ -33,12 +33,15 @@ import urllib.request, urllib.parse
 from need_a_help import settings
 
 
+api_key = settings.GOOGLE_MAPS_API_KEY
+
+
 def home(request):
     return render(request, 'need_a_help_app/index.html')
 
 
-class AppMainView(LoginRequiredMixin, ListView):
-    template_name = 'need_a_help_app/app_main.html'
+class AppMainClientView(LoginRequiredMixin, ListView):
+    template_name = 'need_a_help_app/app_main_client.html'
     context_object_name = 'prof'
     paginate_by = 5
 
@@ -46,10 +49,9 @@ class AppMainView(LoginRequiredMixin, ListView):
         return Profile.objects.filter(role='repairman').order_by('-rating')
 
     def get_context_data(self, **kwargs):
-        context_data = super(AppMainView, self).get_context_data(**kwargs)
+        context_data = super(AppMainClientView, self).get_context_data(**kwargs)
 
         us = self.request.user
-        reqq_seen = SeenRequest.objects.filter(user=us)
 
         hired = Hire.objects.filter(user=us)
         uss = User.objects.all()
@@ -61,16 +63,8 @@ class AppMainView(LoginRequiredMixin, ListView):
                     f_hired.append(u)
 
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
-        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
-        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
-        act_cnt = act_job + act_req
-        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
-        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
-        vis = Requests.objects.filter(visible=True).count()
-
-        api_key = settings.GOOGLE_MAPS_API_KEY
 
         origin = us.profile.address
         distance = [None] * (uss.count() + 1)
@@ -78,21 +72,56 @@ class AppMainView(LoginRequiredMixin, ListView):
             if users.profile.role == 'repairman':
                 api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(users.profile.address) }&key={ api_key }').read(1000)
                 data = json.loads(api.decode('utf-8'))
-                # time = data['rows'].0.['elements'].0.distance.text
+                dist = data['rows'][0]['elements'][0]['distance']['text']
 
-                distance[0] = data
-
+                distance[users.id] = dist
 
         context_data['f_hired'] = f_hired
+        context_data['cnt'] = cnt
+        context_data['not_c'] = not_c
+        context_data['not_cli'] = not_cli
+        context_data['dist'] = distance
+
+        return context_data
+
+
+class AppMainRepairmanView(LoginRequiredMixin, ListView):
+    template_name = 'need_a_help_app/app_main_repairman.html'
+    context_object_name = 'req'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return Requests.objects.filter(visible=True).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context_data = super(AppMainRepairmanView, self).get_context_data(**kwargs)
+
+        us = self.request.user
+        reqq_seen = SeenRequest.objects.filter(user=us)
+
+        req = Requests.objects.filter(visible=True)
+
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        act_job = RepairmanRequests.objects.filter(repairman=us, active=True, done=False).count()
+        act_req = JobHire.objects.filter(repairman=us, status='pending').count()
+        act_cnt = act_job + act_req
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+
+        origin = us.profile.address
+        distance = [None] * (req.count() + 1)
+        for r in req:
+            api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
+            data = json.loads(api.decode('utf-8'))
+            dist = data['rows'][0]['elements'][0]['distance']['text']
+
+            distance[r.id] = dist
+
         context_data['seen_r'] = reqq_seen
         context_data['cnt'] = cnt
         context_data['act_cnt'] = act_cnt
         context_data['not_r'] = not_r
-        context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
-        context_data['not_cli'] = not_cli
-        context_data['vis'] = vis
-        context_data['users'] = uss
         context_data['dist'] = distance
 
         return context_data
@@ -170,8 +199,6 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         else:
             one_per = 0
 
-        api_key = settings.GOOGLE_MAPS_API_KEY
-
         origin = us.profile.address
         api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key={ api_key }').read(1000)
         dist = json.loads(api.decode('utf-8'))
@@ -244,8 +271,6 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
         else:
             one_per = 0
 
-        api_key = settings.GOOGLE_MAPS_API_KEY
-
         origin = us.profile.address
         api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key={ api_key }').read(1000)
         dist = json.loads(api.decode('utf-8'))
@@ -317,12 +342,23 @@ def show_favs(request):
     not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+    origin = us.profile.address
+    distance = [None] * (users.count() + 1)
+    for u in users:
+        if u.profile.role == 'repairman':
+            api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(u.profile.address) }&key={ api_key }').read(1000)
+            data = json.loads(api.decode('utf-8'))
+            dist = data['rows'][0]['elements'][0]['distance']['text']
+
+            distance[u.id] = dist
+
     context = {
         'favs': favs,
         'users': users,
         'f_hired': f_hired,
         'not_c': not_c,
-        'not_cli': not_cli
+        'not_cli': not_cli,
+        'dist': distance
     }
 
     return render(request, 'need_a_help_app/favorites.html', context)

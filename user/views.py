@@ -39,6 +39,13 @@ def register(request):
     return render(request, 'user/register.html', context)
 
 
+def login_success(request):
+    if request.user.profile.role == 'client':
+        return redirect("main_client")
+    else:
+        return redirect("main_repairman")
+
+
 @login_required  # decorator dodaje funkcionalnost nasoj funkciji
 def profile(request, log):
     user = User.objects.filter(id=log).first()
