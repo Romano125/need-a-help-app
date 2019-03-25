@@ -1,4 +1,5 @@
 {% extends 'need_a_help_app/base.html' %}
+{% load maps_tags %}
 
 {% block notify_repairman %}
     {% if not_r %}
@@ -159,7 +160,15 @@
                                 <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
                             {% endif %}
                             <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
-                            <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
+                                </div>
+                                <div class="col-sm-5">
+                                    {% resolve dist i.request.id as value %}
+                                    <small class="text-secondary text-muted distance"><i class="fas fa-map-marker-alt" style="color: red"></i>{{ value }}</small><br>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-2 pt-5" align="right">
                               <a href="{% url 'posted_job_done' i.repairman.id i.request.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
