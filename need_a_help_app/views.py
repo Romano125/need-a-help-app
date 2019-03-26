@@ -70,9 +70,11 @@ class AppMainClientView(LoginRequiredMixin, ListView):
         distance = {}
         for users in uss:
             if users.profile.role == 'repairman':
+                dist = '-'
                 api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(users.profile.address) }&key={ api_key }').read(1000)
                 data = json.loads(api.decode('utf-8'))
-                dist = data['rows'][0]['elements'][0]['distance']['text']
+                if data['rows'][0]['elements'][0]['status'] == 'OK':
+                    dist = data['rows'][0]['elements'][0]['distance']['text']
 
                 distance.update({users.id: dist})
 
@@ -111,9 +113,11 @@ class AppMainRepairmanView(LoginRequiredMixin, ListView):
         origin = us.profile.address
         distance = {}
         for r in req:
+            dist = '-'
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
-            dist = data['rows'][0]['elements'][0]['distance']['text']
+            if data['rows'][0]['elements'][0]['status'] == 'OK':
+                dist = data['rows'][0]['elements'][0]['distance']['text']
 
             distance.update({r.id: dist})
 
@@ -201,7 +205,10 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
 
         origin = us.profile.address
         api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key={ api_key }').read(1000)
-        dist = json.loads(api.decode('utf-8'))
+        data = json.loads(api.decode('utf-8'))
+        dist = '-'
+        if data['rows'][0]['elements'][0]['status'] == 'OK':
+            dist = data['rows'][0]['elements'][0]['distance']['text']
 
         context_data['f'] = f
         context_data['f_hired'] = f_hired
@@ -273,7 +280,10 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
 
         origin = us.profile.address
         api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(rep.profile.address) }&key={ api_key }').read(1000)
-        dist = json.loads(api.decode('utf-8'))
+        data = json.loads(api.decode('utf-8'))
+        dist = '-'
+        if data['rows'][0]['elements'][0]['status'] == 'OK':
+            dist = data['rows'][0]['elements'][0]['distance']['text']
 
         context_data['f'] = f
         context_data['not_c'] = not_c
@@ -346,9 +356,11 @@ def show_favs(request):
     distance = {}
     for u in users:
         if u.profile.role == 'repairman':
+            dist = '-'
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(u.profile.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
-            dist = data['rows'][0]['elements'][0]['distance']['text']
+            if data['rows'][0]['elements'][0]['status'] == 'OK':
+                dist = data['rows'][0]['elements'][0]['distance']['text']
 
             distance.update({u.id: dist})
 
@@ -472,15 +484,19 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         origin = us.profile.address
         api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(req.first().address) }&key={ api_key }').read(1000)
         data = json.loads(api.decode('utf-8'))
-        dist = data['rows'][0]['elements'][0]['distance']['text']
+        dist = '-'
+        if data['rows'][0]['elements'][0]['status'] == 'OK':
+            dist = data['rows'][0]['elements'][0]['distance']['text']
 
         uss = User.objects.all()
         distance = {}
         for u in uss:
             if u.profile.role == 'repairman':
+                dist2 = '-'
                 api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(u.profile.address) }&destinations={ urllib.parse.quote(req.first().address) }&key={ api_key }').read(1000)
                 data = json.loads(api.decode('utf-8'))
-                dist2 = data['rows'][0]['elements'][0]['distance']['text']
+                if data['rows'][0]['elements'][0]['status'] == 'OK':
+                    dist2 = data['rows'][0]['elements'][0]['distance']['text']
 
                 distance.update({u.id: dist2})
 
@@ -607,9 +623,11 @@ def search(request):
     distance = {}
     for u in users:
         if u.profile.role == 'repairman':
+            dist = '-'
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(u.profile.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
-            dist = data['rows'][0]['elements'][0]['distance']['text']
+            if data['rows'][0]['elements'][0]['status'] == 'OK':
+                dist = data['rows'][0]['elements'][0]['distance']['text']
 
             distance.update({u.id: dist})
 
@@ -810,9 +828,11 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         origin = us.profile.address
         distance = {}
         for r in req:
+            dist = '-'
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
-            dist = data['rows'][0]['elements'][0]['distance']['text']
+            if data['rows'][0]['elements'][0]['status'] == 'OK':
+                dist = data['rows'][0]['elements'][0]['distance']['text']
 
             distance.update({r.id: dist})
 
@@ -891,9 +911,11 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         origin = us.profile.address
         distance = {}
         for r in req:
+            dist = '-'
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
-            dist = data['rows'][0]['elements'][0]['distance']['text']
+            if data['rows'][0]['elements'][0]['status'] == 'OK':
+                dist = data['rows'][0]['elements'][0]['distance']['text']
 
             distance.update({r.id: dist})
 
@@ -950,9 +972,11 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
         origin = us.profile.address
         distance = {}
         for r in req:
+            dist = '-'
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
-            dist = data['rows'][0]['elements'][0]['distance']['text']
+            if data['rows'][0]['elements'][0]['status'] == 'OK':
+                dist = data['rows'][0]['elements'][0]['distance']['text']
 
             distance.update({r.id: dist})
 

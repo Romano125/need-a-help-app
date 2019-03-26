@@ -116,7 +116,7 @@
                 </div>
                 <div class="col-sm-4">
                     {% if user.profile.role != 'repairman' and user != info %}
-                      <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist.rows.0.elements.0.distance.text }}</h5>
+                      <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</h5>
                     {% endif %}
                 </div>
             </div>
@@ -229,7 +229,7 @@
                 </div>
                 <div class="col-sm-4">
                     {% if user != info %}
-                        <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist.rows.0.elements.0.distance.text }}</h5>
+                        <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</h5>
                     {% endif %}
                 </div>
             </div>
