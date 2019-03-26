@@ -308,6 +308,22 @@
 
             <main role="main" class="container">
               <div class="row">
+                <div class="col-sm-6 col-md-5 offset-3 col-lg-6">
+                  {% if messages %}
+                      {% for mess in messages %}
+                          <div class="alert alert-{{ mess.tags }} ">
+                              {{ mess }}
+                          </div>
+                      {% endfor %}
+                  {% endif %}
+
+                  {% block register_login %}{% endblock %}
+                </div>
+              </div>
+            </main>
+
+            <main role="main" class="container">
+              <div class="row">
                 <div class="col-sm-8 col-md-8 col-lg-8">
                   {% if messages %}
                       {% for mess in messages %}
