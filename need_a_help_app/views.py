@@ -67,14 +67,14 @@ class AppMainClientView(LoginRequiredMixin, ListView):
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
         origin = us.profile.address
-        distance = [None] * 10000000
+        distance = {}
         for users in uss:
             if users.profile.role == 'repairman':
                 api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(users.profile.address) }&key={ api_key }').read(1000)
                 data = json.loads(api.decode('utf-8'))
                 dist = data['rows'][0]['elements'][0]['distance']['text']
 
-                distance[users.id] = dist
+                distance.update({users.id: dist})
 
         context_data['f_hired'] = f_hired
         context_data['cnt'] = cnt
@@ -109,13 +109,13 @@ class AppMainRepairmanView(LoginRequiredMixin, ListView):
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
         origin = us.profile.address
-        distance = [None] * 10000000
+        distance = {}
         for r in req:
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
             dist = data['rows'][0]['elements'][0]['distance']['text']
 
-            distance[r.id] = dist
+            distance.update({r.id: dist})
 
         context_data['seen_r'] = reqq_seen
         context_data['cnt'] = cnt
@@ -343,14 +343,14 @@ def show_favs(request):
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
     origin = us.profile.address
-    distance = [None] * 10000000
+    distance = {}
     for u in users:
         if u.profile.role == 'repairman':
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(u.profile.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
             dist = data['rows'][0]['elements'][0]['distance']['text']
 
-            distance[u.id] = dist
+            distance.update({u.id: dist})
 
     context = {
         'favs': favs,
@@ -475,14 +475,14 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         dist = data['rows'][0]['elements'][0]['distance']['text']
 
         uss = User.objects.all()
-        distance = [None] * 10000000
+        distance = {}
         for u in uss:
             if u.profile.role == 'repairman':
                 api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(u.profile.address) }&destinations={ urllib.parse.quote(req.first().address) }&key={ api_key }').read(1000)
                 data = json.loads(api.decode('utf-8'))
                 dist2 = data['rows'][0]['elements'][0]['distance']['text']
 
-                distance[u.id] = dist2
+                distance.update({u.id: dist2})
 
         context_data['s'] = reqq_seen
         context_data['app'] = app
@@ -604,14 +604,14 @@ def search(request):
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
     origin = us.profile.address
-    distance = [None] * 10000000
+    distance = {}
     for u in users:
         if u.profile.role == 'repairman':
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(u.profile.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
             dist = data['rows'][0]['elements'][0]['distance']['text']
 
-            distance[u.id] = dist
+            distance.update({u.id: dist})
 
     context = {
         'not_c': not_c,
@@ -808,13 +808,13 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         req = Requests.objects.filter(visible=False)
 
         origin = us.profile.address
-        distance = [None] * 10000000
+        distance = {}
         for r in req:
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
             dist = data['rows'][0]['elements'][0]['distance']['text']
 
-            distance[r.id] = dist
+            distance.update({r.id: dist})
 
         context_data['us'] = users
         context_data['job'] = job
@@ -889,13 +889,13 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         req = Requests.objects.filter(visible=False)
 
         origin = us.profile.address
-        distance = [None] * 10000000
+        distance = {}
         for r in req:
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
             dist = data['rows'][0]['elements'][0]['distance']['text']
 
-            distance[r.id] = dist
+            distance.update({r.id: dist})
 
         context_data['us'] = users
         context_data['done'] = job_done
@@ -948,13 +948,13 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
         req = Requests.objects.filter(visible=True)
 
         origin = us.profile.address
-        distance = [None] * 10000000
+        distance = {}
         for r in req:
             api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(r.address) }&key={ api_key }').read(1000)
             data = json.loads(api.decode('utf-8'))
             dist = data['rows'][0]['elements'][0]['distance']['text']
 
-            distance[r.id] = dist
+            distance.update({r.id: dist})
 
         context_data['cnt'] = cnt
         context_data['not_r'] = not_r
