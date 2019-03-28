@@ -36,6 +36,7 @@
                       <a class="list-group-item sb" href="{% url 'notifications_client' user.id %}"><i class="fa fa-bell fa-fw" aria-hidden="true"></i></a>
                       <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></a>
                       <a class="list-group-item sb" href="{% url 'favorites' %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i></a>
+                      {% block bell_cli %}{% endblock %}
                     </div>
                 </ul>
             </div>
@@ -57,6 +58,7 @@
                       <a class="list-group-item sb" href="{% url 'profile' user.id %}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></a>
                       <a class="list-group-item sb" href="{% url 'repairman_feedbacks' user.id %}"><i class="fa fa-star fa-fw" aria-hidden="true"></i></a>
                       <a class="list-group-item sb" href="{% url 'repairman_apps' user.id %}"><i class="fas fa-pencil-alt"></i></a>
+                      {% block bell_rep %}{% endblock %}
                     </div>
                 </ul>
             </div>

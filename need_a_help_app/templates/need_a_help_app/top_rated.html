@@ -1,5 +1,21 @@
 {% extends 'need_a_help_app/base.html' %}
 
+{% block bell_cli %}
+  {% if not_c %}
+    {% if not_cli %}
+        <span class="badge badge-notify-side-bell">{{ not_cli }}</span>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block bell_rep %}
+  {% if not_r %}
+    {% if not_rep %}
+        <span class="badge badge-notify-side-bell-rep">{{ not_rep }}</span>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
 {% block notify_repairman %}
     {% if not_r %}
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="

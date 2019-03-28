@@ -401,6 +401,28 @@ header.masthead .masthead-content .masthead-subheading {
    left: 5px;
 }
 
+.badge-notify-side-bell {
+  background: red;
+  position: relative;
+  color: white;
+  border-radius: 50%;
+  top: -146px;
+  left: 8px;
+  font-size: xx-small;
+  margin-bottom: 0;
+}
+
+.badge-notify-side-bell-rep {
+  background: red;
+  position: relative;
+  color: white;
+  border-radius: 50%;
+  top: -193px;
+  left: 8px;
+  font-size: xx-small;
+  margin-bottom: 0;
+}
+
 /*applications style*/
 
 .app-img {

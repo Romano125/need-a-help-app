@@ -41,7 +41,23 @@ def home(request):
 
 
 def about(request):
-    return render(request, 'need_a_help_app/about.html')
+    us = request.user
+    not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+    not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
+    cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+    not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+    not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+
+    context = {
+        'cnt': cnt,
+        'not_r': not_r,
+        'not_rep': not_rep,
+        'not_c': not_c,
+        'not_cli': not_cli,
+    }
+
+    return render(request, 'need_a_help_app/about.html', context)
 
 
 class AppMainClientView(LoginRequiredMixin, ListView):
@@ -66,7 +82,6 @@ class AppMainClientView(LoginRequiredMixin, ListView):
                 if h.user == us and h.repairman == u.id and h.status == 'pending':
                     f_hired.append(u)
 
-        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
@@ -83,7 +98,6 @@ class AppMainClientView(LoginRequiredMixin, ListView):
                 distance.update({users.id: dist})
 
         context_data['f_hired'] = f_hired
-        context_data['cnt'] = cnt
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
         context_data['dist'] = distance
