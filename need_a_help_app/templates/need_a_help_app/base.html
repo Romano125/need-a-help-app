@@ -80,6 +80,7 @@
                     <img class="rounded-circle navbar-img navbar-toggler-icon" src="{{ user.profile.photo.url }}"><i class="fas fa-caret-down" style="color: white"></i>
                   </span>
                 {% else %}
+                  <a class="nav-item nav-link d-md-none d-lg-none" href="{% url 'home' %}"><i class="fas fa-arrow-left" style="color: white"></i></a>
                   <a class="navbar-brand mr-auto ml-auto" href="#">Need a help?!</a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -311,7 +312,7 @@
             <main role="main" class="container">
               <div class="row">
                 <div class="col-sm-6 col-md-5 offset-3 col-lg-6">
-                  {% if messages %}
+                  {% if messages and not user.is_authenticated %}
                       {% for mess in messages %}
                           <div class="alert alert-{{ mess.tags }} ">
                               {{ mess }}
@@ -327,7 +328,7 @@
             <main role="main" class="container">
               <div class="row">
                 <div class="col-sm-8 col-md-8 col-lg-8">
-                  {% if messages %}
+                  {% if messages and user.is_authenticated %}
                       {% for mess in messages %}
                           <div class="alert alert-{{ mess.tags }} ">
                               {{ mess }}

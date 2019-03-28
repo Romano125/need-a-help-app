@@ -147,6 +147,12 @@ header.masthead .masthead-content .masthead-subheading {
   }
 }
 
+@media (max-width: 500px) {
+  .img-fluid {
+    transform: scale(1.0);
+  }
+}
+
 .bg-primary {
   background-color: #ee0979 !important;
 }
