@@ -314,21 +314,7 @@
               {% endblock %}
             {% endif %}
 
-            <main role="main" class="container">
-              <div class="row">
-                <div class="col-sm-6 col-md-5 offset-3 col-lg-6">
-                  {% if messages and not user.is_authenticated %}
-                      {% for mess in messages %}
-                          <div class="alert alert-{{ mess.tags }} ">
-                              {{ mess }}
-                          </div>
-                      {% endfor %}
-                  {% endif %}
-
-                  {% block register_login %}{% endblock %}
-                </div>
-              </div>
-            </main>
+            {% block register_login %}{% endblock %}
 
             <main role="main" class="container">
               <div class="row">

@@ -551,3 +551,51 @@ header.masthead .masthead-content .masthead-subheading {
   object-fit: cover;
 }
 
+/* Login style */
+
+@media (max-width: 500px) {
+  .login {
+    position: relative;
+    background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
+    margin-right: 100px;
+   }
+
+   .content-section {
+      background: #00ff00;
+      border: 1px solid #dddddd;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+}
+
+.login {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
+  margin-left: 475px;
+  margin-right: 475px;
+ }
+
+ .register {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
+  margin-left: 375px;
+  margin-right: 375px;
+ }
+
+ .cont {
+  position: relative;
+  background-image: url('https://www.profissionaldeecommerce.com.br/wp-content/uploads/2016/09/Tools-for-content-marketers-header-image.jpg');
+  background-size: cover;
+  overflow: auto;
+}
+
+.links {
+    font-size: 15px;
+    color: #ABA8AE;
+
+    a {
+      color: #fff;
+      cursor: pointer;
+    }
+}
+

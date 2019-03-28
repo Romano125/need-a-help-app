@@ -6,22 +6,41 @@
 
 {% block register_login %}
 
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="from-group">
-                <legend class="border-bottom mb-4">Log In</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Log In</button>
-                <small class="text-muted ml-2"><a class="ml-2" href="{% url 'password_reset' %}">Forgot your password?</a></small>
+    <main role="main" class="container-fluid cont">
+        <div class="d-flex justify-content-center login">
+            <div class="user_card">
+                {% if messages and not user.is_authenticated %}
+                    {% for mess in messages %}
+                      <div class="alert alert-{{ mess.tags }} ">
+                          {{ mess }}
+                      </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container" style="margin-bottom: 50px; margin-top: 30px">
+                        <img src="https://cdn4.iconfinder.com/data/icons/green-shopper/1068/user.png" class="brand_logo avatar" height="100px" width="100px" alt="Logo">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="from-group">
+                            <legend class="border-bottom mb-4">Log In</legend>
+                            {{ form|crispy }}
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-outline-info" type="submit">Log In</button>
+                            <small class="text-muted ml-2"><a class="ml-2" href="{% url 'password_reset' %}">Forgot your password?</a></small>
+                        </div>
+                    </form>
+                    <div class="border-top pt-3">
+                        <small class="links">Do you need an account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a></small>
+                    </div>
+                </div>
             </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">Do you need an account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a></small>
         </div>
-    </div>
+    </main>
 
 
 {% endblock %}
