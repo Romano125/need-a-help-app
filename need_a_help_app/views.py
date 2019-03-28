@@ -40,6 +40,10 @@ def home(request):
     return render(request, 'need_a_help_app/index.html')
 
 
+def about(request):
+    return render(request, 'need_a_help_app/about.html')
+
+
 class AppMainClientView(LoginRequiredMixin, ListView):
     template_name = 'need_a_help_app/app_main_client.html'
     context_object_name = 'prof'

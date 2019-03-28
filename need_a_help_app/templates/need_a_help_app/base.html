@@ -88,7 +88,7 @@
                 {% endif %}
                 <div class="collapse navbar-collapse" id="navbarToggle">
                   <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{% url 'home' %}">About</a>
+                    <a class="nav-item nav-link" href="{% url 'about' %}">About</a>
                     {% if user.is_authenticated %}
                       <div class="d-sm-block d-md-none">
                         <a class='nav-item nav-link' href='{% url 'info' user.id %}'><i class='fa fa-user fa-fw' aria-hidden='true'></i>&nbsp; My profile</a>
@@ -141,6 +141,9 @@
           <div id="page-content-wrapper">
 
             {% block main %}
+            {% endblock %}
+
+            {% block about %}
             {% endblock %}
 
             {% if user.is_authenticated and user.profile.role == 'client' %}
@@ -347,19 +350,21 @@
                   {% endblock %}
                 </div>
                 {% if user.is_authenticated %}
-                  <div class="col-sm-4 col-md-4 col-lg-4">
-                    <div class="content-section">
-                      <h3>Filters</h3>
-                      <p class='text-muted'>You can put any information here you'd like.
-                        <ul class="list-group">
-                          <li class="list-group-item list-group-item-light">Latest Posts</li>
-                          <li class="list-group-item list-group-item-light">Announcements</li>
-                          <li class="list-group-item list-group-item-light">Calendars</li>
-                          <li class="list-group-item list-group-item-light">etc</li>
-                        </ul>
-                      </p>
+                  {% block filters %}
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                      <div class="content-section">
+                        <h3>Filters</h3>
+                        <p class='text-muted'>You can put any information here you'd like.
+                          <ul class="list-group">
+                            <li class="list-group-item list-group-item-light">Latest Posts</li>
+                            <li class="list-group-item list-group-item-light">Announcements</li>
+                            <li class="list-group-item list-group-item-light">Calendars</li>
+                            <li class="list-group-item list-group-item-light">etc</li>
+                          </ul>
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  {% endblock %}
                 {% endif %}
               </div>
             </main>
