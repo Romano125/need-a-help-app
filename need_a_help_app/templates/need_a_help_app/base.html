@@ -70,15 +70,17 @@
                                   <div class='menu-icon'></div>
                                   <div class='menu-icon'></div></a>
                   {% if user.profile.role == 'client' %}
-                    <a class="navbar-brand mr-4 ml-3" href="{% url 'main_client' %}">Need a help?!</a>
+                    <a class="navbar-brand mr-4 ml-3 d-none d-sm-none d-md-block d-lg-block" href="{% url 'main_client' %}">Need a help?!</a>
+                    <a class="navbar-brand mr-auto ml-auto d-md-none d-lg-none" href="{% url 'main_client' %}">Need a help?!</a>
                   {% else %}
-                    <a class="navbar-brand mr-4 ml-3" href="{% url 'main_repairman' %}">Need a help?!</a>
+                    <a class="navbar-brand mr-4 ml-3 d-none d-sm-none d-md-block d-lg-block" href="{% url 'main_repairman' %}">Need a help?!</a>
+                    <a class="navbar-brand mr-auto ml-auto d-md-none d-lg-none" href="{% url 'main_repairman' %}">Need a help?!</a>
                   {% endif %}
                   <span class="navbar-toggler" style="border: none;" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <img class="rounded-circle navbar-img navbar-toggler-icon" src="{{ user.profile.photo.url }}"><i class="fas fa-caret-down" style="color: white"></i>
                   </span>
                 {% else %}
-                  <a class="navbar-brand mr-4" href="#">Need a help?!</a>
+                  <a class="navbar-brand mr-auto ml-auto" href="#">Need a help?!</a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
@@ -343,6 +345,21 @@
                   {% block script %}
                   {% endblock %}
                 </div>
+                {% if user.is_authenticated %}
+                  <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="content-section">
+                      <h3>Filters</h3>
+                      <p class='text-muted'>You can put any information here you'd like.
+                        <ul class="list-group">
+                          <li class="list-group-item list-group-item-light">Latest Posts</li>
+                          <li class="list-group-item list-group-item-light">Announcements</li>
+                          <li class="list-group-item list-group-item-light">Calendars</li>
+                          <li class="list-group-item list-group-item-light">etc</li>
+                        </ul>
+                      </p>
+                    </div>
+                  </div>
+                {% endif %}
               </div>
             </main>
 
