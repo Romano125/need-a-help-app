@@ -17,23 +17,21 @@
                 <div class="d-flex justify-content-center">
                     <div class="brand_logo_container" style="margin-bottom: 50px; margin-top: 30px">
                         <img src="https://cdn4.iconfinder.com/data/icons/green-shopper/1068/user.png" class="brand_logo avatar" height="100px" width="100px" alt="Logo">
+                        <legend class="mb-0 mt-auto pl-1">Join Today</legend>
                     </div>
                 </div>
-                <div class="content-section">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <fieldset class="form-group">
-                            <legend class="border-bottom mb-4">Join Today</legend>
-                            {{ form|crispy }}
-                            {{ form_p|crispy }}
-                        </fieldset>
-                        <div class="form-group">
-                            <button class="btn btn-outline-info" type="submit">Sign Up</button>
-                        </div>
-                    </form>
-                    <div class="border-top pt-3">
-                        <small class="text-muted">Already have an account? <a class="ml-2" href="{% url 'login' %}">Sign In</a></small>
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        {{ form|crispy }}
+                        {{ form_p|crispy }}
+                    </fieldset>
+                    <div class="form-group d-flex justify-content-center">
+                        <button class="btn btn-outline-info" type="submit">Sign Up</button>
                     </div>
+                </form>
+                <div class="border-top pt-3 d-flex justify-content-center">
+                    <small class="links">Already have an account? <a class="ml-2" href="{% url 'login' %}">Sign In</a></small>
                 </div>
             </div>
         </div>

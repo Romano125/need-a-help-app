@@ -9,6 +9,14 @@
     <main role="main" class="container-fluid cont">
         <div class="d-flex justify-content-center login">
             <div class="user_card">
+
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container" style="margin-bottom: 50px; margin-top: 30px">
+                        <img src="https://cdn4.iconfinder.com/data/icons/green-shopper/1068/user.png" class="brand_logo avatar" height="100px" width="100px" alt="Logo">
+                        <legend class="mb-0 mt-auto pl-3">Log In</legend>
+                    </div>
+                </div>
+
                 {% if messages and not user.is_authenticated %}
                     {% for mess in messages %}
                       <div class="alert alert-{{ mess.tags }} ">
@@ -16,31 +24,64 @@
                       </div>
                     {% endfor %}
                 {% endif %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="from-group">
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Log In</button>
+                        <small class="text-muted ml-2"><a class="ml-2" href="{% url 'password_reset' %}">Forgot your password?</a></small>
+                    </div>
+                </form>
+                <div class="border-top pt-3 d-flex justify-content-center">
+                    <small class="links">Do you need an account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a></small>
+                </div>
+            </div>
+        </div>
+    </main>
 
+    <div class="container-fluid cont">
+        <div class="d-flex justify-content-center h-100 login">
+            <div class="user_card">
                 <div class="d-flex justify-content-center">
                     <div class="brand_logo_container" style="margin-bottom: 50px; margin-top: 30px">
                         <img src="https://cdn4.iconfinder.com/data/icons/green-shopper/1068/user.png" class="brand_logo avatar" height="100px" width="100px" alt="Logo">
                     </div>
                 </div>
-                <div class="content-section">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <fieldset class="from-group">
-                            <legend class="border-bottom mb-4">Log In</legend>
-                            {{ form|crispy }}
-                        </fieldset>
+                <div class="d-flex justify-content-center form_container">
+                    <form action="login.php" method="POST">
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="text" name="mail" class="form-control input_user" value="" placeholder="E-mail">
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" name="passwd" class="form-control input_pass" value="" placeholder="Password">
+                        </div>
                         <div class="form-group">
-                            <button class="btn btn-outline-info" type="submit">Log In</button>
-                            <small class="text-muted ml-2"><a class="ml-2" href="{% url 'password_reset' %}">Forgot your password?</a></small>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customControlInline">
+                            </div>
+                            <span style="color: red">Please, check your e-mail or password</span>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3 login_container">
+                            <button type="submit" name="button" class="btn btn-primary">Login</button>
                         </div>
                     </form>
-                    <div class="border-top pt-3">
-                        <small class="links">Do you need an account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a></small>
+                </div>
+                <div class="mt-4">
+                    <div class="d-flex justify-content-center links">
+                        Don't have an account? <a href="signup.html" class="ml-2">Sign Up</a>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
 
 {% endblock %}

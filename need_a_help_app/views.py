@@ -41,23 +41,27 @@ def home(request):
 
 
 def about(request):
-    us = request.user
-    not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
-    not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
-    cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
-    not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
-    not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+    if request.user.is_authenticated:
+        us = request.user
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
-    context = {
-        'cnt': cnt,
-        'not_r': not_r,
-        'not_rep': not_rep,
-        'not_c': not_c,
-        'not_cli': not_cli,
-    }
+        cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
 
-    return render(request, 'need_a_help_app/about.html', context)
+        context = {
+            'cnt': cnt,
+            'not_r': not_r,
+            'not_rep': not_rep,
+            'not_c': not_c,
+            'not_cli': not_cli,
+        }
+
+        return render(request, 'need_a_help_app/about.html', context)
+    else:
+        return render(request, 'need_a_help_app/about.html')
 
 
 class AppMainClientView(LoginRequiredMixin, ListView):
