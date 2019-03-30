@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile, Requests
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Row, Column
 
 
 class UserRegisterForm(UserCreationForm):
@@ -22,28 +24,42 @@ class UserRegisterForm(UserCreationForm):
         super(UserRegisterForm, self).__init__(auto_id=True, *args, **kwargs)
         self.fields['username'].widget.attrs.update({
             'placeholder': 'mickey',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['first_name'].widget.attrs.update({
             'placeholder': 'Mirko',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['last_name'].widget.attrs.update({
             'placeholder': 'Mirkic',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['email'].widget.attrs.update({
             'placeholder': 'mirko.mirkic67@gmail.com',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['password1'].widget.attrs.update({
             'placeholder': '*******',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['password2'].widget.attrs.update({
             'placeholder': '*******',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
+
+        self.helper = FormHelper()
 
 
 class ProfileRegisterForm(forms.ModelForm):
@@ -60,18 +76,25 @@ class ProfileRegisterForm(forms.ModelForm):
         super(ProfileRegisterForm, self).__init__(auto_id=True, *args, **kwargs)
         self.fields['address'].widget.attrs.update({
             'placeholder': 'Enter a location',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['birth_date'].widget.attrs.update({
             'placeholder': 'YYYY-MM-DD',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['gender'].widget.attrs.update({
             'placeholder': 'Choose gender',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
         self.fields['role'].widget.attrs.update({
             'placeholder': 'Choose role',
+            'autocomplete': 'off',
+            'class': 'form-control',
             'required': True,
         })
 

@@ -27,7 +27,18 @@
                 <form method="POST">
                     {% csrf_token %}
                     <fieldset class="from-group">
-                        {{ form|crispy }}
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form.username }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            {{ form.password }}
+                        </div>
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Log In</button>
@@ -40,48 +51,6 @@
             </div>
         </div>
     </main>
-
-    <div class="container-fluid cont">
-        <div class="d-flex justify-content-center h-100 login">
-            <div class="user_card">
-                <div class="d-flex justify-content-center">
-                    <div class="brand_logo_container" style="margin-bottom: 50px; margin-top: 30px">
-                        <img src="https://cdn4.iconfinder.com/data/icons/green-shopper/1068/user.png" class="brand_logo avatar" height="100px" width="100px" alt="Logo">
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center form_container">
-                    <form action="login.php" method="POST">
-                        <div class="input-group mb-3">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            </div>
-                            <input type="text" name="mail" class="form-control input_user" value="" placeholder="E-mail">
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                            </div>
-                            <input type="password" name="passwd" class="form-control input_pass" value="" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customControlInline">
-                            </div>
-                            <span style="color: red">Please, check your e-mail or password</span>
-                        </div>
-                        <div class="d-flex justify-content-center mt-3 login_container">
-                            <button type="submit" name="button" class="btn btn-primary">Login</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="mt-4">
-                    <div class="d-flex justify-content-center links">
-                        Don't have an account? <a href="signup.html" class="ml-2">Sign Up</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 {% endblock %}

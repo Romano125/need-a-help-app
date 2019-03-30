@@ -578,8 +578,8 @@ header.masthead .masthead-content .masthead-subheading {
  .register {
   position: relative;
   background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
-  margin-left: 375px;
-  margin-right: 375px;
+  margin-left: 400px;
+  margin-right: 400px;
  }
 
  .cont {
@@ -591,11 +591,10 @@ header.masthead .masthead-content .masthead-subheading {
 
 .links {
     font-size: 15px;
-    color: #ABA8AE;
+    color: #d9d9d9;
 
     a {
       color: #fff;
       cursor: pointer;
     }
 }
-

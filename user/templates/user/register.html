@@ -23,8 +23,77 @@
                 <form method="POST">
                     {% csrf_token %}
                     <fieldset class="form-group">
-                        {{ form|crispy }}
-                        {{ form_p|crispy }}
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form.username }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <small class="text-muted"><span style="color: #d9d9d9">{{ form.username.help_text }}</span></small>
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form.last_name }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            {{ form.email }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            {{ form.password1 }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <small class="text-muted"><span style="color: #d9d9d9">{{ form.password1.help_text }}</span></small>
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            {{ form.password2 }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <small class="text-muted"><span style="color: #d9d9d9">{{ form.password2.help_text }}</span></small>
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                            </div>
+                            {{ form_p.address }}
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                            {{ form_p.birth_date }}
+                        </div>
+                        <span style="color: #d9d9d9">Select {{ form_p.gender.label_tag }}</span>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form_p.gender }}
+                        </div>
+                        <span style="color: #d9d9d9">Select {{ form_p.role.label_tag }}</span>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form_p.role }}
+                        </div>
                     </fieldset>
                     <div class="form-group d-flex justify-content-center">
                         <button class="btn btn-outline-info" type="submit">Sign Up</button>
