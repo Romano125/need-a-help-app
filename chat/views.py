@@ -68,7 +68,19 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        us = self.request.user
+        not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
+        not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+
         context['form'] = self.get_form()
+        context['not_r'] = not_r
+        context['not_c'] = not_c
+        context['not_rep'] = not_rep
+        context['not_cli'] = not_cli
+
         return context
 
     def post(self, request, *args, **kwargs):

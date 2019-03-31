@@ -110,7 +110,7 @@
           <p class="text-secondary text-muted">{{ info.email }}</p>
           <div align="right">
             {% if user.id != info.id %}
-              <a class="btn btn-outline-danger rounded-circle" href="#"><i class="fas fa-envelope fa-2x"></i></a>
+              <a class="btn btn-outline-danger rounded-circle" href="{% url 'messages' info %}"><i class="fas fa-envelope fa-2x"></i></a>
               {% if info.profile.role == 'repairman' %}
                 {% if f %}
                   <a class="btn btn-warning rounded-circle" style="color: yellow;" href="{% url 'del_favorite' user.id info.id %}"><i class="fas fa-star fa-2x"></i></a>

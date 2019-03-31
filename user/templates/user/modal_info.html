@@ -117,7 +117,7 @@
           <p class="text-secondary text-muted">{{ modal_info.email }}</p>
           <div align="right">
             {% if user.id != modal_info.id %}
-              <a class="btn btn-outline-danger rounded-circle" href="#"><i class="fas fa-envelope fa-2x"></i></a>
+              <a class="btn btn-outline-danger rounded-circle" href="{% url 'messages' modal_info %}"><i class="fas fa-envelope fa-2x"></i></a>
               {% if modal_info.profile.role == 'repairman' and user.profile.role != 'repairman' %}
                 {% if f %}
                   <a class="btn btn-warning rounded-circle" style="color: yellow;" href="{% url 'del_favorite' user.id modal_info.id %}"><i class="fas fa-star fa-2x"></i></a>

@@ -5,7 +5,7 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_r|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'requests_repairman' user.id %}?not={{ n.id }}&quot;;'>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not={{ n.id }}&quot;;'>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -33,7 +33,7 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_c|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'main' %}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -164,12 +164,12 @@ socket.onopen = function(e){
 	formData.submit(function(event){
 		event.preventDefault()
 		var msgText = msgInput.val()
-		
+
 		var finalData = {
 			'message' : msgText
 		}
 		socket.send(JSON.stringify(finalData))
-		
+
 		msgInput.val('')			//prikupljanje poruke i resetiranje forme
 		formData[0].reset()
 	})
