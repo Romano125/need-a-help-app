@@ -1,12 +1,11 @@
 {% extends "need_a_help_app/base.html" %}
-{% load static %}
 
 {% block notify_repairman %}
     {% if not_r %}
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_r|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'requests_repairman' user.id %}?not={{ n.id }}&quot;;'>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not={{ n.id }}&quot;;'>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -34,7 +33,7 @@
         <i class="nav-item nav-link fas fa-bell mt-1 popOver" data-title="Notifications" data-content="
             <div class='container'>
                 {% for n in not_c|slice:'5' %}
-                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{% url 'main' %}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
                         {{ n.notification }}
                         <div class='col-sm-3 col-md-3 col-lg-3'>
                             <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
@@ -94,7 +93,7 @@
 
         <h1 align="center">Need a help?! inbox</h1>
         {% if users %}
-             
+
             <div class='container'>
                {% for u in users|slice:'1' %}
                     {% if u.user == user %}
@@ -102,7 +101,7 @@
                              <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.thread.second %}&quot;;">
                         {% else %}
                              <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.thread.first %}&quot;;">
-                        {% endif %}  
+                        {% endif %}
                     {% else %}
 
                         <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.user %}&quot;;">
@@ -113,20 +112,20 @@
                                 <a href="{% url 'info' u.thread.second.id %}"><img class="rounded-circle navbar-img" src="{{ u.thread.second.profile.photo.url }}"></a>
                             {% else %}
                                 <a href="{% url 'info' u.thread.first.id %}"><img class="rounded-circle navbar-img" src="{{ u.thread.first.profile.photo.url }}"></a>
-                            {% endif %}  
-                    {% else %} 
+                            {% endif %}
+                    {% else %}
                         <a href="{% url 'info' u.user.id %}"><img class="rounded-circle navbar-img" src="{{u.user.profile.photo.url }}"></a>
-                    {% endif %}  
-                        
+                    {% endif %}
+
                     {% if u.user == user %}
                         {% if u.user == u.thread.first %}
                             <a href="{% url 'info' u.thread.second.id %}">{{ u.thread.second }}</a>
                         {% else  %}
                             <a href="{% url 'info' u.thread.first.id %}">{{ u.thread.first }}</a>
-                        {% endif %}  
+                        {% endif %}
                     {% else %}
                             <a href="{% url 'info' u.user.id %}">{{ u.user }}</a>
-                    {% endif %}      
+                    {% endif %}
                         <div class="col-sm-3 col-md-3 col-lg-3">
                             <small class="text-secondary text-muted">{{ u.timestamp|date:'d M H:i' }}</small>
                         </div>
@@ -140,7 +139,7 @@
                         </div>
                     <hr width=100%>
                {% endfor %}
-            </div> 
+            </div>
         {% endif %}
     </div>
 
