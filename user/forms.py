@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile, Requests
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
+from crispy_forms.layout import Layout, Submit, Row, Column, Div, HTML
 
 
 class UserRegisterForm(UserCreationForm):
@@ -60,6 +60,26 @@ class UserRegisterForm(UserCreationForm):
         })
 
         self.helper = FormHelper()
+        self.helper.form_show_labels = False
+        self.helper.form_style = 'inline'
+        self.helper.layout = Layout(
+            Div(
+                Div(
+                    HTML('<span class="input-group-text"><i class="fas fa-calendar"></i></span>'),
+                    css_class='input-group-append'
+                ),
+                'username',
+                css_class='input-group mb-2'
+            ),
+            Div(
+                Div(
+                    HTML('<span class="input-group-text"><i class="fas fa-calendar"></i></span>'),
+                    css_class='input-group-append'
+                ),
+                'first_name',
+                css_class='input-group mb-2'
+            ),
+        )
 
 
 class ProfileRegisterForm(forms.ModelForm):
