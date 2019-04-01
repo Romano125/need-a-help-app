@@ -3,6 +3,7 @@ body {
   color: #333333;
   margin-top: 56px;
   font-family: Nunito;
+  height: 80vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -78,6 +79,11 @@ a.article-title:hover {
   width: 125px;
   margin-right: 20px;
   margin-bottom: 16px;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.account-img:hover {
+  transform: scale(1.1);
 }
 
 .navbar-img {
@@ -85,6 +91,11 @@ a.article-title:hover {
   width: 32px;
   margin-right: 10px;
   cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.navbar-img:hover {
+  transform: scale(1.3);
 }
 
 .account-heading {
@@ -228,6 +239,7 @@ header.masthead .masthead-content .masthead-subheading {
   width: 100%;
   position: static;
   padding: 0;
+  height: 91.4vh;
 }
 
 #wrapper.menuDisplayed #sidebar-wrapper {
@@ -573,6 +585,7 @@ header.masthead .masthead-content .masthead-subheading {
   background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
   margin-left: 475px;
   margin-right: 475px;
+  height: 100%;
  }
 
  .register {
@@ -587,6 +600,7 @@ header.masthead .masthead-content .masthead-subheading {
   background-image: url('https://www.profissionaldeecommerce.com.br/wp-content/uploads/2016/09/Tools-for-content-marketers-header-image.jpg');
   background-size: cover;
   overflow: auto;
+  height: 100%;
 }
 
 .links {
@@ -597,4 +611,14 @@ header.masthead .masthead-content .masthead-subheading {
       color: #fff;
       cursor: pointer;
     }
+}
+
+/* messagge transform */
+
+.messagge {
+  transition: background 0.2s, transform 0.2s;
+}
+
+.messagge:hover {
+  transform: scale(1.3);
 }

@@ -601,7 +601,7 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
                     notif += f'<a href="{ reverse("info", kwargs={"pk": req.user.id}) }">'
                     notif += f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
                     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + req.user.username + '</a>' + f' deleted posted job (<a href="{ reverse("request_detail", kwargs={"pk": req.id}) }"> { req.job_title } </a>) for which you\'ve applied for!'
-                    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+                    notif += f'<a href="{ reverse("messages", kwargs={"username": req.user}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
                     url = f'{ reverse("info", kwargs={"pk": req.user.id}) }'
                     rep_not = RepairmanNotifications(repairman=u, notification=notif, url_to_go=url)
                     rep_not.save()
@@ -694,7 +694,7 @@ def hire_repairman(request, user_id, rep_id):
 
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a> hired you for a job!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+    notif += f'<a href="{ reverse("messages", kwargs={"username": us}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
     url = f'{ reverse("requests_repairman", kwargs={"pk": rep_id}) }'
     rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
     rep_not.save()
@@ -805,7 +805,7 @@ def job_accept(request, user_id, rep_id):
 
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + rep.username + '</a> accepted a job you\'ve hired him for!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+    notif += f'<a href="{ reverse("messages", kwargs={"username": rep}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
     url = f'{ reverse("hired_user", kwargs={"pk": us.id}) }'
     cli_not = ClientNotifications(client=us, notification=notif, url_to_go=url)
     cli_not.save()
@@ -896,7 +896,7 @@ def job_done(request, user_id, rep_id):
 
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + rep.username + '</a> finished a job you\'ve hired him for!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+    notif += f'<a href="{ reverse("messages", kwargs={"username": rep}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
     url = f'{ reverse("hired_user", kwargs={"pk": us.id}) }'
     cli_not = ClientNotifications(client=us, notification=notif, url_to_go=url)
     cli_not.save()
@@ -1034,7 +1034,7 @@ def posted_job_hire(request, us_id, req_id):
 
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ req.user.profile.photo.url }">'
         notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": req.user.id}) }">' + req.user.username + '</a>' + f' hired you for a job <a href="{ reverse("request_detail", kwargs={"pk": req.id}) }">{ req.job_title }</a>!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+        notif += f'<a href="{ reverse("messages", kwargs={"username": req.user}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
         url = f'{ reverse("active_repairman", kwargs={"pk": us.id}) }'
         rep_not = RepairmanNotifications(repairman=us, notification=notif, url_to_go=url)
         rep_not.save()
@@ -1054,7 +1054,7 @@ def posted_job_done(request, us_id, req_id):
 
     notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
     notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' finished the job <a href="{ reverse("request_detail", kwargs={"pk": req.id}) }">{ req.job_title }</a> you\'ve hired him for!'
-    notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+    notif += f'<a href="{ reverse("messages", kwargs={"username": us}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
     url = f'{ reverse("hired_user", kwargs={"pk": req.user.id}) }'
     cli_not = ClientNotifications(client=req.user, notification=notif, url_to_go=url)
     cli_not.save()
@@ -1092,7 +1092,7 @@ class JobHireDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
         notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' canceled/deleted the posted job ( { req.job_title } ) for which you were hired!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+        notif += f'<a href="{ reverse("messages", kwargs={"username": us}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
         url = f'{ reverse("info", kwargs={"pk": us.id}) }'
         rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
         rep_not.save()
@@ -1148,7 +1148,7 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
     if log.profile.role == 'client':
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
         notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a> canceled the job for which you were hired!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+        notif += f'<a href="{ reverse("messages", kwargs={"username": us}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
         url = f'{ reverse("info", kwargs={"pk": us.id}) }'
         rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
         rep_not.save()
@@ -1158,7 +1158,7 @@ def client_repairman_job_delete(request, user_id, rep_id, log_id, txt):
     else:
         notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ rep.profile.photo.url }">'
         notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": rep.id}) }">' + rep.username + '</a> quit the job you\'ve hired him!'
-        notif += '<i class="nav-item nav-link fas fa-envelope mt-1"></i></div>'
+        notif += f'<a href="{ reverse("messages", kwargs={"username": rep}) }"><h6><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
         url = f'{ reverse("info", kwargs={"pk": rep.id}) }'
         cli_not = ClientNotifications(client=us, notification=notif, url_to_go=url)
         cli_not.save()
