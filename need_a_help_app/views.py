@@ -1377,13 +1377,13 @@ def rate(request):
     rep.save()
 
     if job == '1':
-        job = Hire.objects.filter(user=us, repairman=rep.id, status='done', done=False).order_by('-date').first()
-        job.done = True
-        job.save()
+        jobs = Hire.objects.filter(user=us, repairman=rep.id, status='done', done=False).order_by('-date').first()
+        jobs.done = True
+        jobs.save()
     elif req == '1':
-        req = JobHire.objects.filter(repairman=rep, status='done', done=False).order_by('-date_hired').first()
-        req.done = True
-        req.save()
+        reqs = JobHire.objects.filter(repairman=rep, status='done', done=False).order_by('-date_hired').first()
+        reqs.done = True
+        reqs.save()
 
     rat = Rate.objects.all()
 
