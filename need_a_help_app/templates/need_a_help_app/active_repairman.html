@@ -66,10 +66,10 @@
     <div class="col-sm-8">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active hire" id="pills-job-tab" data-toggle="pill" href="#pills-job" role="tab" aria-controls="pills-job" aria-selected="true">Active jobs ({{ act_job }})</a>
+              <a class="nav-link active hire" id="pills-job-tab" href="{% url 'active_repairman' user.id %}" role="tab" aria-controls="pills-job" aria-selected="true">Active jobs ({{ act_job }})</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link hire" id="pills-req-tab" data-toggle="pill" href="#pills-req" role="tab" aria-controls="pills-req" aria-selected="false">Active requests ({{ act_req }})</a>
+              <a class="nav-link hire" id="pills-req-tab" href="{% url 'active_req_repairman' user.id %}" role="tab" aria-controls="pills-req" aria-selected="false">Active requests ({{ act_req }})</a>
             </li>
         </ul>
     </div>
@@ -145,79 +145,6 @@
                 </div>
               </div>
             </div>
-        </div>
-        <div class="tab-pane fade" id="pills-req" role="tabpanel" aria-labelledby="pills-req-tab">
-            {% if job %}
-                {% for i in job %}
-                  <article class="media content-section">
-                    <div class="media-body">
-                      <div class="row">
-                        <div class="col-sm-3">
-                            <a href="{% url 'request_detail' i.request.id %}">
-                                <img class="rounded-circle account-img" src="{{ i.request.photo.url }}">
-                            </a>
-                        </div>
-                        <div class="col-sm-7 pl-5">
-                            <small class="text-muted">Hired by: </small><a class="mr-2" href="{% url 'info' i.request.user.id %}">{{ i.request.user }}</a>
-                            <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
-                            <hr width="100%">
-                            <h1>{{ i.request.job_title }}</h1>
-                            {% if i.status == 'pending' %}
-                                <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
-                            {% else %}
-                                <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
-                            {% endif %}
-                            <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
-                            <div class="row">
-                                <div class="col-sm-7">
-                                    <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
-                                </div>
-                                <div class="col-sm-5">
-                                    {% resolve dist i.request.id as value %}
-                                    <small class="text-secondary text-muted distance"><i class="fas fa-map-marker-alt" style="color: red"></i>{{ value }}</small><br>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 pt-5" align="right">
-                              <a href="{% url 'posted_job_done' i.repairman.id i.request.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
-                              <a href="#" class="btn btn-outline-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                {% endfor %}
-            {% else %}
-                <h3 class="text-secondary text-muted" align="center">No results</h3>
-            {% endif %}
-
-            <div class="container" align="center">
-                  <div class="row">
-                      <div class="col-sm-12 col-md-12 col-lg-12 align-items-center justify-content" style="margin: auto">
-                          {% if is_paginated %}
-
-                              {% if page_obj.has_previous %}
-                                  <a href="?page=1"><span class="badge badge-pag"><i class="fas fa-angle-double-left"></i></span></a>
-                                  <a href="?page={{ page_obj.previous_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-left"></i></span></a>
-                              {% endif %}
-
-                              {% for i in page_obj.paginator.page_range %}
-                                  {% if page_obj.number == i %}
-                                      <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
-                                  {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                      <a href="?page={{ i }}"><span class="badge badge-pag">{{ i }}</span></a>
-                                  {% endif %}
-
-                              {% endfor %}
-
-                              {% if page_obj.has_next %}
-                                  <a href="?page={{ page_obj.next_page_number }}"><span class="badge badge-pag"><i class="fas fa-angle-right"></i></span></a>
-                                  <a href="?page={{ page_obj.paginator.num_pages }}"><span class="badge badge-pag"><i class="fas fa-angle-double-right"></i></span></a>
-                              {% endif %}
-
-                          {% endif %}
-                      </div>
-                  </div>
-             </div>
         </div>
     </div>
 {% endblock %}
