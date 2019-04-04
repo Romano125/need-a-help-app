@@ -111,7 +111,9 @@
         {% endif %}
 
       <div class="media">
-        <img class="rounded-circle account-img" src="{{ modal_info.profile.photo.url }}">
+        <a data-target="#modalIMG" data-toggle="modal" href="#" class="color-gray-darker td-hover-none">
+            <img class="rounded-circle account-img" src="{{ modal_info.profile.photo.url }}">
+        </a>
         <div class="media-body">
           <h2 class="account-heading pt-5">{{ modal_info.first_name }} {{ modal_info.last_name }}</h2>
           <p class="text-secondary text-muted">{{ modal_info.email }}</p>
@@ -311,4 +313,15 @@
       </div>
     </div>
   </div>
-  {% endblock %}
+
+  <!-- Modal profile photo -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-body mb-0 p-0">
+            <img class="img-responsive" src="{{ modal_info.profile.photo.url }}" style="width:100%">
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
