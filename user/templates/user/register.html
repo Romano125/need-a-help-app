@@ -20,91 +20,91 @@
                         <legend class="mb-0 mt-auto pl-1">Join Today</legend>
                     </div>
                 </div>
-                <form method="POST">
-                    {% csrf_token %}
-                    <fieldset class="form-group">
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <div class="d-flex justify-content-center">
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                           <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
+                                </div>
+                                {{ form.username|as_crispy_field }}
                             </div>
-                            {{ form.username }}
-                        </div>
-                        <div class="input-group mb-2">
-                            <small class="text-muted"><span style="color: #d9d9d9">{{ form.username.help_text }}</span></small>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
+                                </div>
+                                {{ form.first_name|as_crispy_field }}
                             </div>
-                            {{ form.first_name }}
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
+                                </div>
+                                {{ form.last_name|as_crispy_field }}
                             </div>
-                            {{ form.last_name }}
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                {{ form.email|as_crispy_field }}
                             </div>
-                            {{ form.email }}
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-key"></i></span>
+                                </div>
+                                {{ form.password1|as_crispy_field }}
                             </div>
-                            {{ form.password1 }}
-                        </div>
-                        <div class="input-group mb-2">
-                            <small class="text-muted"><span style="color: #d9d9d9">{{ form.password1.help_text }}</span></small>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-key"></i></span>
+                                </div>
+                                {{ form.password2|as_crispy_field }}
                             </div>
-                            {{ form.password2 }}
-                        </div>
-                        <div class="input-group mb-2">
-                            <small class="text-muted"><span style="color: #d9d9d9">{{ form.password2.help_text }}</span></small>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-map-marker-alt"></i></span>
+                                </div>
+                                {{ form_p.address|as_crispy_field }}
                             </div>
-                            {{ form_p.address }}
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-calendar"></i></span>
+                                </div>
+                                {{ form_p.birth_date|as_crispy_field }}
                             </div>
-                            {{ form_p.birth_date }}
-                        </div>
-                        <span style="color: #d9d9d9">Select {{ form_p.gender.label_tag }}</span>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <span style="color: #d9d9d9">Select {{ form_p.gender.label_tag }}</span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
+                                </div>
+                                {{ form_p.gender|as_crispy_field }}
                             </div>
-                            {{ form_p.gender }}
-                        </div>
-                        <span style="color: #d9d9d9">Select {{ form_p.role.label_tag }}</span>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <span style="color: #d9d9d9">Select {{ form_p.role.label_tag }}</span>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
+                                </div>
+                                {{ form_p.role|as_crispy_field }}
                             </div>
-                            {{ form_p.role }}
+                        </fieldset>
+                        <div class="form-group d-flex justify-content-center">
+                            <button class="btn btn-outline-info" type="submit">Sign Up</button>
                         </div>
-                    </fieldset>
-                    <div class="form-group d-flex justify-content-center">
-                        <button class="btn btn-outline-info" type="submit">Sign Up</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
                 <div class="border-top pt-3 d-flex justify-content-center">
                     <small class="links">Already have an account? <a class="ml-2" href="{% url 'login' %}">Sign In</a></small>
                 </div>
             </div>
         </div>
     </main>
+
+    <script type="text/javascript">
+        document.getElementById('hint_username').classList.remove('text-muted');
+        document.getElementById('hint_password1').classList.remove('text-muted');
+        document.getElementById('hint_password2').classList.remove('text-muted');
+    </script>
 
 
 {% include 'need_a_help_app/autocomplete_maps_js.html' %}

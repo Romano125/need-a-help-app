@@ -43,7 +43,7 @@ PROFESSION = (
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=10, choices=GENDER)
-    address = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
     birth_date = models.DateField(null=True)
     phone_number = models.CharField(max_length=100)
     costs = models.IntegerField(default=100)
@@ -58,16 +58,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{ self.user.username } Profile'
-
-    def save(self):
-        super().save()
-
-        img = Image.open(self.photo.path)
-
-        if img.height > 300 or img.width > 300:
-            out_size = (300, 300)
-            img.thumbnail(out_size)
-            img.save(self.photo.path)
 
 
 class ClientNotifications(models.Model):

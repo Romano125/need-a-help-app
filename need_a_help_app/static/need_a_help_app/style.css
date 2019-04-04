@@ -613,6 +613,28 @@ header.masthead .masthead-content .masthead-subheading {
     }
 }
 
+.form-control {
+  width: 300px;
+}
+
+.col-form-label {
+  display: none;
+}
+
+/* boje help teksta kod registracije */
+
+#hint_username {
+    color: #d9d9d9;
+}
+
+#hint_password1 li {
+    color: #d9d9d9;
+}
+
+#hint_password2 {
+    color: #d9d9d9;
+}
+
 /* messagge transform */
 
 .messagge {
