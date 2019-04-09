@@ -644,3 +644,16 @@ header.masthead .masthead-content .masthead-subheading {
 .messagge:hover {
   transform: scale(1.3);
 }
+
+/* top rated */
+
+.fa-crown {
+  color: #f8ce0b;
+  margin-left: -7px;
+  transform: rotateZ(45deg);
+}
+
+.bigger {
+  transform: scale(0.9);
+  background-color: #e6ffe6;
+}
