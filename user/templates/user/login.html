@@ -19,10 +19,15 @@
 
                 {% if messages and not user.is_authenticated %}
                     {% for mess in messages %}
-                      <div class="alert alert-{{ mess.tags }} ">
+                      <div class="alert alert-{{ mess.tags }}">
                           {{ mess }}
                       </div>
                     {% endfor %}
+                {% endif %}
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
                 {% endif %}
                 <form method="POST">
                     {% csrf_token %}

@@ -20,6 +20,13 @@
                         <legend class="mb-0 mt-auto pl-1">Join Today</legend>
                     </div>
                 </div>
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            <li>Please check belove fields, maybe passwords didn't match or the e-mail format is invalid. Also make sure you did enter a valid birth day and address.</li>
+                        </ul>
+                    </div>
+                {% endif %}
                 <div class="d-flex justify-content-center">
 
                     <form method="POST">
