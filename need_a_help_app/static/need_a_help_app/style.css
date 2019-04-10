@@ -675,4 +675,30 @@ header.masthead .masthead-content .masthead-subheading {
   box-shadow: 10px 10px 5px grey;
 }
 
+/* submit and cancel button */
+
+.submit-btn {
+  background: url(https://365psd.com/images/istock/thumbs/7143/71430505-green-check-sign.jpg) no-repeat center center;
+  background-size: cover;
+  border: none;
+  width: 50px;
+  height: 30px;
+}
+
+.cancel-btn {
+  background: url(http://worldartsme.com/images/pirate-x-clipart-1.jpg) no-repeat center center;
+  background-size: cover;
+  border: none;
+  width: 50px;
+  height: 30px;
+}
+
+.submit-btn:hover, .cancel-btn:hover, .submit-btn:active, .cancel-btn:active {
+  transform: scale(1.2);
+  border: none;
+  background-color: white;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
 
