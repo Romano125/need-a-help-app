@@ -8,3 +8,4 @@ django-phonenumber-field==2.2.0
 Pillow==5.4.1
 pytz==2018.7
 redis==2.10.6
+django-fancybox==0.1.5

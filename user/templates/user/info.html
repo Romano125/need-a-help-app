@@ -1,4 +1,4 @@
-{% extends 'need_a_help_app/base.html' %}
+{% extends request.is_ajax|yesno:"fancybox/base.html,need_a_help_app/base.html" %}
 
 {% block title %}
     <title>Info</title>
@@ -104,7 +104,7 @@
         {% endif %}
 
       <div class="media">
-        <a data-target="#modalIMG" data-toggle="modal" href="#" class="color-gray-darker td-hover-none">
+        <a href="{{ info.profile.photo.url }}" data-fancybox>
             <img class="rounded-circle account-img" src="{{ info.profile.photo.url }}">
         </a>
         <div class="media-body">
@@ -313,15 +313,4 @@
       </div>
     </div>
   </div>
-
-  <!-- Modal profile photo -->
-    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-body mb-0 p-0">
-            <img class="img-responsive" src="{{ info.profile.photo.url }}" style="width:100%">
-          </div>
-        </div>
-      </div>
-    </div>
 {% endblock %}
