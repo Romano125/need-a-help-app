@@ -251,9 +251,9 @@
                     {% endif %}
                 </div>
             </div>
-            <h4>Phone number: {{ info.profile.phone_number }}</h4>
-            <h4>Birth_date: {{ info.profile.birth_date }}</h4>
-            <h4>Badges:
+            <h4><b>Phone number: </b>{{ info.profile.phone_number }}</h4>
+            <h4><b>Birth_date: </b>{{ info.profile.birth_date }}</h4>
+            <h4><b>Badges:</b>
               <i class="fas fa-user-check tool1 {% if info.profile.num_hires >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Rookie user - 5 hires"></i>
               <i class="far fa-paper-plane tool1{% if info.profile.num_hires >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance user - 25 hires"></i>
               <i class="fas fa-user-ninja tool1 {% if info.profile.num_hires >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja award - 100 hires"></i>
