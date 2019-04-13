@@ -282,6 +282,9 @@ class RequestsForm(forms.ModelForm):
             'placeholder': 'Help with cleaning',
             'required': True,
         })
+        self.fields['photo'].widget.attrs.update({
+            'multiple': True,
+        })
         self.fields['required_knowledges'].widget.attrs.update({
             'placeholder': 'Knowledges a repairman must have',
             'required': True,
