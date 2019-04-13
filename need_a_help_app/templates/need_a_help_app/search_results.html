@@ -94,12 +94,11 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4 pt-5" align="right">
-                                    <!--{% if rep in f_hired %}
+                                    {% if us in f_hired %}
                                         <a href="{% url 'hire_repairman' user.id us.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
                                     {% else %}
                                         <a href="{% url 'hire_repairman' user.id us.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
-                                    {% endif %}-->
-                                    <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                                    {% endif %}
                                     <a href="{% url 'info' us.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
                                 </div>
                             </div>

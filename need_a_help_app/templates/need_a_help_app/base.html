@@ -317,16 +317,19 @@
 
             {% block register_login %}{% endblock %}
 
+            {% block invisible %}
             <main role="main" class="container">
               <div class="row">
                 <div class="col-sm-8 col-md-8 col-lg-8">
-                  {% if messages and user.is_authenticated %}
-                      {% for mess in messages %}
-                          <div class="alert alert-{{ mess.tags }} ">
-                              {{ mess }}
-                          </div>
-                      {% endfor %}
-                  {% endif %}
+                  {% block notify %}
+                    {% if messages and user.is_authenticated %}
+                        {% for mess in messages %}
+                            <div class="alert alert-{{ mess.tags }} ">
+                                {{ mess }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                  {% endblock %}
 
                   {% if user.is_authenticated and user.profile.role == 'client' %}
                     {% block content_client %}{% endblock %}
@@ -357,6 +360,7 @@
                 {% endif %}
               </div>
             </main>
+            {% endblock %}
 
           </div>
           <!-- end content-wrapper-->

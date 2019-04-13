@@ -638,6 +638,15 @@ def search(request):
     """
 
     us = request.user
+
+    hired = Hire.objects.filter(user=us)
+
+    f_hired = []
+    for u in users:
+        for h in hired:
+            if h.user == us and h.repairman == u.id and h.status == 'pending':
+                f_hired.append(u)
+
     not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
@@ -657,6 +666,7 @@ def search(request):
         'not_c': not_c,
         'not_cli': not_cli,
         'users': users,
+        'f_hired': f_hired,
         'q': q,
         'f': f,
         'prof': prof,

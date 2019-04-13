@@ -95,6 +95,7 @@
 {% block app_client %}{% endblock %}
 {% block app_repairman %}{% endblock %}
 {% block filters %}{% endblock %}
+{% block invisible %}{% endblock %} <!-- Sprječavam da mi iskaču alertovi kao kod ostalih stranica -->
 
 {% block register_login %}
 
@@ -113,6 +114,15 @@
                                 </a>
                             </div>
                             <div class="name">
+                                {% block notify %}
+                                    {% if messages and user.is_authenticated %}
+                                        {% for mess in messages %}
+                                            <div class="alert alert-{{ mess.tags }} mb-0 mt-4">
+                                                {{ mess }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endblock %}
                                 <h2 class="account-heading pt-5">{{ info.first_name }} {{ info.last_name }}</h2>
                                 <p class="text-secondary text-muted">{{ info.email }}</p>
                                 {% if user.id != info.id %}
