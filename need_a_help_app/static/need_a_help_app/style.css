@@ -226,7 +226,7 @@ header.masthead .masthead-content .masthead-subheading {
 }
 
 #sidebar-wrapper {
-  z-index: 1;
+  z-index: 4;
   position: fixed;
   width: 0;
   height: 100%;
@@ -737,6 +737,7 @@ a .material-icons {
     border: 0;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .header-filter:after, .header-filter:before {
