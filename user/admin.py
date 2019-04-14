@@ -10,7 +10,8 @@ from .models import (
     JobHire,
     ClientNotifications,
     RepairmanNotifications,
-    Rate
+    Rate,
+    RequestImages
 )
 
 # Register your models here.
@@ -25,3 +26,4 @@ admin.site.register(JobHire)
 admin.site.register(ClientNotifications)
 admin.site.register(RepairmanNotifications)
 admin.site.register(Rate)
+admin.site.register(RequestImages)

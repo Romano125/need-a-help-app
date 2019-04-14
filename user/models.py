@@ -110,6 +110,11 @@ class Requests(models.Model):
         return reverse('request_detail', kwargs={'pk': self.pk})
 
 
+class RequestImages(models.Model):
+    request = models.ForeignKey(Requests, on_delete=models.CASCADE)
+    photo = models.ImageField(default='default_request.jpg', upload_to='requests_user')
+
+
 class SeenRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     request = models.ForeignKey(Requests, on_delete=models.CASCADE)

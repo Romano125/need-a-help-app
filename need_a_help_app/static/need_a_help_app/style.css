@@ -971,7 +971,7 @@ input.invalid {
 /*request detail*/
 
 .upd-req:hover, .app-req:hover {
-  color: green;
+  color: #3385ff;
   transform: scale(1.3);
 }
 

@@ -18,7 +18,8 @@ from user.models import (
     JobHire,
     ClientNotifications,
     RepairmanNotifications,
-    Rate
+    Rate,
+    RequestImages
 )
 from django.views.generic import (
     ListView,
@@ -522,6 +523,8 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
 
                 distance.update({u.id: dist2})
 
+        images = RequestImages.objects.filter(request=req.first())
+
         context_data['s'] = reqq_seen
         context_data['app'] = app
         context_data['cnt'] = cnt
@@ -532,6 +535,7 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         context_data['not_cli'] = not_cli
         context_data['dist'] = dist
         context_data['dist2'] = distance
+        context_data['images'] = images
 
         return context_data
 
@@ -562,6 +566,19 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context_data['api_key'] = settings.GOOGLE_MAPS_API_KEY
 
         return context_data
+
+    def post(self, request, *args, **kwargs):
+        req = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist('photo')
+        if form.is_valid():
+            for f in files:
+                add_photo = RequestImages(request=req, photo=f)
+                add_photo.save()
+            req.photo = files[0]
+            req.save()
+            return redirect('request_detail', pk=req.id)
 
 
 class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
