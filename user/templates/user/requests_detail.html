@@ -93,48 +93,144 @@
 {% block app_repairman %}{% endblock %}
 {% block filters %}{% endblock %}
 
-{% block content %}
+{% block register_login %}
 
-    <article class="media content-section mt-2">
-        <a href="{{ object.photo.url }}" data-fancybox data-caption="&lt;h4 style='color:white;'&gt;&lt;b&gt;Description:&lt;/b&gt;&lt;/h4&gt;&lt;br /&gt;{{ object.job_description }}">
-            <img class="rounded-circle account-img" src="{{ object.photo.url }}">
-        </a>
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{% url 'info' object.user.id %}">{{ object.user }}</a>
-              <small class="text-muted">{{ object.date|date:'F d, Y H:i' }}</small>
-                {% if object.user == user %}
-                    <div>
-                        <a href="{% url 'request_update' object.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 upd">Update</a>
-                        <a href="{% url 'request_delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1 upd"><i class="fas fa-trash-alt"></i>&nbsp Delete</a>
+<div class="profile-page">
+
+    <div class="page-header header-filter" data-parallax="true" style="background-image:url('https://gwaliahire.co.uk/wp-content/uploads/2017/05/engine-wallpaper-5.jpg');"></div>
+<div class="main main-raised">
+    <div class="profile-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 ml-auto mr-auto">
+                       <div class="profile">
+                            <div class="row text-left">
+                              <div class="col-xs-3 col-sm-3 col-md-2" style="padding-top: 100px">
+                                <a href="{{ object.user.profile.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img rounded-circle" src="{{ object.user.profile.photo.url }}">
+                                </a>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 mr-auto pt-3">
+                              <h2 class="account-heading">{{ object.job_title }}</h2>
+                              <div class="row text-left">
+                                <div class="col-xs-3 col-sm-3 col-md-4 pt-2 pr-0">
+                                  <h6>Posted by: </h6>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-5 pl-0 pt-1">
+                                  <a class="mr-2" href="{% url 'info' object.user.id %}">{{ object.user }}</a>
+                                </div>
+                              </div>
+                              <div class="row text-left">
+                                <div class="col-xs-3 col-sm-3 col-md-6 pt-2 pr-0">
+                                  <h5>Date posted:</h5>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-6 pl-0 pr-0 pt-2">
+                                  <p>{{ object.date|date:'F d, Y H:i' }}</p>
+                                </div>
+                              </div>
+                            </div>
+                            </div>
+                            <div class="name text-left pl-3 pt-2">
+                              {% if vis %}
+                                {% if object.user == user %}
+                                    <a class="btn btn-just-icon btn-link" href="#" data-toggle="modal" data-target="#applications"><i class="fas fa-bullhorn apps"></i></a>
+                                    <a href="{% url 'request_update' object.id %}" class="btn btn-just-icon btn-link"><i class="far fa-edit upd-req"></i></a>
+                                    <a href="{% url 'request_delete' object.id %}" class="btn btn-just-icon btn-link"><i class="fas fa-trash-alt del-req"></i></a>
+                                {% else %}
+                                    <a class="btn btn-just-icon btn-link" href="#" data-toggle="modal" data-target="#applications"><i class="fas fa-bullhorn apps"></i></a>
+                                    <a class="btn btn-just-icon btn-link"  href="{% url 'repairman_apply' user.id object.id %}"><i class="far fa-check-square app-req"></i></a>
+                                {% endif %}
+                                {% if cnt and user.profile.role == 'client' %}
+                                  <span class="badge badge-apps-cli">{{ cnt }}</span>
+                                {% else %}
+                                  <span class="badge badge-apps-rep">{{ cnt }}</span>
+                                {% endif %}
+                              {% endif %}
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
-            </div>
-            <h2 class="article-title">{{ object.job_title }}</h2>
-            <small class="text-muted">Required knowledges: {{ object.required_knowledges }}</small><br>
-            <small class="text-muted">Price: {{ object.price }} €</small><br>
-            <div class="row">
-                <div class="col-sm-6">
-                    <small class="text-muted">Address: {{ object.address }}</small><br><br>
                 </div>
-                <div class="col-sm-4">
+                <div class="description text-center">
+                    {% block notify %}
+                        {% if messages and user.is_authenticated %}
+                            {% for mess in messages %}
+                                <div class="alert alert-{{ mess.tags }} mb-4 mt-1">
+                                    {{ mess }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endblock %}
+                    <h4>Description:</h4>
+                    <p>{{ object.job_description }}</p>
+                    <h4 class="pt-4">Location:</h4>
+                    <h2>{{ object.address }}</h2>
                     {% if user.profile.role != 'client' %}
-                      <small class="text-muted"><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</small><br>
+                        <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</h5>
                     {% endif %}
                 </div>
+                <div class="row">
+                    <div class="col-md-6 ml-auto mr-auto">
+                        <div class="profile-tabs">
+                          <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
+                                  <i class="fas fa-search"></i>
+                                  Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#works" role="tab" data-toggle="tab">
+                                  <i class="far fa-images"></i>
+                                    Photos
+                                </a>
+                            </li>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content tab-space">
+                    <div class="tab-pane active text-center gallery" id="studio">
+                        <div class="row text-center">
+                            <div class="col-xs-12 col-sm-12 col-md-12 ml-auto">
+                              <h4><b>Required knowledges: </b></h4>
+                              <p>{{ object.required_knowledges }}</p><br>
+                              <h4><b>Price: </b></h4>
+                              <p>{{ object.price }} €</p><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane text-center gallery" id="works">
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 ml-auto">
+                                <a href="{{ object.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img rounded-circle" src="{{ object.photo.url }}">
+                                </a>
+                                <a href="{{ object.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img rounded-circle" src="{{ object.photo.url }}">
+                                </a>
+                                <a href="{{ object.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img rounded-circle" src="{{ object.photo.url }}">
+                                </a>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 mr-auto">
+                                <a href="{{ object.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img rounded-circle" src="{{ object.photo.url }}">
+                                </a>
+                                <a href="{{ object.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img rounded-circle" src="{{ object.photo.url }}">
+                                </a>
+                                <a href="{{ object.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img rounded-circle" src="{{ object.photo.url }}">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h4>Description:</h4>
-            <p class="article-content">{{ object.job_description }}</p>
-            {% if vis %}
-              {% if object.user == user %}
-                  <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications ( {{ cnt }} )</button>
-              {% else %}
-                  <button type="button" class="btn btn-warning mt-1 mb-1" style="margin-left: 250px" data-toggle="modal" data-target="#applications"><i class="fas fa-pencil-alt"></i>&nbsp Applications ( {{ cnt }} )</button>
-                  <a href="{% url 'repairman_apply' user.id object.id %}" class="btn btn-outline-success mt-1 mb-1"><i class="far fa-check-square"></i>&nbsp Apply</a>
-              {% endif %}
-            {% endif %}
-          </div>
-    </article>
+        </div>
+    </div>
+</div>
 
     <!-- Modal -->
     <div class="modal fade" id="applications" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -208,5 +304,6 @@
         </div>
       </div>
     </div>
+</div>
 {% include 'need_a_help_app/stars_js.html' %}
 {% endblock %}

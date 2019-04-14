@@ -33,25 +33,25 @@
                         {% csrf_token %}
                         <fieldset class="form-group">
                             <div class="tab">
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
                                     </div>
                                     {{ form.username|as_crispy_field }}
                                 </div>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
                                     </div>
                                     {{ form.first_name|as_crispy_field }}
                                 </div>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
                                     </div>
                                     {{ form.last_name|as_crispy_field }}
                                 </div>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-envelope"></i></span>
                                     </div>
@@ -60,25 +60,25 @@
                             </div>
 
                             <div class="tab">
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-key"></i></span>
                                     </div>
                                     {{ form.password1|as_crispy_field }}
                                 </div>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-key"></i></span>
                                     </div>
                                     {{ form.password2|as_crispy_field }}
                                 </div>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-map-marker-alt"></i></span>
                                     </div>
                                     {{ form_p.address|as_crispy_field }}
                                 </div>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-calendar"></i></span>
                                     </div>
@@ -88,14 +88,14 @@
 
                             <div class="tab">
                                 <span style="color: #d9d9d9">Select {{ form_p.gender.label_tag }}</span>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
                                     </div>
                                     {{ form_p.gender|as_crispy_field }}
                                 </div>
                                 <span style="color: #d9d9d9">Select {{ form_p.role.label_tag }}</span>
-                                <div class="input-group mb-2">
+                                <div class="input-group justify-content-center mb-2">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
                                     </div>

@@ -17,28 +17,32 @@
                     </div>
                 </div>
 
-                {% if messages and not user.is_authenticated %}
-                    {% for mess in messages %}
-                      <div class="alert alert-{{ mess.tags }}">
-                          {{ mess }}
-                      </div>
-                    {% endfor %}
-                {% endif %}
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        {{ form.non_field_errors }}
+                <div class="row justify-content-center">
+                    <div class="col-md-9">
+                        {% if messages and not user.is_authenticated %}
+                            {% for mess in messages %}
+                              <div class="alert alert-{{ mess.tags }}">
+                                  {{ mess }}
+                              </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                </div>
                 <form method="POST">
                     {% csrf_token %}
-                    <fieldset class="from-group">
-                        <div class="input-group mb-2">
+                    <fieldset class="form-group">
+                        <div class="input-group mb-2 justify-content-center">
                             <div class="input-group-append">
                                 <span class="input-group-text" style="height: 38px;"><i class="fas fa-user"></i></span>
                             </div>
                             {{ form.username|as_crispy_field }}
                         </div>
-                        <div class="input-group mb-2">
+                        <div class="input-group mb-2 justify-content-center">
                             <div class="input-group-append">
                                 <span class="input-group-text" style="height: 38px;"><i class="fas fa-key"></i></span>
                             </div>

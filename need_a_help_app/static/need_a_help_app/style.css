@@ -459,12 +459,6 @@ header.masthead .masthead-content .masthead-subheading {
   color: #ccffcc;
 }
 
-/*request detail*/
-
-.upd:hover {
-  color: white;
-}
-
 /*notifications row hover*/
 
 .not_row:hover{
@@ -973,4 +967,47 @@ input.invalid {
 .step.finish {
   background-color: #4CAF50;
 }
+
+/*request detail*/
+
+.upd-req:hover, .app-req:hover {
+  color: green;
+  transform: scale(1.3);
+}
+
+.del-req:hover {
+  color: #ff4d4d;
+  transform: scale(1.3);
+}
+
+.apps {
+  transition: background 0.2s, transform 0.2s;
+}
+
+.apps:hover {
+  transform: scale(1.3);
+  color: #ffc61a;
+}
+
+.badge-apps-cli {
+   background: red;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -11px;
+   right: 110px;
+   font-size: xx-small;
+}
+
+.badge-apps-rep {
+   background: red;
+   position: relative;
+   color: white;
+   border-radius: 50%;
+   top: -11px;
+   right: 65px;
+   font-size: xx-small;
+}
+
+
 
