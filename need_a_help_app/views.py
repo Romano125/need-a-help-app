@@ -429,6 +429,12 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+
+        self.object = form.save()
+        files = self.request.FILES.getlist('photo')
+        for f in files:
+            add_photo = RequestImages(request=self.object, photo=f)
+            add_photo.save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
