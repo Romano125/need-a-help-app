@@ -100,7 +100,7 @@
                         </div>
                         <div class="col-sm-2 pt-5" align="right">
                             <a href="{% url 'repairman_apply' user.id r.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
-                            <a href="#" class="btn btn-outline-danger btn-sm mt-1 mb-1"><i class="fas fa-trash-alt"></i></a>
+                            <a href="{% url 'request_detail' r.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
                         </div>
                     </div>
                 </div>
