@@ -625,6 +625,12 @@ header.masthead .masthead-content .masthead-subheading {
     color: #d9d9d9;
 }
 
+#hint_password1 ul {
+    padding-left: 0;
+    width: 350px;
+    margin-right: 67px;
+}
+
 #hint_password2 {
     color: #d9d9d9;
 }

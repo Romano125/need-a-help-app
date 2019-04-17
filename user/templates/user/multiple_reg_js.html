@@ -52,8 +52,17 @@
           // If a field is empty...
           if (y[i].value == "") {
             // add an "invalid" class to the field:
-            y[i].className += " invalid";
+            y[i].className += " is-invalid";
             // and set the current valid status to false:
+            valid = false;
+          }
+        }
+        if( currentTab === 1 ) {
+          var date_field = document.getElementById('birth_date');
+          var date_val = date_field.value;
+          var error = document.getElementById('date_error');
+          if( date_val.length < 8 || date_val.charAt(4) != '-' && ( date_val.charAt(6) == '-' || date_val.charAt(7) == '-' ) ) {
+            date_field.className += ' is-invalid';
             valid = false;
           }
         }
