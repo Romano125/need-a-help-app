@@ -84,7 +84,7 @@
                   </span>
                 {% else %}
                   <a class="nav-item nav-link d-md-none d-lg-none" href="{% url 'home' %}"><i class="fas fa-arrow-left" style="color: white"></i></a>
-                  <a class="navbar-brand mr-auto ml-auto" href="#">Need a help?!</a>
+                  <a class="navbar-brand mr-auto ml-auto" href="{% url 'home' %}">Need a help?!</a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
@@ -373,8 +373,17 @@
         <script type="text/javascript">
           document.getElementById('menu-toggle').addEventListener( 'click', e => {
               e.preventDefault();
+              e.stopPropagation();
               document.getElementById('wrapper').classList.toggle('menuDisplayed');
           });
+          window.setInterval( function(){
+            if($("#wrapper").hasClass("menuDisplayed") && !$('#menu-toggle').data('clicked')) {
+              $('html').click((e) => {
+                $("#wrapper").removeClass("menuDisplayed");
+                console.log('ej');
+              });
+            }
+          },1000)
           $(document).ready(function () {
               $('.popOver').popover();
           });
