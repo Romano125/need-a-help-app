@@ -1,4 +1,5 @@
 {% extends "need_a_help_app/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block notify_repairman %}
     {% if not_r %}
@@ -124,6 +125,195 @@
 
 {% endblock %}
 
+
+{% block register_login %}
+    <div id="frame">
+    <div id="sidepanel">
+        <div id="profile">
+            <div class="wrap">
+                {% if user != object.first %}
+                    <img class="rounded-circle" src="{{ object.second.profile.photo.url }}">
+                    <p>{{ object.second.first_name }} {{ object.second.last_name }}</p>
+                {% else %}
+                    <img class="rounded-circle" src="{{ object.first.profile.photo.url }}">
+                    <p>{{ object.first.first_name }} {{ object.first.last_name }}</p>
+                {% endif %}
+                <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+                <div id="status-options">
+                    <ul>
+                        <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+                        <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
+                        <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
+                        <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
+                    </ul>
+                </div>
+                <div id="expanded">
+                    <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" value="mikeross" />
+                    <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" value="ross81" />
+                    <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" value="mike.ross" />
+                </div>
+            </div>
+        </div>
+        <div id="search">
+            <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+            <input type="text" placeholder="Search contacts..." />
+        </div>
+        <div id="contacts">
+            <ul>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status online"></span>
+                        <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Louis Litt</p>
+                            <p class="preview">You just got LITT up, Mike.</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact active">
+                    <div class="wrap">
+                        <span class="contact-status busy"></span>
+                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Harvey Specter</p>
+                            <p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status away"></span>
+                        <img src="http://emilcarlsson.se/assets/rachelzane.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Rachel Zane</p>
+                            <p class="preview">I was thinking that we could have chicken tonight, sounds good?</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status online"></span>
+                        <img src="http://emilcarlsson.se/assets/donnapaulsen.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Donna Paulsen</p>
+                            <p class="preview">Mike, I know everything! I'm Donna..</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status busy"></span>
+                        <img src="http://emilcarlsson.se/assets/jessicapearson.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Jessica Pearson</p>
+                            <p class="preview">Have you finished the draft on the Hinsenburg deal?</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status"></span>
+                        <img src="http://emilcarlsson.se/assets/haroldgunderson.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Harold Gunderson</p>
+                            <p class="preview">Thanks Mike! :)</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status"></span>
+                        <img src="http://emilcarlsson.se/assets/danielhardman.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Daniel Hardman</p>
+                            <p class="preview">We'll meet again, Mike. Tell Jessica I said 'Hi'.</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status busy"></span>
+                        <img src="http://emilcarlsson.se/assets/katrinabennett.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Katrina Bennett</p>
+                            <p class="preview">I've sent you the files for the Garrett trial.</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status"></span>
+                        <img src="http://emilcarlsson.se/assets/charlesforstman.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Charles Forstman</p>
+                            <p class="preview">Mike, this isn't over.</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="contact">
+                    <div class="wrap">
+                        <span class="contact-status"></span>
+                        <img src="http://emilcarlsson.se/assets/jonathansidwell.png" alt="" />
+                        <div class="meta">
+                            <p class="name">Jonathan Sidwell</p>
+                            <p class="preview"><span>You:</span> That's bullshit. This deal is solid.</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="bottom-bar">
+            <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+            <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+        </div>
+    </div>
+    <div class="content">
+        <div class="contact-profile">
+            {% if user != object.first %}
+                <img class="rounded-circle" src="{{ object.first.profile.photo.url }}">
+                <p>{{ object.first.first_name }} {{ object.first.last_name }}</p>
+            {% else %}
+                <img class="rounded-circle" src="{{ object.second.profile.photo.url }}">
+                <p>{{ object.second.first_name }} {{ object.second.last_name }}</p>
+            {% endif %}
+        </div>
+        <div class="messages">
+            <ul>
+                {% for chat in object.chatmessage_set.all %}
+                    {% if user != chat.user %}
+                        <li class="replies">
+                            <img class="rounded-circle" src="{{ object.second.profile.photo.url }}">
+                            <p>{{ chat.message }} </p>
+                            <p {% if user != chat.user %} align = "right" {% else %}{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p>
+                        </li>
+                    {% else %}
+                        <li class="sent">
+                            <img class="rounded-circle" src="{{ object.first.profile.photo.url }}">
+                            <p>{{ chat.message }}</p>
+                            <small {% if user != chat.user %} align = "right" {% else %}{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</small>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="message-input">
+            <div class="wrap">
+                <form id='form' method='POST'>
+                    {% csrf_token %}
+                    <input type = "hidden" id = "myUsername" value = '{{user.username}}'/>
+                    {{form|crispy }}
+                    <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                    <button type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
 {% block script %}
 
 <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -182,6 +372,11 @@ socket.onerror = function(e){
 socket.onclose = function(e){
 	console.log("message", e)
 }
+
+    var el = document.getElementById('message');
+
+    el.autocomplete = 'off';
+    el.placeholder = 'Write your message here ...';
 
 
 </script>
