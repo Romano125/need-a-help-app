@@ -15,9 +15,10 @@
           document.getElementById("prevBtn").style.display = "inline";
         }
         if (n == (x.length - 1)) {
-          document.getElementById("nextBtn").innerHTML = "Submit";
+          document.getElementById("prevBtn").style.display = "none";
+          document.getElementById("nextBtn").innerHTML = '<h3><span class="badge badge-pag">Submit</span><h3>';
         } else {
-          document.getElementById("nextBtn").innerHTML = "Next";
+          document.getElementById("nextBtn").innerHTML = '<span class="badge badge-pag"><i class="fas fa-angle-right"></i></span>';
         }
         // ... and run a function that displays the correct step indicator:
         fixStepIndicator(n)

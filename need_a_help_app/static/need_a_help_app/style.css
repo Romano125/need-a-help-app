@@ -304,14 +304,15 @@ header.masthead .masthead-content .masthead-subheading {
 /*star rating*/
 
 .rating {
-  unicode-bidi: bidi-override;
   direction: rtl;
   cursor: pointer;
+  font-weight: 900;
+  color: #ccc;
 }
 .rating > .rate {
   display: inline-block;
   position: relative;
-  width: 1.1em;
+  width: 1.2em;
   cursor: pointer;
 }
 .rating > .rate:hover:before,
@@ -319,7 +320,12 @@ header.masthead .masthead-content .masthead-subheading {
    content: "\2605";
    color: yellow;
    position: absolute;
+   width: 1.2em;
    cursor: pointer;
+}
+
+.rate:hover:before {
+  border: yellow 1000px;
 }
 
 .blocked {
@@ -327,7 +333,7 @@ header.masthead .masthead-content .masthead-subheading {
   color: yellow;
   display: inline-block;
   position: relative;
-  width: 1.1em;
+  width: 1.2em;
   cursor: pointer;
 }
 
@@ -340,11 +346,13 @@ header.masthead .masthead-content .masthead-subheading {
    border-radius: 50%;
    font-size: medium;
    transition: background 0.2s, transform 0.2s;
+   cursor: pointer;
 }
 
 .badge-pag:hover{
    background: #335533;
    transform: scale(1.3);
+   cursor: pointer;
 }
 
 .badge-notify{
@@ -1015,5 +1023,35 @@ input.invalid {
    font-size: xx-small;
 }
 
+/* Logout */
 
+.door-login {
+  color: #d9d9d9;
+}
+
+.door-login:hover {
+  transform: scale(1.4);
+}
+
+.sign-up {
+  color:  #4dd2ff;
+}
+
+.sign-up:hover {
+  transform: scale(1.4);
+}
+
+/* Password forgot */
+
+.forgot-pass {
+  color: #66ff66;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.forgot-pass:hover {
+  color: #99ff99;
+  transform: scale(1.3);
+  cursor: pointer;
+}
 

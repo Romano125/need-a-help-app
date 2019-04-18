@@ -3,13 +3,20 @@
 {% block app_client %}{% endblock %}
 {% block app_repairman %}{% endblock %}
 
-{% block content %}
+{% block register_login %}
 
+    <div class="container-fluid h-100 cont">
+      <div class="row h-100 justify-content-center align-items-center login">
+        <div class="text-center">
+            <div class="d-flex justify-content-center">
+                <div class="brand_logo_container">
+                    <img src="https://previews.123rf.com/images/zsirosistvan/zsirosistvan1603/zsirosistvan160301001/53129429-time-to-say-goodbye-note-pad-with-text-on-wooden-table-with-office-tools.jpg" class="rounded-circle" height="125px" width="125px" alt="Logo">
+                </div>
+            </div>
 
-    <h2 class="pt-3">You have been logged out</h2>
-    <div class="border-top pt-3">
-        <small class="text-muted"><a href="{% url 'login' %}">Log In Again</a></small>
+            <h3 class="pt-3" style="color: #d9d9d9">You have been logged out, click to log in again</h3>
+            <h3 class="pt-4"><a href="{% url 'login' %}" class=" badge badge-pag" style="color: white"><i class="fas fa-door-open fa-2x"></i></a></h3>
+        </div>
+      </div>
     </div>
-
-
 {% endblock %}

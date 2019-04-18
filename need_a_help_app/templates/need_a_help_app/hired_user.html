@@ -128,7 +128,7 @@
                                           <span aria-hidden="true">&times;</span>
                                         </button>
                                       </div>
-                                      <div class="modal-body">
+                                      <div class="modal-body text-center">
                                         <form id="rate_form" enctype="multipart/form-data">
                                           {% csrf_token %}
                                           <input type="hidden" name="id" id="user" value="{{ i.repairman }}">
@@ -136,11 +136,11 @@
                                           <div class="rating">
 
                                               <h4>:My rating </h4>
-                                              <span class="rate" type="radio" name="star" id="r5"><input type="hidden" name="txt5" id="r55" value="5">☆</span>
-                                              <span class="rate" type="radio" name="star" id="r4"><input type="hidden" name="txt4" id="r44" value="4">☆</span>
-                                              <span class="rate" type="radio" name="star" id="r3"><input type="hidden" name="txt3" id="r33" value="3">☆</span>
-                                              <span class="rate" type="radio" name="star" id="r2"><input type="hidden" name="txt2" id="r22" value="2">☆</span>
-                                              <span class="rate" type="radio" name="star" id="r1"><input type="hidden" name="txt1" id="r11" value="1">☆</span>
+                                              <span class="rate" type="radio" name="star" id="r5"><input type="hidden" name="txt5" id="r55" value="5"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r4"><input type="hidden" name="txt4" id="r44" value="4"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r3"><input type="hidden" name="txt3" id="r33" value="3"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r2"><input type="hidden" name="txt2" id="r22" value="2"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r1"><input type="hidden" name="txt1" id="r11" value="1"><i class="fas fa-star"></i></span>
                                           </div>
                                             <h4>Leave feedback: </h4>
                                             <textarea name="feedback" id="feed" cols="50" rows="8"></textarea>

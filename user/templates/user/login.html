@@ -13,7 +13,7 @@
                 <div class="d-flex justify-content-center">
                     <div class="brand_logo_container" style="margin-bottom: 50px; margin-top: 30px">
                         <img src="https://cdn4.iconfinder.com/data/icons/green-shopper/1068/user.png" class="brand_logo avatar" height="100px" width="100px" alt="Logo">
-                        <legend class="mb-0 mt-auto pl-3">Log In</legend>
+                        <legend class="mb-0 mt-auto pl-3" style="color: #ccc">Log In</legend>
                     </div>
                 </div>
 
@@ -51,12 +51,12 @@
                         {#{{ form|crispy }}#}
                     </fieldset>
                     <div class="form-group d-flex justify-content-center">
-                        <button class="btn btn-outline-info" type="submit">Log In</button>
+                        <button class="badge badge-pag" style="border: none;" type="submit">Log In</button>
                     </div>s
-                    <small class="text-muted ml-2 d-flex justify-content-center"><a class="ml-2" href="{% url 'password_reset' %}">Forgot your password?</a></small>
+                    <small class="text-muted ml-2 d-flex justify-content-center"><a class="ml-2 forgot-pass" href="{% url 'password_reset' %}">Forgot your password?</a></small>
                 </form>
                 <div class="border-top pt-3 d-flex justify-content-center">
-                    <small class="links">Do you need an account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a></small>
+                    <small class="links">Do you need an account? <a class="ml-2  badge badge-pag" style="color: white;" href="{% url 'register' %}"><i class="fas fa-sign-in-alt"></i></a></small>
                 </div>
             </div>
         </div>

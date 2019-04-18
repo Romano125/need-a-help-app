@@ -1434,6 +1434,15 @@ def rate(request):
     rate_save.rating = total
     rate_save.save()
 
+    notif = '<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto">'
+    notif += f'<a href="{ reverse("info", kwargs={"pk": us.id}) }">'
+    notif += f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+    notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + '</a>' + f' rated you with { val } stars, check your profile to see more details!'
+    notif += f'<a href="{ reverse("messages", kwargs={"username": us}) }"><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
+    url = f'{ reverse("info", kwargs={"pk": rep.id}) }'
+    rep_not = RepairmanNotifications(repairman=rep, notification=notif, url_to_go=url)
+    rep_not.save()
+
     messages.success(request, f'You\'ve successfully rated repairman { rep.username }!')
     if job == '1':
         return redirect('done_user', pk=us.id)
