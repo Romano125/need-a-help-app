@@ -50,16 +50,13 @@
     <div class="col-sm-8">
         <h2>You searched for: <strong>{{ q }}</strong></h2>
     </div>
-    <div class="col-sm-4" align="right">
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
-    </div>
    </div>
    <hr width="100%">
    {% if f %}
        {% for us in users %}
             {% if us.profile.profession == prof.first.profession or us.first_name == name.first.first_name or us.last_name == name.first.last_name %}
                 {% if us.profile.role == 'repairman' %}
-                    <article class="media content-section">
+                    <article class="media content-section d-none d-md-block d-lg-block">
                         <div class="media-body">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -111,6 +108,62 @@
         <h3 class="text-secondary text-muted" align="center">No results</h3>
     {% endif %}
 
+    {% if f %}
+       {% for us in users %}
+            {% if us.profile.profession == prof.first.profession or us.first_name == name.first.first_name or us.last_name == name.first.last_name %}
+                {% if us.profile.role == 'repairman' %}
+                    <article class="media content-section d-block d-md-none d-lg-none text-center">
+                        <div class="media-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <a href="{% url 'info' us.id %}">
+                                        <img class="rounded-circle account-img" src="{{ us.profile.photo.url }}">
+                                    </a>
+                                    <div class="row">
+                                      <div class="col-sm-12" align="center">
+                                        <div class="{{ us }}{{ us.id }}">
+                                          <div class="star-outer">
+                                            <div class="star-inner"></div>
+                                          </div>
+                                          <span class="number-rating text-secondary"></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <input type="hidden" class="hid" name="name" id="name{{ us }}{{ us.id }}" value="{{ us }}{{ us.id }}">
+                                    <input type="hidden" class="hid" name="rate" id="rate{{ us.profile.rating }}" value="{{ us.profile.rating }}">
+                                </div>
+                                <div class="col-sm-5">
+                                    <h1>{{ us.first_name }} {{ us.last_name }}</h1>
+                                    <small class="text-secondary text-muted">Profession: {{ us.profile.profession }}</small><br>
+                                    <small class="text-secondary text-muted">Cost: {{ us.profile.costs }} €</small><br>
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            <small class="text-secondary text-muted">Address: {{ us.profile.address }}</small><br>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            {% resolve dist us.id as value %}
+                                            <small class="text-secondary text-muted distance"><i class="fas fa-map-marker-alt" style="color: red"></i>{{ value }}</small><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 pt-4" align="center">
+                                    {% if us in f_hired %}
+                                        <a href="{% url 'hire_repairman' user.id us.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'hire_repairman' user.id us.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                                    {% endif %}
+                                    <a href="{% url 'info' us.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <h3 class="text-secondary text-muted" align="center">No results</h3>
+    {% endif %}
+
     <div class="container" align="center">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 align-items-center justify-content" style="margin: auto">
@@ -140,30 +193,6 @@
         </div>
    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Filter By</strong></h5>
-            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4>Price: min - max</h4>
-            <div class="rating">
-                <h4>:Popularity </h4><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-            </div>
-            <h4>Knowledges: None</h4>
-            <h4>Address: -</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-dark">Done</button>
-          </div>
-        </div>
-      </div>
-    </div>
 {% include 'need_a_help_app/stars_js.html' %}
 {# include 'need_a_help_app/search_ajax.html' #}
 {% endblock %}

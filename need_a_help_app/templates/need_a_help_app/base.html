@@ -190,8 +190,8 @@
                             <form class="card card-sm" action="{% url 'search' %}" method="GET">
                                 <div class="card-body row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <i class="fas fa-search h4 text-body"></i>&nbsp&nbsp
-                                    </div>
+                                        <i class="fas fa-search h4 text-body d-none d-md-block d-lg-block"></i>
+                                    </div>&nbsp;
                                     <!--end of col-->
                                     <div class="col">
                                         {# csrf_token #}
@@ -199,7 +199,8 @@
                                     </div>
                                     <!--end of col-->
                                     <div class="col-auto">
-                                        &nbsp<button class="btn btn-lg btn-success" type="submit">Search</button>
+                                        <button class="btn btn-lg btn-success d-none d-md-block d-lg-block" type="submit">Search</button>
+                                        <button class="btn btn-success d-block d-md-none d-lg-none text-center" type="submit"><i class="fas fa-search h5 text-body"></i></button>
                                     </div>
                                     <!--end of col-->
                                 </div>
@@ -393,7 +394,6 @@
         {% include "fancybox/fancybox_js.html" %}
     </body>
 </html>
-
 <!-- star rating iskoristiti kasnije za ocijenjivanje majstora
   <div class="rating">
       <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
