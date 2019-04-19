@@ -141,6 +141,11 @@
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
+                                {% if user.id == info.id %}
+                                    {% if info.profile.role == 'repairman' %}
+                                        <a class="btn btn-just-icon btn-link" style="color: #a6a6a6;" data-toggle="modal" data-target="#feedbacks"><i class="fa fa-comment feed-btn"></i></a>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -252,9 +257,9 @@
                             <div class="col-xs-12 col-md-10">
                                 <div class="well well-sm">
                                     <div class="row">
-                                        <div class="col-xs-12 col-md-6 text-right">
+                                        <div class="col-xs-12 col-md-6 text-right" id="nums">
                                             <h1 class="mr-1">{{ info.profile.rating }}</h1>
-                                            <div class="col-sm-7 col-md-12 mb-1 ml-4" align="right">
+                                            <div class="col-sm-7 col-md-12 mb-1 ml-4" id="stars">
                                               <div class="{{ info }}">
                                                 <div class="star-outer">
                                                   <div class="star-inner"></div>
@@ -269,7 +274,7 @@
                                         </div>
                                         <div class="col-xs-12 col-md-5">
                                             <div class="row rating-desc">
-                                                <div class="col-xs-3 col-md-3 text-right">
+                                                <div class="col-xs-3 col-md-3 text-right" id="five">
                                                     <span class="fa fa-star"></span> 5
                                                 </div>
                                                 <div class="col-xs-8 col-md-9">
@@ -281,7 +286,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- end 5 -->
-                                                <div class="col-xs-3 col-md-3 text-right">
+                                                <div class="col-xs-3 col-md-3 text-right" id="four">
                                                     <span class="fa fa-star"></span> 4
                                                 </div>
                                                 <div class="col-xs-8 col-md-9">
@@ -293,7 +298,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- end 4 -->
-                                                <div class="col-xs-3 col-md-3 text-right">
+                                                <div class="col-xs-3 col-md-3 text-right" id="three">
                                                     <span class="fa fa-star"></span> 3
                                                 </div>
                                                 <div class="col-xs-8 col-md-9">
@@ -305,7 +310,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- end 3 -->
-                                                <div class="col-xs-3 col-md-3 text-right">
+                                                <div class="col-xs-3 col-md-3 text-right" id="two">
                                                     <span class="fa fa-star"></span> 2
                                                 </div>
                                                 <div class="col-xs-8 col-md-9">
@@ -317,7 +322,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- end 2 -->
-                                                <div class="col-xs-3 col-md-3 text-right">
+                                                <div class="col-xs-3 col-md-3 text-right" id="one">
                                                     <span class="fa fa-star"></span> 1
                                                 </div>
                                                 <div class="col-xs-8 col-md-9">
@@ -378,6 +383,79 @@
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+    $(window).ready( function() {
+        if($(window).width() < 767) {
+            $('#nums').addClass('text-center');
+            $('#nums').removeClass('text-right');
+            $('#stars').removeClass('ml-4');
+            $('#stars').removeClass('text-right');
+            $('#stars').addClass('text-center');
+            $('#five').addClass('text-left');
+            $('#five').removeClass('text-right');
+            $('#four').addClass('text-left');
+            $('#four').removeClass('text-right');
+            $('#three').addClass('text-left');
+            $('#three').removeClass('text-right');
+            $('#two').addClass('text-left');
+            $('#two').removeClass('text-right');
+            $('#one').addClass('text-left');
+            $('#one').removeClass('text-right');
+        }else{
+            $('#nums').removeClass('text-center');
+            $('#nums').addClass('text-right');
+            $('#stars').addClass('ml-4');
+            $('#stars').addClass('text-right');
+            $('#stars').removeClass('text-center');
+            $('#five').removeClass('text-left');
+            $('#five').addClass('text-right');
+            $('#four').removeClass('text-left');
+            $('#four').addClass('text-right');
+            $('#three').removeClass('text-left');
+            $('#three').addClass('text-right');
+            $('#two').removeClass('text-left');
+            $('#two').addClass('text-right');
+            $('#one').removeClass('text-left');
+            $('#one').addClass('text-right');
+        }
+    })
+    $(window).on('resize', function() {
+        if($(window).width() < 767) {
+            $('#nums').addClass('text-center');
+            $('#nums').removeClass('text-right');
+            $('#stars').removeClass('ml-4');
+            $('#stars').removeClass('text-right');
+            $('#stars').addClass('text-center');
+            $('#five').addClass('text-left');
+            $('#five').removeClass('text-right');
+            $('#four').addClass('text-left');
+            $('#four').removeClass('text-right');
+            $('#three').addClass('text-left');
+            $('#three').removeClass('text-right');
+            $('#two').addClass('text-left');
+            $('#two').removeClass('text-right');
+            $('#one').addClass('text-left');
+            $('#one').removeClass('text-right');
+        }else{
+            $('#nums').removeClass('text-center');
+            $('#nums').addClass('text-right');
+            $('#stars').addClass('ml-4');
+            $('#stars').addClass('text-right');
+            $('#stars').removeClass('text-center');
+            $('#five').removeClass('text-left');
+            $('#five').addClass('text-right');
+            $('#four').removeClass('text-left');
+            $('#four').addClass('text-right');
+            $('#three').removeClass('text-left');
+            $('#three').addClass('text-right');
+            $('#two').removeClass('text-left');
+            $('#two').addClass('text-right');
+            $('#one').removeClass('text-left');
+            $('#one').addClass('text-right');
+        }
+    })
+  </script>
 
 {% include 'need_a_help_app/stars_js.html' %}
 </body>
