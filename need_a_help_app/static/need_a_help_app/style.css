@@ -567,35 +567,52 @@ header.masthead .masthead-content .masthead-subheading {
 
 /* Login style */
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
+
+  .cont {
+    padding: 0;
+  }
+}
+
+@media (max-width: 767px) {
+
   .login {
     position: relative;
     background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
-    margin-right: 100px;
+    height: 100%;
+  }
+
+  .register {
+    position: relative;
+    background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
    }
 
-   .content-section {
-      background: #00ff00;
-      border: 1px solid #dddddd;
-      border-radius: 3px;
-      margin-bottom: 20px;
-    }
+  .reg-form {
+    width: 250px;
+  }
 }
 
-.login {
-  position: relative;
-  background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
-  margin-left: 475px;
-  margin-right: 475px;
-  height: 100%;
- }
+@media (min-width: 768px) {
 
- .register {
-  position: relative;
-  background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
-  margin-left: 400px;
-  margin-right: 400px;
- }
+  .login {
+    position: relative;
+    background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
+    margin-left: 475px;
+    margin-right: 475px;
+    height: 100%;
+   }
+
+   .register {
+    position: relative;
+    background: linear-gradient(to bottom, rgba(150, 150, 150, 0.8) 0%, rgba(0,0,0,0.6) 100%);
+    margin-left: 400px;
+    margin-right: 400px;
+   }
+
+   .reg-form {
+      width: 300px;
+    }
+}
 
  .cont {
   position: relative;
@@ -613,10 +630,6 @@ header.masthead .masthead-content .masthead-subheading {
       color: #fff;
       cursor: pointer;
     }
-}
-
-.reg-form {
-  width: 300px;
 }
 
 .col-form-label {
