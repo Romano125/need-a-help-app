@@ -1,7 +1,7 @@
 {% extends request.is_ajax|yesno:"fancybox/base.html,need_a_help_app/base.html" %}
 
 {% block title %}
-    <title>Info</title>
+    <title>modal_info</title>
 {% endblock %}
 
 {% block bell_cli %}
@@ -102,184 +102,255 @@
 {% block app_client %}{% endblock %}
 {% block app_repairman %}{% endblock %}
 {% block filters %}{% endblock %}
+{% block invisible %}{% endblock %} <!-- Sprječavam da mi iskaču alertovi kao kod ostalih stranica -->
 
-{% block content %}
-    <div class="content-section">
-        {% if error %}
-            <div class="alert alert-warning">
-                {{ error }}
-            </div>
-        {% endif %}
+{% block register_login %}
 
-      <div class="media">
-        <a href="{{ modal_info.profile.photo.url }}" data-fancybox>
-            <img class="rounded-circle account-img" src="{{ modal_info.profile.photo.url }}">
-        </a>
-        <div class="media-body">
-          <h2 class="account-heading pt-5">{{ modal_info.first_name }} {{ modal_info.last_name }}</h2>
-          <p class="text-secondary text-muted">{{ modal_info.email }}</p>
-          <div align="right">
-            {% if user.id != modal_info.id %}
-              <a class="btn btn-outline-danger rounded-circle" href="{% url 'messages' modal_info %}"><i class="fas fa-envelope fa-2x"></i></a>
-              {% if modal_info.profile.role == 'repairman' and user.profile.role != 'repairman' %}
-                {% if f %}
-                  <a class="btn btn-warning rounded-circle" style="color: yellow;" href="{% url 'del_favorite' user.id modal_info.id %}"><i class="fas fa-star fa-2x"></i></a>
-                {% else %}
-                  <a class="btn btn-outline-warning rounded-circle" style="color: yellow;" href="{% url 'add_favorite' user.id modal_info.id %}"><i class="fas fa-star fa-2x"></i></a>
-                {% endif %}
-              {% endif %}
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      <hr width="100%">
-      <div class="container">
-        <fieldset class="from-group">
-          {% if modal_info.profile.role == 'repairman' %}
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4><b>Address: </b>{{ modal_info.profile.address }}</h4>
+<body class="profile-page">
+
+    <div class="page-header header-filter" data-parallax="true" style="background-image:url('http://wallpapere.org/wp-content/uploads/2012/02/black-and-white-city-night.png');"></div>
+<div class="main main-raised">
+    <div class="profile-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 ml-auto mr-auto">
+                       <div class="profile">
+                            <div class="avatar">
+                                <a href="{{ modal_info.profile.photo.url }}" data-fancybox>
+                                    <img alt="Circle Image" class="account-img img-raised rounded-circle img-fluid" src="{{ modal_info.profile.photo.url }}">
+                                </a>
+                            </div>
+                            <div class="name">
+                                {% block notify %}
+                                    {% if messages and user.is_authenticated %}
+                                        {% for mess in messages %}
+                                            <div class="alert alert-{{ mess.tags }} mb-0 mt-4">
+                                                {{ mess }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endblock %}
+                                <h2 class="account-heading pt-5">{{ modal_info.first_name }} {{ modal_info.last_name }}</h2>
+                                <p class="text-secondary text-muted">{{ modal_info.email }}</p>
+                                {% if user.id != modal_info.id %}
+                                  <a class="btn btn-just-icon btn-link mes-send" href="{% url 'messages' modal_info %}"><i class="fas fa-envelope"></i></a>
+                                    {% if modal_info.profile.role == 'repairman' %}
+                                        {% if f %}
+                                          <a class="btn btn-just-icon btn-link" style="color: yellow;" href="{% url 'del_favorite' user.id modal_info.id %}"><i class="fas fa-star favs-del"></i></a>
+                                        {% else %}
+                                          <a class="btn btn-just-icon btn-link" style="color: #a6a6a6;" href="{% url 'add_favorite' user.id modal_info.id %}"><i class="fas fa-star favs-add"></i></a>
+                                        {% endif %}
+                                        <a class="btn btn-just-icon btn-link" style="color: #a6a6a6;" data-toggle="modal" data-target="#feedbacks"><i class="fa fa-comment feed-btn"></i></a>
+                                    {% endif %}
+                                {% endif %}
+                                {% if user.id == modal_info.id %}
+                                    {% if modal_info.profile.role == 'repairman' %}
+                                        <a class="btn btn-just-icon btn-link" style="color: #a6a6a6;" data-toggle="modal" data-target="#feedbacks"><i class="fa fa-comment feed-btn"></i></a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    {% if user.profile.role != 'repairman' %}
-                      <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</h5>
+                <div class="description text-center">
+                    {% if modal_info.profile.role == 'repairman' %}
+                        <p>An repairman whose profession is {{ modal_info.profile.profession }}, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
+                    {% endif %}
+                    <h4>{{ modal_info.profile.address }}</h4>
+                    {% if user != modal_info %}
+                        <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</h5>
                     {% endif %}
                 </div>
-            </div>
-            <h4><b>Phone number: </b>{{ modal_info.profile.phone_number }}</h4>
-            <h4><b>Birth_date: </b>{{ modal_info.profile.birth_date }}</h4>
-            <h4><b>Profession: </b>{{ modal_info.profile.profession }}</h4>
-            <h4><b>Knowledges: </b>{{ modal_info.profile.knowledges }}</h4>
-            <h4><b>Price: </b>{{ modal_info.profile.costs }} €</h4>
-            <h4><b>Badges:</b>
-              <i class="fas fa-user-check tool1 {% if info.profile.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>
-              <i class="far fa-paper-plane tool1 {% if info.profile.hired >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance - 25 times hired"></i>
-              <i class="fas fa-user-ninja tool1 {% if info.profile.hired >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja - 100 times hired"></i>
-              <i class="far fa-star tool1 {% if info.profile.hired >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Pro repairman - 250 times hired"></i>
-              <i class="fas fa-award tool1 {% if info.profile.hired >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master repairman - >500 times hired"></i>
-            </h4>
-            <h4><b>Rating:</b></h4>
-            <div class="container mb-3">
-              <div class="row">
-                <div class="col-xs-12 col-md-10">
-                    <div class="well well-sm">
+                <div class="row">
+                    <div class="col-md-6 ml-auto mr-auto">
+                        <div class="profile-tabs">
+                          <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
+                                  <i class="fas fa-search"></i>
+                                  Details
+                                </a>
+                            </li>
+                            {% if modal_info.profile.role == 'repairman' %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#works" role="tab" data-toggle="tab">
+                                      <i class="fas fa-medal"></i>
+                                        Rating
+                                    </a>
+                                </li>
+                            {% endif %}
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content tab-space">
+                    <div class="tab-pane active text-center gallery" id="studio">
                         <div class="row">
-                            <div class="col-xs-12 col-md-6 text-center">
-                                <h1>{{ modal_info.profile.rating }}</h1>
-                                <div class="col-sm-7 mb-1 ml-5" align="center">
-                                  <div class="{{ modal_info }}">
-                                    <div class="star-outer">
-                                      <div class="star-inner"></div>
-                                    </div>
-                                  </div>
-                                  <input type="hidden" class="hid" name="name" id="name{{ modal_info }}" value="{{ modal_info }}">
-                                  <input type="hidden" class="hid" name="rate" id="rate{{ modal_info.profile.rating }}" value="{{ modal_info.profile.rating }}">
-                                </div>
-                                <div>
-                                    <span class="fa fa-user"></span> {{ num_rates }} total
-                                </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 ml-auto">
+                                {% if modal_info.profile.role == 'repairman' %}
+                                    <h4><b>Phone number: </b></h4>
+                                    <h4><b>Birth date: </b></h4>
+                                    <h4><b>Profession: </b></h4>
+                                    <h4><b>Knowledges: </b></h4>
+                                    <h4><b>Price: </b></h4>
+                                    <h4><b>Badges:</b></h4>
+                                {% else %}
+                                    <h4><b>Phone number: </b></h4>
+                                    <h4><b>Birth date: </b></h4>
+                                    <h4><b>Badges:</b></h4>
+                                {% endif %}
                             </div>
-                            <div class="col-xs-12 col-md-6">
-                                <div class="row rating-desc">
-                                    <div class="col-xs-3 col-md-3 text-right">
-                                        <span class="fa fa-star"></span> 5
-                                    </div>
-                                    <div class="col-xs-8 col-md-9">
-                                        <div class="progress progress-striped">
-                                            <div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: {{ five_per }}%">
-                                                <span class="sr-only">{{ five_per }}%</span>
+                            <div class="col-xs-3 col-sm-3 col-md-3 mr-auto">
+                                {% if modal_info.profile.role == 'repairman' %}
+                                    {% if modal_info.profile.phone_number %}
+                                        <h4>{{ modal_info.profile.phone_number }}</h4>
+                                    {% else %}
+                                         <h4 class="text-muted">None</h4>
+                                    {% endif %}
+                                    {% if modal_info.profile.birth_date %}
+                                        <h4>{{ modal_info.profile.birth_date }}</h4>
+                                    {% else %}
+                                         <h4 class="text-muted">None</h4>
+                                    {% endif %}
+                                    {% if modal_info.profile.profession %}
+                                        <h4>{{ modal_info.profile.profession }}</h4>
+                                    {% else %}
+                                         <h4 class="text-muted">None</h4>
+                                    {% endif %}
+                                    {% if modal_info.profile.knowledges %}
+                                        <h4>{{ modal_info.profile.knowledges }}</h4>
+                                    {% else %}
+                                         <h4 class="text-muted">None</h4>
+                                    {% endif %}
+                                    <h4>{{ modal_info.profile.costs }} €</h4>
+                                    <h4>
+                                        <i class="fas fa-user-check tool1 {% if modal_info.profile.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>
+                                      <i class="far fa-paper-plane tool1 {% if modal_info.profile.hired >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance - 25 times hired"></i>
+                                      <i class="fas fa-user-ninja tool1 {% if modal_info.profile.hired >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja - 100 times hired"></i>
+                                      <i class="far fa-star tool1 {% if modal_info.profile.hired >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Pro repairman - 250 times hired"></i>
+                                      <i class="fas fa-award tool1 {% if modal_info.profile.hired >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master repairman - >500 times hired"></i>
+                                    </h4>
+                                {% else %}
+                                    {% if modal_info.profile.phone_number %}
+                                        <h4>{{ modal_info.profile.phone_number }}</h4>
+                                    {% else %}
+                                         <h4 class="text-muted">None</h4>
+                                    {% endif %}
+                                    {% if modal_info.profile.birth_date %}
+                                        <h4>{{ modal_info.profile.birth_date }}</h4>
+                                    {% else %}
+                                         <h4 class="text-muted">None</h4>
+                                    {% endif %}
+                                    <h4>
+                                      <i class="fas fa-user-check tool1 {% if modal_info.profile.num_hires >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Rookie user - 5 hires"></i>
+                                      <i class="far fa-paper-plane tool1{% if modal_info.profile.num_hires >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance user - 25 hires"></i>
+                                      <i class="fas fa-user-ninja tool1 {% if modal_info.profile.num_hires >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja award - 100 hires"></i>
+                                      <i class="far fa-star tool1 {% if modal_info.profile.num_hires >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Star user - 250 hires"></i>
+                                      <i class="fas fa-award tool1 {% if modal_info.profile.num_hires >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master user - >500 hires"></i>
+                                    </h4>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane text-center gallery" id="works">
+                        <div class="container mb-3">
+                          <div class="row">
+                            <div class="col-xs-12 col-md-10">
+                                <div class="well well-sm">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6 text-right" id="nums">
+                                            <h1 class="mr-1">{{ modal_info.profile.rating }}</h1>
+                                            <div class="col-sm-7 col-md-12 mb-1 ml-4" id="stars">
+                                              <div class="{{ modal_info }}">
+                                                <div class="star-outer">
+                                                  <div class="star-inner"></div>
+                                                </div>
+                                              </div>
+                                              <input type="hidden" class="hid" name="name" id="name{{ modal_info }}" value="{{ modal_info }}">
+                                              <input type="hidden" class="hid" name="rate" id="rate{{ modal_info.profile.rating }}" value="{{ modal_info.profile.rating }}">
+                                            </div>
+                                            <div class="mr-1">
+                                                <span class="fa fa-user"></span> {{ num_rates }} total
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- end 5 -->
-                                    <div class="col-xs-3 col-md-3 text-right">
-                                        <span class="fa fa-star"></span> 4
-                                    </div>
-                                    <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: {{ four_per }}%">
-                                                <span class="sr-only">{{ four_per }}%</span>
+                                        <div class="col-xs-12 col-md-5">
+                                            <div class="row rating-desc">
+                                                <div class="col-xs-3 col-md-3 text-right" id="five">
+                                                    <span class="fa fa-star"></span> 5
+                                                </div>
+                                                <div class="col-xs-8 col-md-9">
+                                                    <div class="progress progress-striped">
+                                                        <div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="20"
+                                                            aria-valuemin="0" aria-valuemax="100" style="width: {{ five_per }}%">
+                                                            <span class="sr-only">{{ five_per }}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end 5 -->
+                                                <div class="col-xs-3 col-md-3 text-right" id="four">
+                                                    <span class="fa fa-star"></span> 4
+                                                </div>
+                                                <div class="col-xs-8 col-md-9">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
+                                                            aria-valuemin="0" aria-valuemax="100" style="width: {{ four_per }}%">
+                                                            <span class="sr-only">{{ four_per }}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end 4 -->
+                                                <div class="col-xs-3 col-md-3 text-right" id="three">
+                                                    <span class="fa fa-star"></span> 3
+                                                </div>
+                                                <div class="col-xs-8 col-md-9">
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-modal_info" role="progressbar" aria-valuenow="20"
+                                                            aria-valuemin="0" aria-valuemax="100" style="width: {{ three_per }}%">
+                                                            <span class="sr-only">{{ three_per }}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end 3 -->
+                                                <div class="col-xs-3 col-md-3 text-right" id="two">
+                                                    <span class="fa fa-star"></span> 2
+                                                </div>
+                                                <div class="col-xs-8 col-md-9">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="20"
+                                                            aria-valuemin="0" aria-valuemax="100" style="width: {{ two_per }}%">
+                                                            <span class="sr-only">{{ two_per }}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end 2 -->
+                                                <div class="col-xs-3 col-md-3 text-right" id="one">
+                                                    <span class="fa fa-star"></span> 1
+                                                </div>
+                                                <div class="col-xs-8 col-md-9">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="80"
+                                                            aria-valuemin="0" aria-valuemax="100" style="width: {{ one_per }}%">
+                                                            <span class="sr-only">{{ one_per }}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end 1 -->
                                             </div>
+                                            <!-- end row -->
                                         </div>
                                     </div>
-                                    <!-- end 4 -->
-                                    <div class="col-xs-3 col-md-3 text-right">
-                                        <span class="fa fa-star"></span> 3
-                                    </div>
-                                    <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: {{ three_per }}%">
-                                                <span class="sr-only">{{ three_per }}%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end 3 -->
-                                    <div class="col-xs-3 col-md-3 text-right">
-                                        <span class="fa fa-star"></span> 2
-                                    </div>
-                                    <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: {{ two_per }}%">
-                                                <span class="sr-only">{{ two_per }}%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end 2 -->
-                                    <div class="col-xs-3 col-md-3 text-right">
-                                        <span class="fa fa-star"></span> 1
-                                    </div>
-                                    <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="80"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: {{ one_per }}%">
-                                                <span class="sr-only">{{ one_per }}%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end 1 -->
                                 </div>
-                                <!-- end row -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-          {% else %}
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4><b>Address: </b>{{ modal_info.profile.address }}</h4>
-                </div>
-                <div class="col-sm-4">
-                    <h5><i class="fas fa-map-marker-alt" style="color: red"></i> {{ dist }}</h5>
-                </div>
-            </div>
-            <h4>Phone number: {{ modal_info.profile.phone_number }}</h4>
-            <h4>Birth_date: {{ modal_info.profile.birth_date }}</h4>
-            <h4>Badges:
-              <i class="fas fa-user-check tool1 {% if info.profile.num_hires >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Rookie user - 5 hires"></i>
-              <i class="far fa-paper-plane tool1 {% if info.profile.num_hires >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance user - 25 hires"></i>
-              <i class="fas fa-user-ninja tool1 {% if info.profile.num_hires >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja award - 100 hires"></i>
-              <i class="far fa-star tool1 {% if info.profile.num_hires >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Star user - 250 hires"></i>
-              <i class="fas fa-award tool1 {% if info.profile.num_hires >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master user - >500 hires"></i>
-            </h4>
-          {% endif %}
-        </fieldset>
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12" align="center">
-            {% if modal_info.profile.role == 'repairman' and user.id != modal_info.id %}
-              <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#feedbacks"><i class="far fa-comment-alt"></i>&nbsp&nbspFeedbacks</button>
-            {% endif %}
-          </div>
         </div>
-      </div>
     </div>
-{% include 'need_a_help_app/stars_js.html' %}
+</div>
 
-<!-- Modal feedbacks -->
+    <!-- Modal feedbacks -->
   <div class="modal fade" id="feedbacks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -296,10 +367,10 @@
                 <article class="media content-section">
                   <div class="media-body">
                     <div class="article-metadata">
-                      <a href="{% url 'info' f.user.id %}">
+                      <a href="{% url 'modal_info' f.user.id %}">
                           <img class="rounded-circle navbar-img" src="{{ f.user.profile.photo.url }}">
                       </a>
-                      <a class="mr-2" href="{% url 'info' f.user.id %} ">{{ f.user }}</a>
+                      <a class="mr-2" href="{% url 'modal_info' f.user.id %} ">{{ f.user }}</a>
                       <small class="text-muted">{{ f.date|date:'F d, Y H:i' }}</small>
                     </div>
                     <p class="article-content">{{ f.feedback }}</p>
@@ -314,4 +385,80 @@
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+    $(window).ready( function() {
+        if($(window).width() < 767) {
+            $('#nums').addClass('text-center');
+            $('#nums').removeClass('text-right');
+            $('#stars').removeClass('ml-4');
+            $('#stars').removeClass('text-right');
+            $('#stars').addClass('text-center');
+            $('#five').addClass('text-left');
+            $('#five').removeClass('text-right');
+            $('#four').addClass('text-left');
+            $('#four').removeClass('text-right');
+            $('#three').addClass('text-left');
+            $('#three').removeClass('text-right');
+            $('#two').addClass('text-left');
+            $('#two').removeClass('text-right');
+            $('#one').addClass('text-left');
+            $('#one').removeClass('text-right');
+        }else{
+            $('#nums').removeClass('text-center');
+            $('#nums').addClass('text-right');
+            $('#stars').addClass('ml-4');
+            $('#stars').addClass('text-right');
+            $('#stars').removeClass('text-center');
+            $('#five').removeClass('text-left');
+            $('#five').addClass('text-right');
+            $('#four').removeClass('text-left');
+            $('#four').addClass('text-right');
+            $('#three').removeClass('text-left');
+            $('#three').addClass('text-right');
+            $('#two').removeClass('text-left');
+            $('#two').addClass('text-right');
+            $('#one').removeClass('text-left');
+            $('#one').addClass('text-right');
+        }
+    })
+    $(window).on('resize', function() {
+        if($(window).width() < 767) {
+            $('#nums').addClass('text-center');
+            $('#nums').removeClass('text-right');
+            $('#stars').removeClass('ml-4');
+            $('#stars').removeClass('text-right');
+            $('#stars').addClass('text-center');
+            $('#five').addClass('text-left');
+            $('#five').removeClass('text-right');
+            $('#four').addClass('text-left');
+            $('#four').removeClass('text-right');
+            $('#three').addClass('text-left');
+            $('#three').removeClass('text-right');
+            $('#two').addClass('text-left');
+            $('#two').removeClass('text-right');
+            $('#one').addClass('text-left');
+            $('#one').removeClass('text-right');
+        }else{
+            $('#nums').removeClass('text-center');
+            $('#nums').addClass('text-right');
+            $('#stars').addClass('ml-4');
+            $('#stars').addClass('text-right');
+            $('#stars').removeClass('text-center');
+            $('#five').removeClass('text-left');
+            $('#five').addClass('text-right');
+            $('#four').removeClass('text-left');
+            $('#four').addClass('text-right');
+            $('#three').removeClass('text-left');
+            $('#three').addClass('text-right');
+            $('#two').removeClass('text-left');
+            $('#two').addClass('text-right');
+            $('#one').removeClass('text-left');
+            $('#one').addClass('text-right');
+        }
+    })
+  </script>
+
+{% include 'need_a_help_app/stars_js.html' %}
+</body>
 {% endblock %}
