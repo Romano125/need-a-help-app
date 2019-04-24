@@ -46,7 +46,7 @@
 
 {% block content %}
    <div class="row">
-    <div class="col-sm-8">
+    <div class="col-9">
       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
         <li class="nav-item">
           <a class="nav-link hire" id="pills-list-tab" href="{% url 'done_user' user.id %}" role="tab" aria-controls="pills-list" aria-selected="true">Done list {% if done_job %} ({{ done_job }}) {% endif %}</a>
@@ -56,8 +56,9 @@
         </li>
       </ul>
     </div>
-    <div class="col-sm-4" align="right">
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
+    <div class="col-3" align="right">
+        <button type="button" class="btn btn-dark d-none d-md-block d-lg-block" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
+        <button type="button" class="btn btn-md icons-active d-block d-md-none d-lg-none rounded-circle" data-toggle="modal" data-target="#filter"><i class="fas fa-filter active"></i></button>
     </div>
    </div>
    <hr width="100%">
@@ -91,7 +92,7 @@
               </article>
            {% endfor %}
        {% else %}
-        <h3 class="text-secondary text-muted" align="center">No results</h3>
+        <h3 class="text-secondary text-muted pb-3" align="center">No results</h3>
        {% endif %}
 
         <div class="container" align="center">

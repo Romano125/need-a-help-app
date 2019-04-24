@@ -57,16 +57,13 @@
         </li>
       </ul>
     </div>
-    <div class="col-sm-4" align="right">
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
-    </div>
    </div>
    <hr width="100%">
     <div class="tab-content" id="pills-tabContent">
       <div class="tab-pane fade show active" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
         {% if hir %}
            {% for i in hir %}
-              <article class="media content-section">
+              <article class="media content-section d-none d-md-block d-lg-block">
                 <div class="media-body">
                   <div class="row">
                       <div class="col-sm-3">
@@ -107,7 +104,11 @@
                               <small class="text-secondary text-muted">Accepted: <span style="color: green">{{ i.accepted }}</span></small><br>
                           {% endif %}
                           <small class="text-secondary text-muted">Date requested: {{ i.date }}</small><br>
-                          <small class="text-secondary text-muted">Price: 100000 €</small><br>
+                          {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                <small class="text-secondary text-muted">Price: {{ j.profile.costs }} €</small><br>
+                              {% endif %}
+                          {% endfor %}
                       </div>
                       <div class="col-sm-2 pt-5" align="right">
                           {% if i.status == 'pending' %}
@@ -159,9 +160,108 @@
                   </div>
                 </div>
               </article>
+
+              <!-- mali ekran -->
+              <article class="media content-section d-block d-md-none d-lg-none">
+                <div class="media-body">
+                  <div class="row">
+                      <div class="col-sm-3 text-center">
+                          {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                  <a href="{% url 'info' j.id %}">
+                                      <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
+                                  </a>
+                                  <div class="row">
+                                      <div class="col-sm-12" align="center">
+                                        <div class="{{ j }}{{ i.profile.id }}">
+                                          <div class="star-outer">
+                                            <div class="star-inner"></div>
+                                          </div>
+                                          <span class="number-rating text-secondary"></span>
+                                        </div>
+                                      </div>
+                                  </div>
+                              {% endif %}
+                          {% endfor %}
+                      </div>
+                      <div class="col-sm-7 text-center">
+                          {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                  <h1>{{ j.first_name }} {{ j.last_name }}</h1>
+                                  <input type="hidden" class="hid" name="name" id="name{{ j }}{{ i.profile.id }}" value="{{ j }}{{ i.profile.id }}">
+                                  <input type="hidden" class="hid" name="rate" id="rate{{ j }}" value="{{ j.profile.rating }}">
+                              {% endif %}
+                          {% endfor %}
+                          {% if i.status == 'pending' %}
+                              <small class="text-secondary text-muted">Status: <span style="color: red">{{ i.status }}</span></small><br>
+                          {% else %}
+                              <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
+                          {% endif %}
+                          {% if not i.accepted %}
+                              <small class="text-secondary text-muted">Accepted: <span style="color: red">{{ i.accepted }}</span></small><br>
+                          {% else %}
+                              <small class="text-secondary text-muted">Accepted: <span style="color: green">{{ i.accepted }}</span></small><br>
+                          {% endif %}
+                          <small class="text-secondary text-muted">Date requested: {{ i.date }}</small><br>
+                          {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                <small class="text-secondary text-muted">Price: {{ j.profile.costs }} €</small><br>
+                              {% endif %}
+                          {% endfor %}
+                      </div>
+                      <div class="col-sm-2 pt-2 text-center">
+                          {% if i.status == 'pending' %}
+                              <a href="#" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="far fa-check-square"></i></a>
+                              <a href="{% url 'client_repairman_job_delete' user.id i.repairman user.id 'l' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                          {% else %}
+                            {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                <button type="button" class="btn btn-outline-success btn-sm mt-1 mb-1" data-toggle="modal" data-target="#done_job{{ j.profile.id }}"><i class="far fa-check-square"></i></button>
+                              {% endif %}
+                              <!-- Modal done -->
+                                <div class="modal fade" id="done_job{{ i.profile.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle"><strong>Rate</strong></h5>
+                                        <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body text-center">
+                                        <form id="rate_form" enctype="multipart/form-data">
+                                          {% csrf_token %}
+                                          <input type="hidden" name="id" id="user" value="{{ i.repairman }}">
+                                          <input type="hidden" name="job" id="job" value="1">
+                                          <div class="rating">
+
+                                              <h4>:My rating </h4>
+                                              <span class="rate" type="radio" name="star" id="r5"><input type="hidden" name="txt5" id="r55" value="5"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r4"><input type="hidden" name="txt4" id="r44" value="4"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r3"><input type="hidden" name="txt3" id="r33" value="3"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r2"><input type="hidden" name="txt2" id="r22" value="2"><i class="fas fa-star"></i></span>
+                                              <span class="rate" type="radio" name="star" id="r1"><input type="hidden" name="txt1" id="r11" value="1"><i class="fas fa-star"></i></span>
+                                          </div>
+                                            <h4>Leave feedback: </h4>
+                                            <textarea name="feedback" id="feed" cols="50" rows="8"></textarea>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="submit" id="btn-submit" class="btn btn-success">Done</button>
+                                          </div>
+                                        </form>
+                                    </div>
+                                  </div>
+                                </div>
+                            {% endfor %}
+                            <a href="#" class="btn btn-danger btn-sm mt-1 mb-1 disabled"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                          {% endif %}
+                      </div>
+                  </div>
+                </div>
+              </article>
            {% endfor %}
        {% else %}
-        <h3 class="text-secondary text-muted" align="center">No results</h3>
+        <h3 class="text-secondary text-muted pb-3" align="center">No results</h3>
        {% endif %}
 
         <div class="container" align="center">
@@ -190,31 +290,6 @@
 
                   {% endif %}
               </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Filter By</strong></h5>
-            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4>Price: min - max</h4>
-            <div class="rating">
-                <h4>:Popularity </h4><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-            </div>
-            <h4>Knowledges: None</h4>
-            <h4>Address: -</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-dark">Done</button>
           </div>
         </div>
       </div>

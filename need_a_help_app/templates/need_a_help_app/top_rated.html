@@ -118,9 +118,9 @@
     <hr width="15%" align="left">
     {% for p in prof %}
         {% if p.user == user %}
-            <article class="media content-section bigger">
+            <article class="media content-section bigger d-none d-md-block d-lg-block">
         {% else %}
-            <article class="media content-section">
+            <article class="media content-section d-none d-md-block d-lg-block">
         {% endif %}
             <div class="media-body">
                 <div class="row">
@@ -167,6 +167,68 @@
                         </div>
                     {% else %}
                         <div class="col-sm-4 pt-5" align="right">
+                            {% if p.user == user %}
+                                <h3 style="color: #f8ce0b; font-style: italic;">MY RANK</h3>
+                            {% endif %}
+                            <a href="{% url 'modal_info' p.user.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+
+        <!-- mali ekran -->
+
+        {% if p.user == user %}
+            <article class="media content-section bigger d-block d-md-none d-lg-none">
+        {% else %}
+            <article class="media content-section d-block d-md-none d-lg-none">
+        {% endif %}
+            <div class="media-body">
+                <div class="row">
+                    <div class="col-sm-3 text-center">
+                        <span class="badge badge-popularity">{{ forloop.counter }}.</span>
+                        {% if forloop.counter == 1 %}
+                            <i class="fas fa-crown gold"></i>
+                        {% elif forloop.counter == 2 %}
+                            <i class="fas fa-crown silver"></i>
+                        {% elif forloop.counter == 3 %}
+                            <i class="fas fa-crown bronce"></i>
+                        {% endif %}
+                        <a href="{% url 'modal_info' p.user.id %}">
+                            <img class="rounded-circle account-img" src="{{ p.photo.url }}">
+                        </a>
+                        <div class="row">
+                            <div class="col-sm-12" align="center">
+                              <div class="{{ p.user }}">
+                                <div class="star-outer">
+                                  <div class="star-inner"></div>
+                                </div>
+                                <span class="number-rating text-secondary"></span>
+                              </div>
+                            </div>
+                        </div>
+                        <input type="hidden" class="hid" name="name" id="name{{ p.user }}" value="{{ p.user }}">
+                        <input type="hidden" class="hid" name="rate" id="rate{{ p.user.profile.rating }}" value="{{ p.user.profile.rating }}">
+                    </div>
+                    <div class="col-sm-5 pt-4 text-center">
+                        <h1>{{ p.user.first_name }} {{ p.user.last_name }}</h1>
+                        <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
+                        <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
+                        <small class="text-secondary text-muted">Being hired: {{ p.hired }}</small><br>
+                        <small class="text-secondary text-muted">Badges</small><br>
+                    </div>
+                    {% if user.profile.role == 'client' %}
+                        <div class="col-sm-4 pt-3 text-center">
+                            {% if p.user in f_hired %}
+                                <a href="{% url 'hire_repairman' user.id p.user.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
+                            {% else %}
+                                <a href="{% url 'hire_repairman' user.id p.user.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                            {% endif %}
+                            <a href="{% url 'info' p.user.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
+                        </div>
+                    {% else %}
+                        <div class="col-sm-4 pt-3" align="right">
                             {% if p.user == user %}
                                 <h3 style="color: #f8ce0b; font-style: italic;">MY RANK</h3>
                             {% endif %}

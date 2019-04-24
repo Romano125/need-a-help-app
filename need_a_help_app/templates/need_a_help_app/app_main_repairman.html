@@ -68,7 +68,7 @@
     <hr width="100%">
     {% if req %}
         {% for r in req %}
-            <article class="media content-section">
+            <article class="media content-section d-none d-md-block d-lg-block">
                 <div class="media-body">
                     <div class="row">
                         <div class="col-sm-3">
@@ -105,9 +105,48 @@
                     </div>
                 </div>
             </article>
+
+            <!-- mali ekran -->
+            <article class="media content-section d-block d-md-none d-lg-none">
+                <div class="media-body">
+                    <div class="row">
+                        <div class="col-sm-3 text-center">
+                            <a href="{% url 'request_detail' r.id %}">
+                                <img class="rounded-circle account-img" src="{{ r.photo.url }}">
+                            </a>
+                        </div>
+                        <div class="col-sm-7 text-center">
+                            <a class="mr-2" href="{% url 'info' r.user.id %}">{{ r.user }}</a>
+                            <small class="text-muted">{{ r.date|date:'F d, Y H:i' }}</small>&nbsp
+                            {% for s in seen_r %}
+                                {% if s.request.id == r.id and s.seen == False %}
+                                    <span class="badge badge-info">New</span>
+                                {% endif %}
+                            {% endfor %}
+                            <hr width="100%">
+                            <h1>{{ r.job_title }}</h1>
+                            <small class="text-secondary text-muted">Required knowladges: {{ r.required_knowledges }}</small><br>
+                            <small class="text-secondary text-muted">Price: {{ r.price }} €</small><br>
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <small class="text-secondary text-muted">Address: {{ r.address }}</small><br>
+                                </div>
+                                <div class="col-sm-5">
+                                    {% resolve dist r.id as value %}
+                                    <small class="text-secondary text-muted distance"><i class="fas fa-map-marker-alt" style="color: red"></i>{{ value }}</small><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 pt-3" align="center">
+                            <a href="{% url 'repairman_apply' user.id r.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                            <a href="{% url 'request_detail' r.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </article>
         {% endfor %}
     {% else %}
-        <h3 class="text-secondary text-muted" align="center">No results</h3>
+        <h3 class="text-secondary text-muted pb-3" align="center">No results</h3>
     {% endif %}
 
     <div class="container" align="center">

@@ -53,7 +53,7 @@
             {% if us.user == user.id %}
                 {% for rep in users %}
                     {% if rep.id == us.repairman %}
-                        <article class="media content-section">
+                        <article class="media content-section d-none d-md-block d-lg-block">
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -79,7 +79,7 @@
                                         <small class="text-secondary text-muted">Cost: 155</small><br>
                                         <div class="row">
                                             <div class="col-sm-7">
-                                                <small class="text-secondary text-muted">Address: {{ p.address }}</small><br>
+                                                <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>
                                             </div>
                                             <div class="col-sm-5">
                                                 {% resolve dist rep.id as value %}
@@ -98,12 +98,59 @@
                                 </div>
                             </div>
                         </article>
+
+                        <!-- mali ekran -->
+                        <article class="media content-section d-block d-md-none d-lg-none">
+                            <div class="media-body">
+                                <div class="row">
+                                    <div class="col-sm-3 text-center">
+                                        <a href="{% url 'info' rep.id %}">
+                                            <img class="rounded-circle account-img" src="{{ rep.profile.photo.url }}">
+                                        </a>
+                                        <div class="row">
+                                            <div class="col-sm-12" align="center">
+                                              <div class="{{ rep.username }}">
+                                                <div class="star-outer">
+                                                  <div class="star-inner"></div>
+                                                </div>
+                                                <span class="number-rating text-secondary"></span>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" class="hid" name="name" id="name{{ rep.username }}" value="{{ rep.username }}">
+                                        <input type="hidden" class="hid" name="rate" id="rate{{ rep.profile.rating }}" value="{{ rep.profile.rating }}">
+                                    </div>
+                                    <div class="col-sm-5 text-center">
+                                        <h1>{{ rep.first_name }} {{ rep.last_name }}</h1>
+                                        <small class="text-secondary text-muted">Profession: {{ rep.profile.profession }}</small><br>
+                                        <small class="text-secondary text-muted">Cost: 155</small><br>
+                                        <div class="row">
+                                            <div class="col-sm-7">
+                                                <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                {% resolve dist rep.id as value %}
+                                                <small class="text-secondary text-muted distance"><i class="fas fa-map-marker-alt" style="color: red"></i>{{ value }}</small><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 pt-2 text-center">
+                                        {% if rep in f_hired %}
+                                            <a href="{% url 'hire_repairman' user.id rep.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1 disabled"><i class="fas fa-handshake"></i></a>
+                                        {% else %}
+                                            <a href="{% url 'hire_repairman' user.id rep.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="fas fa-handshake"></i></a>
+                                        {% endif %}
+                                        <a href="{% url 'info' rep.id %}" class="btn btn-outline-info btn-sm mt-1 mb-1"><i class="fas fa-info-circle"></i>&nbsp Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
                     {% endif %}
                 {% endfor %}
             {% endif %}
        {% endfor %}
    {% else %}
-    <h3 class="text-secondary text-muted" align="center">No results</h3>
+    <h3 class="text-secondary text-muted pb-3" align="center">No results</h3>
    {% endif %}
 
     <div class="container" align="center">

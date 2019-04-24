@@ -237,6 +237,7 @@ header.masthead .masthead-content .masthead-subheading {
 
 #page-content-wrapper {
   width: 100%;
+  height: 100%;
   position: static;
   padding: 0;
   height: 91.4vh;
@@ -355,13 +356,46 @@ header.masthead .masthead-content .masthead-subheading {
    cursor: pointer;
 }
 
-.badge-notify{
-   background: red;
-   position: relative;
-   color: white;
-   border-radius: 50%;
-   top: -20px;
-   left: -28px;
+@media (max-width: 480px) {
+
+  .badge-notify{
+     background: red;
+     position: relative;
+     color: white;
+     border-radius: 50%;
+     top: -55px;
+     left: 15px;
+  }
+
+  .badge-active{
+     background: green;
+     position: relative;
+     color: white;
+     border-radius: 50%;
+     top: -55px;
+     left: 20px;
+  }
+}
+
+@media (min-width: 767px) {
+
+  .badge-notify{
+     background: red;
+     position: relative;
+     color: white;
+     border-radius: 50%;
+     top: -20px;
+     left: -28px;
+  }
+
+  .badge-active{
+     background: green;
+     position: relative;
+     color: white;
+     border-radius: 50%;
+     top: -20px;
+     left: -28px;
+  }
 }
 
 .badge-notify-bell{
@@ -401,15 +435,6 @@ header.masthead .masthead-content .masthead-subheading {
    border-radius: 50%;
    top: -2px;
    font-size: xx-small;
-}
-
-.badge-active{
-   background: green;
-   position: relative;
-   color: white;
-   border-radius: 50%;
-   top: -20px;
-   left: -28px;
 }
 
 .badge-popularity{
@@ -1070,15 +1095,75 @@ input.invalid {
 
 /* Icons in base */
 
-.icons {
-  transition: background 0.2s, transform 0.2s;
-  cursor: pointer;
+.rated, .req, .hir, .done, .active {
+  color: white;
 }
 
-.icons:hover {
+.icons-req {
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  background: #007bff;
+  background: linear-gradient(to right, #0062e6, #33aeff);
+}
+
+.icons-hir {
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  background: #ffcc00;
+  background: linear-gradient(to right, #ffcc00, #ffe066);
+}
+
+.icons-rate {
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  background: #e60000;
+  background: linear-gradient(to left, #ff1a1a, #ff4d4d);
+}
+
+.icons-done {
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  background: #47d147;
+  background: linear-gradient(to right, #2eb82e, #85e085);
+}
+
+.icons-active {
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  background: #1a1a1a;
+  background: linear-gradient(to right, #1a1a1a, #595959);
+}
+
+
+.icons-hir:hover, .icons-req:hover, .icons-rate:hover, .icons-done:hover, .icons-active:hover {
   transform: scale(1.2);
   cursor: pointer;
 }
+
+.icons-req:active  {
+  background: #007bff;
+}
+
+.icons-done:active  {
+  background: #47d147;
+  outline: #47d147;
+}
+
+.icons-rate:active  {
+  background: #e60000;
+  outline: #e60000;
+}
+
+.icons-hir:active  {
+  background: #ffcc00;
+  border-color: #ffcc00;
+}
+
+.icons-active:active  {
+  background: #1a1a1a;
+  outline: #595959;
+}
+
 
 /* chat style */
 

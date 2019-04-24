@@ -56,9 +56,6 @@
         </li>
       </ul>
     </div>
-    <div class="col-sm-4" align="right">
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#filter"><i class="fas fa-filter"></i>&nbsp Filter</button>
-    </div>
    </div>
    <hr width="100%">
     <div class="tab-content" id="pills-tabContent">
@@ -113,7 +110,7 @@
               </article>
            {% endfor %}
        {% else %}
-        <h3 class="text-secondary text-muted" align="center">No results</h3>
+        <h3 class="text-secondary text-muted pb-3" align="center">No results</h3>
        {% endif %}
 
         <div class="container" align="center">
@@ -142,31 +139,6 @@
 
                   {% endif %}
               </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle"><strong>Filter By</strong></h5>
-            <button type="button" class="close" style="color: red" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4>Price: min - max</h4>
-            <div class="rating">
-                <h4>:Popularity </h4><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-            </div>
-            <h4>Knowledges: None</h4>
-            <h4>Address: -</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-dark">Done</button>
           </div>
         </div>
       </div>

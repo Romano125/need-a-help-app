@@ -213,16 +213,16 @@
                 <div class="container p-4">
                     <div class="row" align="center">
                         <div class="col-3 col-sm-3">
-                            <a href="{% url 'top_rated' %} " class="rounded-circle btn btn-danger icons"><i class="fas fa-medal fa-2x"></i></a>
+                            <a href="{% url 'top_rated' %} " class="rounded-circle btn btn-md icons-rate"><i class="fas fa-medal fa-2x rated"></i></a>
                         </div>
                         <div class="col-3 col-sm-3">
-                            <a href="{% url 'requests_user' user.id %}" class="rounded-circle btn btn-info icons"><i class="fas fa-clipboard-list fa-2x"></i></a>
+                            <a href="{% url 'requests_user' user.id %}" class="rounded-circle btn btn-md icons-req"><i class="fas fa-clipboard-list fa-2x req"></i></a>
                         </div>
                         <div class="col-3 col-sm-3 pl-0">
-                            <a href="{% url 'hired_user' user.id %}" class="rounded-circle btn btn-warning icons"><i class="fas fa-handshake fa-2x" style="color: white"></i></a>
+                            <a href="{% url 'hired_user' user.id %}" class="rounded-circle btn btn-md icons-hir"><i class="fas fa-handshake fa-2x hir" style="color: white"></i></a>
                         </div>
                         <div class="col-3 col-sm-3 pl-0">
-                            <a href="{% url 'done_user' user.id %}" class="rounded-circle btn btn-success icons"><i class="far fa-check-circle fa-2x"></i></a>
+                            <a href="{% url 'done_user' user.id %}" class="rounded-circle btn btn-md icons-done"><i class="far fa-check-circle fa-2x done"></i></a>
                         </div>
                     </div>
                     <div class="row" align="center">
@@ -280,27 +280,27 @@
                 <div class="container p-4">
                     <div class="row" align="center">
                         <div class="col-3 col-sm-3">
-                            <a href="{% url 'top_rated' %}" class="rounded-circle btn btn-warning icons"><i class="fas fa-star fa-2x" style="color: white"></i></a>
+                            <a href="{% url 'top_rated' %}" class="rounded-circle btn btn-md icons-hir"><i class="fas fa-star fa-2x" style="color: white"></i></a>
                         </div>
                         <div class="col-3 col-sm-3">
-                              <a href="{% url 'requests_repairman' user.id %}" class="rounded-circle btn btn-info icons">
-                                  <i class="fas fa-clipboard-list fa-2x"></i>
+                              <a href="{% url 'requests_repairman' user.id %}" class="rounded-circle btn btn-md icons-req">
+                                  <i class="fas fa-clipboard-list fa-2x req"></i>
                               </a>
                               {% block count %}{% endblock %}
                         </div>
                         <div class="col-3 col-sm-3">
-                            <a href="{% url 'active_repairman' user.id %}" class="rounded-circle btn btn-dark icons"><i class="fas fa-handshake fa-2x"></i></a>
+                            <a href="{% url 'active_repairman' user.id %}" class="rounded-circle btn btn-md icons-active"><i class="fas fa-handshake fa-2x req"></i></a>
                             {% block active %}{% endblock %}
                         </div>
                         <div class="col-3 col-sm-3">
-                            <a href="{% url 'done_repairman' user.id %}" class="rounded-circle btn btn-success icons"><i class="far fa-check-circle fa-2x"></i></a>
+                            <a href="{% url 'done_repairman' user.id %}" class="rounded-circle btn btn-md icons-done"><i class="far fa-check-circle fa-2x done"></i></a>
                         </div>
                     </div>
                     <div class="row" align="center">
                         <div class="col-3 col-sm-3 pl-0 pr-0">
                             <p>Popularity</p>
                         </div>
-                        <div class="col-3 col-sm-3 pl-0">
+                        <div class="col-3 col-sm-3">
                             <p>Requests</p>
                         </div>
                         <div class="col-3 col-sm-3 pl-0 pr-0">
@@ -361,7 +361,6 @@
               </div>
             </main>
             {% endblock %}
-
           </div>
           <!-- end content-wrapper-->
     </div>

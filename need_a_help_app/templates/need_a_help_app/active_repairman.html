@@ -81,7 +81,7 @@
         <div class="tab-pane fade show active" id="pills-job" role="tabpanel" aria-labelledby="pills-job-tab">
             {% if act_rep %}
                {% for i in act_rep %}
-                  <article class="media content-section">
+                  <article class="media content-section d-none d-md-block d-lg-block">
                     <div class="media-body">
                       <div class="row">
                           <div class="col-sm-3">
@@ -114,9 +114,45 @@
                       </div>
                     </div>
                   </article>
+
+                  <!-- mali ekran -->
+
+                  <article class="media content-section d-block d-md-none d-lg-none">
+                    <div class="media-body">
+                      <div class="row">
+                          <div class="col-sm-3 text-center">
+                              {% for j in us %}
+                                  {% if i.user == j.id %}
+                                      <a href="{% url 'info' j.id %}">
+                                          <img class="rounded-circle account-img" src="{{ j.profile.photo.url }}">
+                                      </a>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+                          <div class="col-sm-7 text-center">
+                              {% for j in us %}
+                                  {% if i.user == j.id %}
+                                      <a class="mr-2" href="{% url 'info' j.id %}">{{ j }}</a>
+                                  {% endif %}
+                              {% endfor %}
+                              <small class="text-muted">{{ i.date|date:'F d, Y H:i' }}</small>&nbsp
+                              <hr width="100%">
+                              <h4 class="text-secondary">{{ i.request_message }}</h4><br>
+                          </div>
+                          <div class="col-sm-2 pt-3" align="center">
+                              {% for j in us %}
+                                  {% if i.user == j.id %}
+                                      <a href="{% url 'job_done' j.id i.repairman.id %}" class="btn btn-outline-success btn-sm mt-1 mb-1"><i class="far fa-check-square"></i></a>
+                                      <a href="{% url 'client_repairman_job_delete' j.id i.repairman.id user.id 'act' %}" class="btn btn-danger btn-sm mt-1 mb-1"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+                      </div>
+                    </div>
+                  </article>
                {% endfor %}
            {% else %}
-            <h3 class="text-secondary text-muted" align="center">No results</h3>
+            <h3 class="text-secondary text-muted pb-3" align="center">No results</h3>
            {% endif %}
 
           <div class="container" align="center">
