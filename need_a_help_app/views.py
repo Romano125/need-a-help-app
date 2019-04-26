@@ -32,6 +32,7 @@ from user.forms import RequestsForm
 import json
 import urllib.request, urllib.parse
 from need_a_help import settings
+from .filters import MostWantedFilter, TopRatedFilter
 
 
 api_key = settings.GOOGLE_MAPS_API_KEY
@@ -106,6 +107,7 @@ class AppMainClientView(LoginRequiredMixin, ListView):
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
         context_data['dist'] = distance
+        context_data['filter'] = MostWantedFilter(self.request.GET, queryset=self.get_queryset())
 
         return context_data
 
@@ -150,6 +152,7 @@ class AppMainRepairmanView(LoginRequiredMixin, ListView):
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
         context_data['dist'] = distance
+
 
         return context_data
 
@@ -1562,6 +1565,7 @@ class TopRatedView(LoginRequiredMixin, ListView):
         context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
+        context_data['filter'] = TopRatedFilter(self.request.GET, queryset = self.get_queryset())
 
         return context_data
 

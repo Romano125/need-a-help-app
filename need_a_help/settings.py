@@ -26,6 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
+# DEBUG = 'True'
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
+    'bootstrapform',
 ]
 
 MIDDLEWARE = [
