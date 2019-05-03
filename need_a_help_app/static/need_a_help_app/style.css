@@ -508,15 +508,39 @@ header.masthead .masthead-content .masthead-subheading {
 }
 
 .popover-body {
-  height: 115px;
+  height: 215px;
+  width: 450px;
   overflow-y: auto;
   margin: auto;
+}
+
+.popover {
+  max-width: 460px;
+  max-height: 260px;
+}
+
+.popover-body::-webkit-scrollbar {
+  width: 8px;
+  background: #cccccc;
+}
+
+.popover-body::-webkit-scrollbar-thumb {
+  background-color: #b3b3b3;
 }
 
 /*modal scroll*/
 .modal-body {
   height: 317px;
   overflow-y: auto;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+  background: #cccccc;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: #b3b3b3;
 }
 
 /*messages*/
