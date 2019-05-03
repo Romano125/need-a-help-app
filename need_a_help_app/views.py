@@ -1126,6 +1126,14 @@ def repairman_apply(request, us_id, req_id):
     if not app:
         app_save = Appliccation(repairman=us, request=req)
         app_save.save()
+
+        notif = f'<div class="col-sm-2 col-md-2 col-lg-2 align-items-center justify-content" style="margin: auto"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + f'<img class="rounded-circle navbar-img" src="{ us.profile.photo.url }">'
+        notif += '</a></div>' + f'<div class="col-sm-7 col-md-7 col-lg-7"><a href="{ reverse("info", kwargs={"pk": us.id}) }">' + us.username + f'</a> applied for a job <i>{ req.job_title }</i>!'
+        notif += f'<a href="{ reverse("messages", kwargs={"username": us}) }"><i class="messagge nav-item nav-link fas fa-envelope mt-1" style="color: red"></i></a></div>'
+        url = f'{ reverse("request_detail", kwargs={"pk": req.id}) }'
+        cli_not = ClientNotifications(client=req.user, notification=notif, url_to_go=url)
+        cli_not.save()
+
         messages.success(request, f'You\'ve successfuly applied for a job { req.job_title }!')
         return redirect('request_detail', pk=req.id)
     else:
