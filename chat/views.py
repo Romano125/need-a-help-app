@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormMixin
 from django.db.models import Q
+from datetime import datetime
 
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.models import User
@@ -20,9 +21,10 @@ class InboxView(LoginRequiredMixin, ListView):
     #paginate_by = 3
 
     def get_queryset(self):
-        # return Thread.objects.by_user(self.request.user).order_by('-timestamp') - točno
-        # return Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-timestamp').distinct()
-        return ChatMessage.objects.filter(Q(thread__first=self.request.user) | Q(thread__second=self.request.user)).order_by('-timestamp').distinct()
+        #return Thread.objects.by_user(self.request.user).order_by('-timestamp') 
+        return Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-updated')
+        
+        #return ChatMessage.objects.filter(Q(thread__first=self.request.user) | Q(thread__second=self.request.user)).order_by('-timestamp').distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -98,4 +100,10 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         user = self.request.user
         message = form.cleaned_data.get("message")
         ChatMessage.objects.create(user=user, thread=thread, message=message)
+        thr = Thread.objects.filter(Q(first=self.request.user) | Q(second=self.request.user)).order_by('-updated')[0]
+        thr.latestMessage = message
+       # thr.timestamp = datetime.now()
+        thr.save()
         return super().form_valid(form)
+#boto3 1.5.0
+#django storages 1.6.3
