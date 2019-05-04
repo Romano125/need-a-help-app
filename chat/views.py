@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 
 from .forms import ComposeForm
 from .models import Thread, ChatMessage
+from  user.models import ClientMessage
 from user.models import ClientNotifications, RepairmanNotifications
 
 
@@ -36,6 +37,8 @@ class InboxView(LoginRequiredMixin, ListView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         # users =  ChatMessage.objects.by_user(us).order_by('-timestamp').distinct()
 
@@ -44,6 +47,8 @@ class InboxView(LoginRequiredMixin, ListView):
         context['not_rep'] = not_rep
         context['not_cli'] = not_cli
         context['th'] = thrd
+        context['mess_cli'] = mess_cli
+        context['mess_cli_c'] = mess_cli_c
         # context['users'] = users
 
         return context
@@ -77,11 +82,13 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+
         context['form'] = self.get_form()
         context['not_r'] = not_r
         context['not_c'] = not_c
         context['not_rep'] = not_rep
         context['not_cli'] = not_cli
+
 
         return context
 
@@ -99,11 +106,18 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         thread = self.get_object()
         user = self.request.user
         message = form.cleaned_data.get("message")
-        ChatMessage.objects.create(user=user, thread=thread, message=message)
+        mess = ChatMessage.objects.create(user=user, thread=thread, message=message)
         thr = Thread.objects.filter(Q(first=self.request.user) | Q(second=self.request.user)).order_by('-updated')[0]
         thr.latestMessage = message
-       # thr.timestamp = datetime.now()
-        thr.save()
+        thr.save()        
+        if (thread.first == user):
+            not_usr = thread.second
+        else :
+            not_usr = thread.first
+
+        url = f'{ reverse("messages", kwargs={"username": user}) }'
+        ClientMessage.objects.create(client= not_usr, message = mess, url_to_go = url)
+
         return super().form_valid(form)
 #boto3 1.5.0
 #django storages 1.6.3

@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib.auth.models import User
+from chat.models import ChatMessage
 from django.conf import settings
 from PIL import Image
 
@@ -82,6 +83,17 @@ class RepairmanNotifications(models.Model):
 
     def __str__(self):
         return f'{ self.repairman } notification'
+
+class ClientMessage(models.Model):
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.ForeignKey(ChatMessage, on_delete=models.CASCADE)
+    url_to_go = models.CharField(max_length=200, default='-')
+    date = models.DateTimeField(auto_now_add=True)
+    seen = models.BooleanField(default=False)
+    remove = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{ self.client } message'
 
 
 class UserFavourite(models.Model):
