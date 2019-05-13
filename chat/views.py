@@ -117,7 +117,12 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
             not_usr = thread.first
 
         url = f'{ reverse("messages", kwargs={"username": user}) }'
-        ClientMessage.objects.create(client= not_usr, message = mess, url_to_go = url)
+        noti = ClientMessage.objects.filter(client=not_usr,seen=False, sender=user)
+        for n in noti :
+            n.seen = True
+            n.save()  
+
+        ClientMessage.objects.create(client= not_usr, message = mess, url_to_go = url, sender=user)
 
         return super().form_valid(form)
 #boto3 1.5.0

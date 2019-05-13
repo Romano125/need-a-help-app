@@ -85,7 +85,8 @@ class RepairmanNotifications(models.Model):
         return f'{ self.repairman } notification'
 
 class ClientMessage(models.Model):
-    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciever')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender', default=False)
     message = models.ForeignKey(ChatMessage, on_delete=models.CASCADE)
     url_to_go = models.CharField(max_length=200, default='-')
     date = models.DateTimeField(auto_now_add=True)
