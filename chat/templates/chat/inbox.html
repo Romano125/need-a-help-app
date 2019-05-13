@@ -143,9 +143,9 @@
                     </div>
                      <div class="row">
                             {% if u.first == user %}
-                                 <small class="text-secondary text-muted">You : {{u.latestMessage}}</small>
+                                 <small class="text-secondary text-muted">{{u.latestMessage}}</small>
                             {% else %}
-                                 <small class="text-secondary text-muted">{{u.second}} : {{u.latestMessage}}</small>
+                                 <small class="text-secondary text-muted">{{u.latestMessage}}</small>
                             {% endif %}
                         </div>
                     <hr width=100%>

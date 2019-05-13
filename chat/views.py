@@ -107,7 +107,8 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         user = self.request.user
         message = form.cleaned_data.get("message")
         mess = ChatMessage.objects.create(user=user, thread=thread, message=message)
-        thr = Thread.objects.filter(Q(first=self.request.user) | Q(second=self.request.user)).order_by('-updated')[0]
+        #thr = Thread.objects.filter(Q(first=self.request.user) | Q(second=self.request.user)).order_by('-updated')[0]
+        thr = thread
         thr.latestMessage = message
         thr.save()        
         if (thread.first == user):
