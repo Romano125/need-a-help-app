@@ -77,6 +77,15 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         us = self.request.user
+
+        other_username = self.kwargs.get("username")
+        other_object = User.objects.filter(username=other_username)[0]
+        not_seen = ClientMessage.objects.filter(client=us,seen=False, sender=other_object)
+        
+        for m in not_seen:
+            m.seen = True
+            m.save()
+
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
@@ -91,6 +100,13 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
 
 
         return context
+
+    
+        
+        
+
+
+
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
