@@ -22,9 +22,9 @@ class InboxView(LoginRequiredMixin, ListView):
     #paginate_by = 3
 
     def get_queryset(self):
-        #return Thread.objects.by_user(self.request.user).order_by('-timestamp') 
+        #return Thread.objects.by_user(self.request.user).order_by('-timestamp')
         return Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-updated')
-        
+
         #return ChatMessage.objects.filter(Q(thread__first=self.request.user) | Q(thread__second=self.request.user)).order_by('-timestamp').distinct()
 
     def get_context_data(self, **kwargs):
@@ -81,7 +81,7 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         other_username = self.kwargs.get("username")
         other_object = User.objects.filter(username=other_username)[0]
         not_seen = ClientMessage.objects.filter(client=us,seen=False, sender=other_object)
-        
+
         for m in not_seen:
             m.seen = True
             m.save()
@@ -91,21 +91,16 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
 
+        thr = Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-updated')
 
         context['form'] = self.get_form()
         context['not_r'] = not_r
         context['not_c'] = not_c
         context['not_rep'] = not_rep
         context['not_cli'] = not_cli
-
+        context['inbox'] = thr
 
         return context
-
-    
-        
-        
-
-
 
 
     def post(self, request, *args, **kwargs):
@@ -126,7 +121,7 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         #thr = Thread.objects.filter(Q(first=self.request.user) | Q(second=self.request.user)).order_by('-updated')[0]
         thr = thread
         thr.latestMessage = message
-        thr.save()        
+        thr.save()
         if (thread.first == user):
             not_usr = thread.second
         else :
@@ -136,7 +131,7 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         noti = ClientMessage.objects.filter(client=not_usr,seen=False, sender=user)
         for n in noti :
             n.seen = True
-            n.save()  
+            n.save()
 
         ClientMessage.objects.create(client= not_usr, message = mess, url_to_go = url, sender=user)
 
