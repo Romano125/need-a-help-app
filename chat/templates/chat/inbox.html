@@ -86,10 +86,31 @@
 {% endblock %}
 
 {% block mess_client %}
-       
     {% if mess_cli %}
+         <i class="nav-item nav-link fas fa-envelope mt-1 popOver" data-title="Messages" data-content="
+            <div class='container'>
+                {% for n in mess_cli|slice:'5' %}
+                    <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
+                        <b> {{n.message.user.first_name}} {{n.message.user.last_name}} </b> - {{ n.message.message }}
+                        <div class='col-sm-3 col-md-3 col-lg-3'>
+                            <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
+                        </div>
+                    </div>
+                    <hr width=100%>
+                {% endfor %}
+                <div class='row'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                        <a href='{% url 'inbox' user.id %}'>Show all messages</a>
+                    </div>
+                </div>
+            </div>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click"></i>
+
+        {% if mess_cli_c %}
+            <span class="badge badge-notify-mess">{{mess_cli_c}}</span>
+        {% endif %}
     {% else %}
-        {{ block.super }}
+        <i class="nav-item nav-link fas fa-envelope mt-1 popOver" data-title="Notifications" data-content="
+            <h6 class='text-secondary text-muted' align='center'>No results</h6>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover"></i>
     {% endif %}
 {% endblock %}
 
@@ -124,7 +145,7 @@
                     {% else %}
                         <div class="row not_seen" onclick="location.href=&quot;{% url 'messages' u.first %}&quot;;">
                     {% endif %}
-                    
+
                     {% if u.first == user %}
                         <a href="{% url 'info' u.second.id %}"><img class="rounded-circle navbar-img" src="{{ u.second.profile.photo.url }}"></a>
                     {% else %}
@@ -133,7 +154,7 @@
 
                     {% if u.first == user %}
                         <a href="{% url 'info' u.second.id %}">{{ u.second.first_name }} {{ u.second.last_name }} </a>
-                        
+
                     {% else %}
                             <a href="{% url 'info' u.first.id %}">{{ u.first.first_name }} {{ u.first.last_name }}</a>
                     {% endif %}
@@ -159,7 +180,7 @@
                 <p class="lead">Looks like you have not yet contacted anyone</p>
                 <hr class="my-4">
                 <p>Once you are ready to negotiate, all your contacts will appear here</p>
-               
+
             </div>
 
         {% endif %}
