@@ -1129,7 +1129,7 @@ input.invalid {
 
 /* Icons in base */
 
-.rated, .req, .hir, .done, .active {
+.rated, .req, .hir, .done {
   color: white;
 }
 

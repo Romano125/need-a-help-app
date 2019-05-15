@@ -159,7 +159,7 @@
                     <h4>Description:</h4>
                     <div class="container-fluid">
                       <div class="row flex-nowrap">
-                        <div style="word-break: break-all;"><p>{{ object.job_description }}</p></div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 text-center" style="word-break: break-all;"><p>{{ object.job_description }}</p></div>
                       </div>
                     </div>
                     <h4 class="pt-4">Location:</h4>
@@ -194,7 +194,11 @@
                         <div class="row text-center">
                             <div class="col-xs-12 col-sm-12 col-md-12 ml-auto">
                               <h4><b>Required knowledges: </b></h4>
-                              <p>{{ object.required_knowledges }}</p><br>
+                              <div class="container-fluid">
+                                <div class="row flex-nowrap">
+                                  <div class="col-sm-12 col-md-12 col-lg-12 text-center" style="word-break: break-all;"><p>{{ object.required_knowledges }}</p></div>
+                                </div>
+                              </div>
                               <h4><b>Price: </b></h4>
                               <h1 class="btn rounded-circle" style="cursor: default;font-style: italic;background-color: #009933; color: white">{{ object.price }} €</h1><br>
                             </div>

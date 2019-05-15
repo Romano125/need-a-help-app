@@ -99,7 +99,11 @@
                               <small class="text-secondary text-muted">Accepted: <span style="color: green">{{ i.accepted }}</span></small><br>
                           {% endif %}
                           <small class="text-secondary text-muted">Date requested: {{ i.date }}</small><br>
-                          <small class="text-secondary text-muted">Price: 100000 €</small><br>
+                          {% for j in us %}
+                              {% if j.id == i.repairman %}
+                                  <small class="text-secondary text-muted">Price: {{ j.profile.costs }} €</small><br>
+                              {% endif %}
+                          {% endfor %}
                       </div>
                   </div>
                 </div>

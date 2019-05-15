@@ -225,7 +225,8 @@ class RepairmanUpdateForm(forms.ModelForm):
             'costs',
             'profession',
             'knowledges',
-            'photo'
+            'user_description',
+            'photo',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -248,6 +249,10 @@ class RepairmanUpdateForm(forms.ModelForm):
             'placeholder': 'Your extra knowledges',
             'required': True,
         })
+        self.fields['user_description'].widget.attrs.update({
+            'placeholder': 'Describe yourself, expirience, past jobs, etc.',
+            'required': True,
+        })
 
 
 class ClientUpdateForm(forms.ModelForm):
@@ -258,7 +263,7 @@ class ClientUpdateForm(forms.ModelForm):
             'address',
             'birth_date',
             'phone_number',
-            'photo'
+            'photo',
         ]
 
     def __init__(self, *args, **kwargs):

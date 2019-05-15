@@ -55,6 +55,7 @@ class Profile(models.Model):
     rated = models.IntegerField(default=0)
     hired = models.IntegerField(default=0)
     num_hires = models.IntegerField(default=0)
+    user_description = models.TextField(max_length=10000)
     photo = models.ImageField(default='default_user.jpg', upload_to='profile_user')
 
     def __str__(self):
@@ -83,6 +84,7 @@ class RepairmanNotifications(models.Model):
 
     def __str__(self):
         return f'{ self.repairman } notification'
+
 
 class ClientMessage(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciever')
