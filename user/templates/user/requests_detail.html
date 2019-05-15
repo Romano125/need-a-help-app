@@ -157,7 +157,11 @@
                         {% endif %}
                     {% endblock %}
                     <h4>Description:</h4>
-                    <p>{{ object.job_description }}</p>
+                    <div class="container-fluid">
+                      <div class="row flex-nowrap">
+                        <div style="word-break: break-all;"><p>{{ object.job_description }}</p></div>
+                      </div>
+                    </div>
                     <h4 class="pt-4">Location:</h4>
                     <h2>{{ object.address }}</h2>
                     {% if user.profile.role != 'client' %}
