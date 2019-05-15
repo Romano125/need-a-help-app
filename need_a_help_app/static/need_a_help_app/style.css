@@ -621,6 +621,11 @@ header.masthead .masthead-content .masthead-subheading {
   .cont {
     padding: 0;
   }
+
+  .cont::-webkit-scrollbar {
+    width: 8px;
+    background: #cccccc;
+  }
 }
 
 @media (max-width: 767px) {
@@ -669,6 +674,11 @@ header.masthead .masthead-content .masthead-subheading {
   background-size: cover;
   overflow: auto;
   height: 100%;
+
+  .cont::-webkit-scrollbar {
+    width: 8px;
+    background: #cccccc;
+  }
 }
 
 .links {

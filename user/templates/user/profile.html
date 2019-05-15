@@ -124,5 +124,13 @@
       </form>
     </div>
 
+    <script type="text/javascript">
+        var els = document.getElementsByClassName('col-form-label');
+
+        for (var i = 0; i < els.length; i++) {
+            els[i].style.display = 'block';
+        }
+    </script>
+
 {% include 'need_a_help_app/autocomplete_maps_js.html' %}
 {% endblock %}
