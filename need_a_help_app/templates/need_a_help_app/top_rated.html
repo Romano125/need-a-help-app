@@ -147,7 +147,13 @@
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
                         <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
                         <small class="text-secondary text-muted">Being hired: {{ p.hired }}</small><br>
-                        <small class="text-secondary text-muted">Badges</small><br>
+                        <small class="text-secondary text-muted">
+                            <i class="fas fa-user-check tool1 {% if p.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>
+                            <i class="far fa-paper-plane tool1 {% if p.hired >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance - 25 times hired"></i>
+                            <i class="fas fa-user-ninja tool1 {% if p.hired >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja - 100 times hired"></i>
+                            <i class="far fa-star tool1 {% if p.hired >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Pro repairman - 250 times hired"></i>
+                            <i class="fas fa-award tool1 {% if p.hired >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master repairman - >500 times hired"></i>
+                        </small><br>
                     </div>
                     {% if user.profile.role == 'client' %}
                         <div class="col-sm-4 pt-5" align="right">
@@ -209,7 +215,13 @@
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
                         <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
                         <small class="text-secondary text-muted">Being hired: {{ p.hired }}</small><br>
-                        <small class="text-secondary text-muted">Badges</small><br>
+                        <small class="text-secondary text-muted">
+                            <i class="fas fa-user-check tool1 {% if p.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>
+                            <i class="far fa-paper-plane tool1 {% if p.hired >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance - 25 times hired"></i>
+                            <i class="fas fa-user-ninja tool1 {% if p.hired >= 100 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Ninja - 100 times hired"></i>
+                            <i class="far fa-star tool1 {% if p.hired >= 250 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Pro repairman - 250 times hired"></i>
+                            <i class="fas fa-award tool1 {% if p.hired >= 500 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Master repairman - >500 times hired"></i>
+                        </small><br>
                     </div>
                     {% if user.profile.role == 'client' %}
                         <div class="col-sm-4 pt-3 text-center">
