@@ -1248,7 +1248,11 @@ input.invalid {
 #frame{
   min-width: initial;
   max-width: initial;
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 7b9e95b07dd449969a3186139d01f947046739e8
 }
 @media screen and (max-width: 735px) {
   #frame #sidepanel {
