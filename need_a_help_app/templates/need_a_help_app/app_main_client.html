@@ -45,7 +45,7 @@
 {% block content_client %}
     <h2>Most wanted</h2>
     <hr width="100%">
-    {% for p in prof %}
+    {% for p in filter.qs %}
         <article class="media content-section d-none d-md-block d-lg-block">
             <div class="media-body">
                 <div class="row">
@@ -93,7 +93,7 @@
         </article>
     {% endfor %}
 
-    {% for p in prof %}
+    {% for p in filter.qs %}
         <article class="media content-section d-block d-md-none d-lg-none text-center">
             <div class="media-body">
                 <div class="row">

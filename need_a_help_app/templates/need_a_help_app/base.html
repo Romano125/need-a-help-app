@@ -109,7 +109,7 @@
                         <!-- blokovi za poruke ovisno o ulozi -->
 
                         {% block mess_not %}{% endblock %}
-                        
+
                       </div>
                     {% else %}
                       <div class="d-sm-block d-md-none">
@@ -126,7 +126,7 @@
                           <span class="nav-item nav-link">Welcome, {{ user.username }}
                             <img class="rounded-circle navbar-img popOver" data-title="Logged in as {{ user.profile.role }}" data-content="
                                 <a class='list-group-item sb' href='{% url 'info' user.id %}'><i class='fa fa-user fa-fw' aria-hidden='true'></i>&nbsp; My profile</a>
-                                <a class='list-group-item sb' href='{% url 'logout' %}'><i class='fas fa-power-off'></i>&nbsp Logout</a>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="click" src="{{ user.profile.photo.url }}">
+                                <a class='list-group-item sb' href='{% url 'logout' %}'><i class='fas fa-power-off'></i>&nbsp Logout</a>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="html" data-trigger="click" src="{{ user.profile.photo.url }}">
                           </span>
                           <!-- <a class="nav-item nav-link" href="{% url 'logout' %}"><i class="fas fa-power-off"></i>&nbsp Logout</a>-->
                       </div>
