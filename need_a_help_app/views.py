@@ -34,10 +34,10 @@ from django.views.generic import (
 )
 from user.forms import RequestsForm
 from need_a_help import settings
-from .filters import MostWantedFilter, TopRatedFilter
-from storages.backends.s3boto3 import S3Boto3Storage, SpooledTemporaryFile
+from .filters import MostWantedFilter, TopRatedFilter, FavouritesFilter, SearchFilter
+#from storages.backends.s3boto3 import S3Boto3Storage, SpooledTemporaryFile
 
-
+"""
 class CustomS3Boto3Storage(S3Boto3Storage):
 
     def _save_content(self, obj, content, parameters):
@@ -60,7 +60,7 @@ class CustomS3Boto3Storage(S3Boto3Storage):
         # Cleanup if this is fixed upstream our duplicate should always close
         if not content_autoclose.closed:
             content_autoclose.close()
-
+"""
 
 api_key = settings.GOOGLE_MAPS_API_KEY
 
@@ -426,6 +426,7 @@ def show_favs(request):
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
     mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
     mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
+    fil = FavouritesFilter(self.request.GET, queryset=self.get_queryset())
 
     origin = us.profile.address
     distance = {}
@@ -447,7 +448,8 @@ def show_favs(request):
         'not_cli': not_cli,
         'dist': distance,
         'mess_cli': mess_cli,
-        'mess_cli_c': mess_cli_c
+        'mess_cli_c': mess_cli_c,
+        'filter': fil
     }
 
     return render(request, 'need_a_help_app/favorites.html', context)
@@ -750,6 +752,7 @@ def search(request):
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
     mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
     mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
+    fil = SearchFilter(self.request.GET, queryset=self.get_queryset())
 
     origin = us.profile.address
     distance = {}
