@@ -150,8 +150,7 @@
             {% endif %}
         </div>
         <div id="bottom-bar">
-            <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-            <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+            
         </div>
     </div>
     <div class="content">
@@ -178,7 +177,7 @@
                             <p id ="text" >{{ chat.message }} </p>
                         </li>
                     {% endif %}
-                    <p {% if user != chat.user %} align = "left" {% else %} align = "right"{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p>
+                    <p {% if user != chat.user %} align = "left" {% else %} align = "right"{% endif %} style = "font-size: 10px; margin-bottom: 20px"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p>
                 {% endfor %}
             </ul>
         </div>
@@ -188,7 +187,7 @@
                     {% csrf_token %}
                     <input type = "hidden" id = "myUsername" value = '{{user.username}}'/>
                     {{form|crispy }}
-                    <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                    
                     <button type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </form>
             </div>

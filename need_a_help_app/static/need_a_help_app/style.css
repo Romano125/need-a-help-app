@@ -38,6 +38,11 @@ ul {
   margin-bottom: 20px;
 }
 
+.content{
+
+  padding-right: 20%;
+}
+
 .article-title {
   color: #444444;
 }
@@ -1209,12 +1214,12 @@ input.invalid {
 /* chat style */
 
 #frame {
-  width: 95%;
+  width: 100%;
   min-width: 360px;
   max-width: 1000px;
-  height: 92vh;
+  height: 100%;
   min-height: 300px;
-  max-height: 720px;
+  max-height: 100%;
   background: #E6EAEA;
 }
 @media screen and (max-width: 360px) {
@@ -1233,6 +1238,12 @@ input.invalid {
   color: #f5f5f5;
   overflow: hidden;
   position: relative;
+}
+
+#frame{
+  min-width: initial;
+  max-width: initial;
+  
 }
 @media screen and (max-width: 735px) {
   #frame #sidepanel {
@@ -1861,5 +1872,9 @@ input.invalid {
 }
 #frame .content .message-input .wrap button:focus {
   outline: none;
+}
+
+.message-input{
+  padding-right: 27%;
 }
 
