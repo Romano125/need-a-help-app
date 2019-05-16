@@ -90,6 +90,8 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         thr = Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-updated')
 
@@ -99,6 +101,8 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         context['not_rep'] = not_rep
         context['not_cli'] = not_cli
         context['inbox'] = thr
+        context['mess_cli'] = mess_cli
+        context['mess_cli_c'] = mess_cli_c
 
         return context
 

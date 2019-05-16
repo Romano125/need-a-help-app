@@ -139,7 +139,7 @@
                     <div class="col-sm-5 pl-5 pt-4">
                         <h1>{{ p.user.first_name }} {{ p.user.last_name }}</h1>
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
-                        <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
+                        <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ p.costs }} €</small><br>
                         <small class="text-secondary text-muted">Being hired: {{ p.hired }}</small><br>
                         <small class="text-secondary text-muted">
                             <i class="fas fa-user-check tool1 {% if p.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>
@@ -207,7 +207,7 @@
                     <div class="col-sm-5 pt-4 text-center">
                         <h1>{{ p.user.first_name }} {{ p.user.last_name }}</h1>
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
-                        <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
+                        <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ p.costs }} €</small><br>
                         <small class="text-secondary text-muted">Being hired: {{ p.hired }}</small><br>
                         <small class="text-secondary text-muted">
                             <i class="fas fa-user-check tool1 {% if p.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>

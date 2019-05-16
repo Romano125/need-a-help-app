@@ -57,20 +57,8 @@
     {% endif %}
 {% endblock %}
 
-{% block mess_repairman %}
-    {% if mess_rep %}
-        <span class="badge badge-notify-mess">{{ mess_rep }}</span>
-    {% else %}
-        {{ block.super }}
-    {% endif %}
-{% endblock %}
-
-{% block mess_client %}
-        <span class="badge badge-notify-mess">55</span>
-    {% if mess_cli %}
-    {% else %}
-        {{ block.super }}
-    {% endif %}
+{% block mess_not %}
+    {% include 'need_a_help_app/mess_not.html' %}
 {% endblock %}
 
 {% block count %}
