@@ -1,3 +1,6 @@
+import os
+import json
+import urllib.request, urllib.parse
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.http import HttpResponse, Http404
 from django.views import generic
@@ -30,10 +33,33 @@ from django.views.generic import (
     DeleteView
 )
 from user.forms import RequestsForm
-import json
-import urllib.request, urllib.parse
 from need_a_help import settings
 from .filters import MostWantedFilter, TopRatedFilter
+from storages.backends.s3boto3 import S3Boto3Storage, SpooledTemporaryFile
+
+
+class CustomS3Boto3Storage(S3Boto3Storage):
+
+    def _save_content(self, obj, content, parameters):
+        """
+        We create a clone of the content file as when this is passed to boto3 it wrongly closes
+        the file upon upload where as the storage backend expects it to still be open
+        """
+        # Seek our content back to the start
+        content.seek(0, os.SEEK_SET)
+
+        # Create a temporary file that will write to disk after a specified size
+        content_autoclose = SpooledTemporaryFile()
+
+        # Write our original content into our copy that will be closed by boto3
+        content_autoclose.write(content.read())
+
+        # Upload the object which will auto close the content_autoclose instance
+        super(CustomS3Boto3Storage, self)._save_content(obj, content_autoclose, parameters)
+
+        # Cleanup if this is fixed upstream our duplicate should always close
+        if not content_autoclose.closed:
+            content_autoclose.close()
 
 
 api_key = settings.GOOGLE_MAPS_API_KEY
