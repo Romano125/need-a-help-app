@@ -71,8 +71,8 @@
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
                         <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
                         <div class="row">
-                            <div class="col-sm-7">
-                                <small class="text-secondary text-muted text-truncate">Address: {{ p.address }}</small><br>
+                            <div class="col-sm-7 text-truncate">
+                                <small class="text-secondary text-muted">Address: {{ p.address }}</small><br>
                             </div>
                             <div class="col-sm-5">
                                 {% resolve dist p.user.id as value %}
@@ -119,8 +119,8 @@
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
                         <small class="text-secondary text-muted">Cost: {{ p.costs }} €</small><br>
                         <div class="row">
-                            <div class="col-sm-7">
-                                <small class="text-secondary text-muted text-truncate">Address: {{ p.address }}</small><br>
+                            <div class="col-sm-7 text-truncate">
+                                <small class="text-secondary text-muted">Address: {{ p.address }}</small><br>
                             </div>
                             <div class="col-sm-5">
                                 {% resolve dist p.user.id as value %}

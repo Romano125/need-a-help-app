@@ -89,7 +89,7 @@
                                       <img class="rounded-circle account-img" src="{{ i.request.photo.url }}">
                                   </a>
                               </div>
-                              <div class="col-sm-7 pl-5">
+                              <div class="col-sm-7 pl-5 text-truncate">
                                   <small class="text-muted">Hired by: </small><a class="mr-2" href="{% url 'info' i.request.user.id %}">{{ i.request.user }}</a>
                                   <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
                                   <hr width="100%">
@@ -102,7 +102,7 @@
                                   <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
                                   <div class="row">
                                         <div class="col-sm-7">
-                                            <small class="text-secondary text-muted text-truncate">Address: {{ i.request.address }}</small><br>
+                                            <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
                                         </div>
                                         <div class="col-sm-5">
                                             {% resolve dist i.request.id as value %}

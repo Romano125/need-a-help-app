@@ -69,7 +69,7 @@
                             <img class="rounded-circle account-img" src="{{ i.request.photo.url }}">
                         </a>
                     </div>
-                    <div class="col-sm-7 pl-5">
+                    <div class="col-sm-7 pl-5 text-truncate">
                         <small class="text-muted">Repairman hired: </small><a class="mr-2" href="{% url 'info' i.repairman.id %}">{{ i.repairman }}</a>
                         <small class="text-muted">Date hired: {{ i.date_hired|date:'F d, Y H:i' }}</small>
                         <hr width="100%">
@@ -80,7 +80,7 @@
                             <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
                         {% endif %}
                         <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
-                        <small class="text-secondary text-muted text-truncate">Address: {{ i.request.address }}</small><br>
+                        <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
                     </div>
                     <div class="col-sm-2 pt-5" align="right">
                         {% if i.status == 'pending' %}
