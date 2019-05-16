@@ -203,12 +203,12 @@
                     {% if user != chat.user %}
                         <li class="sent">
                             <img class="rounded-circle" src="{{ object.first.profile.photo.url }}">
-                            <p>{{ chat.message }}</p>
+                            <p id ="text" >{{ chat.message }}</p>
                         </li>
                     {% else %}
                         <li class="replies">
                             <img class="rounded-circle" src="{{ object.second.profile.photo.url }}">
-                            <p>{{ chat.message }} </p>
+                            <p id ="text" >{{ chat.message }} </p>
                         </li>
                     {% endif %}
                     <p {% if user != chat.user %} align = "left" {% else %} align = "right"{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p>

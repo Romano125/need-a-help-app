@@ -35,16 +35,16 @@ from django.views.generic import (
 from user.forms import RequestsForm
 from need_a_help import settings
 from .filters import MostWantedFilter, TopRatedFilter
-from storages.backends.s3boto3 import S3Boto3Storage, SpooledTemporaryFile
-
+#from storages.backends.s3boto3 import S3Boto3Storage, SpooledTemporaryFile
+"""
 
 class CustomS3Boto3Storage(S3Boto3Storage):
 
     def _save_content(self, obj, content, parameters):
-        """
-        We create a clone of the content file as when this is passed to boto3 it wrongly closes
-        the file upon upload where as the storage backend expects it to still be open
-        """
+        
+        #We create a clone of the content file as when this is passed to boto3 it wrongly closes
+        #the file upon upload where as the storage backend expects it to still be open
+        
         # Seek our content back to the start
         content.seek(0, os.SEEK_SET)
 
@@ -60,7 +60,7 @@ class CustomS3Boto3Storage(S3Boto3Storage):
         # Cleanup if this is fixed upstream our duplicate should always close
         if not content_autoclose.closed:
             content_autoclose.close()
-
+"""
 
 api_key = settings.GOOGLE_MAPS_API_KEY
 

@@ -112,9 +112,9 @@
                     </div>
                      <div class="row">
                             {% if u.first == user %}
-                                 <small class="text-secondary text-muted">{{u.latestMessage}}</small>
+                                 <small id = "mess_pre" class="text-secondary text-muted" >{{u.latestMessage}}</small>
                             {% else %}
-                                 <small class="text-secondary text-muted">{{u.latestMessage}}</small>
+                                 <small id = "mess_pre" class="text-secondary text-muted">{{u.latestMessage}}</small>
                             {% endif %}
                         </div>
                     <hr width=100%>

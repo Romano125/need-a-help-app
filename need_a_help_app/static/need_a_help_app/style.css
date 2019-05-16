@@ -564,6 +564,13 @@ header.masthead .masthead-content .masthead-subheading {
   white-space: normal;
 }
 
+#mess_pre{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
 /* star styles */
 
 .star-outer {
