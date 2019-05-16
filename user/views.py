@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import ClientNotifications, RepairmanNotifications
 from need_a_help import settings
+from user.models import ClientMessage
 
 
 def register(request):
@@ -81,6 +82,8 @@ def profile(request, log):
     not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_rep = RepairmanNotifications.objects.filter(repairman=user, seen=False).count()
     not_cli = ClientNotifications.objects.filter(client=user, seen=False).count()
+    mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+    mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
     args = {
         'u_form': u_form,
@@ -89,6 +92,8 @@ def profile(request, log):
         'not_r': not_r,
         'not_cli': not_cli,
         'not_rep': not_rep,
+        'mess_cli': mess_cli,
+        'mess_cli_c': mess_cli_c,
         'api_key': settings.GOOGLE_MAPS_API_KEY
     }
 

@@ -19,7 +19,8 @@ from user.models import (
     ClientNotifications,
     RepairmanNotifications,
     Rate,
-    RequestImages
+    RequestImages,
+    ClientMessage
 )
 from django.views.generic import (
     ListView,
@@ -52,6 +53,8 @@ def about(request):
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context = {
             'cnt': cnt,
@@ -59,6 +62,8 @@ def about(request):
             'not_rep': not_rep,
             'not_c': not_c,
             'not_cli': not_cli,
+            'mess_cli': mess_cli,
+            'mess_cli_c': mess_cli_c
         }
 
         return render(request, 'need_a_help_app/about.html', context)
@@ -90,6 +95,8 @@ class AppMainClientView(LoginRequiredMixin, ListView):
 
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         origin = us.profile.address
         distance = {}
@@ -108,6 +115,8 @@ class AppMainClientView(LoginRequiredMixin, ListView):
         context_data['not_cli'] = not_cli
         context_data['dist'] = distance
         context_data['filter'] = MostWantedFilter(self.request.GET, queryset=self.get_queryset())
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -134,6 +143,8 @@ class AppMainRepairmanView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         origin = us.profile.address
         distance = {}
@@ -152,6 +163,8 @@ class AppMainRepairmanView(LoginRequiredMixin, ListView):
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
         context_data['dist'] = distance
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
 
         return context_data
@@ -196,6 +209,8 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         us = self.request.user
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         feeds = Rate.objects.all().order_by('-date')
@@ -250,6 +265,8 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
         context_data['two_per'] = two_per
         context_data['one_per'] = one_per
         context_data['dist'] = dist
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -273,6 +290,8 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
 
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
         feeds = Rate.objects.all().order_by('-date')
 
         rep = User.objects.filter(id=rep_id).first()
@@ -321,6 +340,8 @@ class ModalInfoDetailView(LoginRequiredMixin, DetailView):
         context_data['two_per'] = two_per
         context_data['one_per'] = one_per
         context_data['dist'] = dist
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -377,6 +398,8 @@ def show_favs(request):
     us = request.user
     not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+    mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+    mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
     origin = us.profile.address
     distance = {}
@@ -396,7 +419,9 @@ def show_favs(request):
         'f_hired': f_hired,
         'not_c': not_c,
         'not_cli': not_cli,
-        'dist': distance
+        'dist': distance,
+        'mess_cli': mess_cli,
+        'mess_cli_c': mess_cli_c
     }
 
     return render(request, 'need_a_help_app/favorites.html', context)
@@ -418,9 +443,13 @@ class RequestsView(LoginRequiredMixin, ListView):
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -446,9 +475,13 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
         context_data['api_key'] = settings.GOOGLE_MAPS_API_KEY
 
         return context_data
@@ -512,6 +545,8 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         origin = us.profile.address
         api = urllib.request.urlopen(f'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={ urllib.parse.quote(origin) }&destinations={ urllib.parse.quote(req.first().address) }&key={ api_key }').read(1000)
@@ -545,6 +580,9 @@ class RequestDetailView(LoginRequiredMixin, DetailView):
         context_data['dist'] = dist
         context_data['dist2'] = distance
         context_data['images'] = images
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
+
 
         return context_data
 
@@ -569,9 +607,13 @@ class RequestUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
         context_data['api_key'] = settings.GOOGLE_MAPS_API_KEY
 
         return context_data
@@ -609,9 +651,14 @@ class RequestDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
+
 
         return context_data
 
@@ -675,6 +722,8 @@ def search(request):
 
     not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+    mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+    mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
     origin = us.profile.address
     distance = {}
@@ -691,6 +740,8 @@ def search(request):
     context = {
         'not_c': not_c,
         'not_cli': not_cli,
+        'mess_cli': mess_cli,
+        'mess_cli_c': mess_cli_c,
         'users': users,
         'f_hired': f_hired,
         'q': q,
@@ -765,6 +816,8 @@ class HiredListView(LoginRequiredMixin, ListView):
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
         done_job = Hire.objects.filter(user=us, status='done', accepted=True, done=False).count()
         done_req = JobHire.objects.filter(status='done', done=False).count()
 
@@ -774,6 +827,8 @@ class HiredListView(LoginRequiredMixin, ListView):
         context_data['not_cli'] = not_cli
         context_data['done_job'] = done_job
         context_data['done_req'] = done_req
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -802,11 +857,15 @@ class HiredReqListView(LoginRequiredMixin, ListView):
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         done_job = Hire.objects.filter(user=us, status='done', accepted=True, done=False).count()
         done_req = JobHire.objects.filter(status='done', done=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
         context_data['done_job'] = done_job
         context_data['done_req'] = done_req
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -839,6 +898,8 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['us'] = users
         context_data['cnt'] = req
@@ -846,6 +907,8 @@ class RepairmanRequestsListView(LoginRequiredMixin, ListView):
         context_data['act_cnt'] = act_cnt
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -913,6 +976,8 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         req = Requests.objects.filter(visible=False)
 
@@ -936,6 +1001,8 @@ class RepairmanActiveListView(LoginRequiredMixin, ListView):
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
         context_data['dist'] = distance
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -968,6 +1035,8 @@ class RepairmanActiveReqListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         req = Requests.objects.filter(visible=False)
 
@@ -989,6 +1058,8 @@ class RepairmanActiveReqListView(LoginRequiredMixin, ListView):
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
         context_data['dist'] = distance
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -1049,6 +1120,8 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         req = Requests.objects.filter(visible=False)
 
@@ -1070,6 +1143,8 @@ class RepairmanDoneListView(LoginRequiredMixin, ListView):
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
         context_data['dist'] = distance
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -1094,6 +1169,8 @@ class RepairmanDoneReqListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         req = Requests.objects.filter(visible=False)
 
@@ -1113,6 +1190,8 @@ class RepairmanDoneReqListView(LoginRequiredMixin, ListView):
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
         context_data['dist'] = distance
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -1160,6 +1239,8 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
         act_cnt = act_job + act_req
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
         app = Appliccation.objects.filter(repairman=us)
 
         req = Requests.objects.filter(visible=True)
@@ -1181,6 +1262,8 @@ class RepairmanApplicationsListView(LoginRequiredMixin, ListView):
         context_data['act_cnt'] = act_cnt
         context_data['app'] = app
         context_data['dist'] = distance
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -1360,10 +1443,15 @@ class NotificationsClientListView(LoginRequiredMixin, ListView):
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['us'] = users
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
+
 
         return context_data
 
@@ -1385,10 +1473,14 @@ class NotificationsRepairmanListView(LoginRequiredMixin, ListView):
         us = self.request.user
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['us'] = users
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -1480,6 +1572,8 @@ class UserDoneListView(LoginRequiredMixin, ListView):
         us = self.request.user
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
         done_job = Hire.objects.filter(user=us, status='done', accepted=True, done=True).count()
         done_req = JobHire.objects.filter(status='done', done=True).count()
 
@@ -1487,6 +1581,8 @@ class UserDoneListView(LoginRequiredMixin, ListView):
         context_data['job'] = job
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
         context_data['done_job'] = done_job
         context_data['done_req'] = done_req
         context_data['us_list'] = list(User.objects.all())
@@ -1511,11 +1607,15 @@ class UserDoneReqListView(LoginRequiredMixin, ListView):
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
         done_job = Hire.objects.filter(user=us, status='done', accepted=True, done=True).count()
         done_req = JobHire.objects.filter(status='done', done=True).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
         context_data['done_job'] = done_job
         context_data['done_req'] = done_req
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
 
@@ -1564,6 +1664,8 @@ class TopRatedView(LoginRequiredMixin, ListView):
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['f_hired'] = f_hired
         context_data['seen_r'] = reqq_seen
@@ -1573,6 +1675,8 @@ class TopRatedView(LoginRequiredMixin, ListView):
         context_data['not_c'] = not_c
         context_data['not_rep'] = not_rep
         context_data['not_cli'] = not_cli
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
         context_data['filter'] = TopRatedFilter(self.request.GET, queryset = self.get_queryset())
 
         return context_data
@@ -1595,9 +1699,13 @@ class RepairmanFeedbacksListView(LoginRequiredMixin, ListView):
         us = self.request.user
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
+        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
+        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
 
         context_data['us'] = users
         context_data['not_r'] = not_r
         context_data['not_rep'] = not_rep
+        context_data['mess_cli'] = mess_cli
+        context_data['mess_cli_c'] = mess_cli_c
 
         return context_data
