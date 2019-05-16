@@ -15,7 +15,7 @@
                     <hr width=100%>
                 {% endfor %}
                 <div class='row'>
-                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5 text-center'>
                         <a href='{% url 'notifications_repairman' user.id %}'>Show all notifications</a>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                     <hr width=100%>
                 {% endfor %}
                 <div class='row'>
-                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5 text-center'>
                         <a href='{% url 'notifications_client' user.id %}'>Show all notifications</a>
                     </div>
                 </div>
@@ -78,39 +78,6 @@
 {% block filters %}{% endblock %}
 
 {% block content %}
-<h3 align = "center">
-    {% if user != object.first %}
-        <a href="{% url 'info' object.first.id %}"><img class="rounded-circle navbar-img" src="{{ object.first.profile.photo.url }}"></a>{{ object.first }}
-    {% else %}
-        <a href="{% url 'info' object.second.id %}"><img class="rounded-circle navbar-img" src="{{ object.second.profile.photo.url }}"></a>{{ object.second }}
-    {% endif %}
-</h3>
-<div class = "row">
-	<div id='chat-items'>
-	{% for chat in object.chatmessage_set.all %}
-
-        {% if user != chat.user %}
-    		<button type="button" class="btn btn-dark" id = "text" style = "{% if user != chat.user %}
-    		  float:right; display:block;{% else %}{% endif %}">{{ chat.message }} </button><br>
-        {% else %}
-            <button type="button" class="btn btn-info" id = "text" style = "{% if user != chat.user %}
-          float:right; display:block;{% else %}{% endif %}">{{ chat.message }} </button><br>
-        {% endif %}
-		{% if user != chat.user %} <br> {% else %}{% endif %}
-		<p {% if user != chat.user %} align = "right" {% else %}{% endif %} style = "font-size: 10px;"> {% if user != chat.user %}{{ chat.user }}{% else %}{% endif %}<br> {{chat.timestamp}}</p>
-
-
-		{% endfor %}
-	</div>
-</div>
-<div class = "row">
-	<form id='form' method='POST'  "> {% csrf_token %}
-		<input type = "hidden" id = "myUsername" value = '{{user.username}}'/>
-	{{form.as_p }}
-	<input type='submit' class='btn btn-primary'/>
-	</form>
-</div>
-
 {% endblock %}
 
 
