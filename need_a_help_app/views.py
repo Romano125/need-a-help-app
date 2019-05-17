@@ -1652,7 +1652,7 @@ class TopRatedView(LoginRequiredMixin, ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return Profile.objects.filter(role='repairman', profession='Other').order_by('-rating')
+        return Profile.objects.filter(role='repairman').order_by('-rating')
 
     def get_context_data(self, **kwargs):
         context_data = super(TopRatedView, self).get_context_data(**kwargs)
