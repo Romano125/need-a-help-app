@@ -44,7 +44,7 @@ PROFESSION = (
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=10, choices=GENDER)
-    address = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
     birth_date = models.DateField(null=True)
     phone_number = models.CharField(max_length=100)
     costs = models.IntegerField(default=100)
@@ -112,7 +112,7 @@ class Requests(models.Model):
     job_title = models.CharField(max_length=30)
     required_knowledges = models.TextField(max_length=1000)
     price = models.IntegerField()
-    address = models.CharField(max_length=30)
+    address = models.CharField(max_length=100)
     job_description = models.TextField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
     photo = models.ImageField(default='default_request.jpg', upload_to='requests_user')
