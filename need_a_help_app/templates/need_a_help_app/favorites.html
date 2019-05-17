@@ -42,11 +42,13 @@
    {% include "need_a_help_app/mess_not.html" %}
 {% endblock %}
 
+{% block filters %} {% endblock %}
+
 {% block content %}
    <h2>My favorites</h2>
    <hr width="100%">
    {% if favs %}
-       {% for us in filter.qs %}
+       {% for us in favs %}
             {% if us.user == user.id %}
                 {% for rep in users %}
                     {% if rep.id == us.repairman %}
@@ -181,14 +183,4 @@
 {% include 'need_a_help_app/stars_js.html' %}
 {% endblock %}
 
-
-{% block filters %}
-    <div class="col-sm-4 col-md-4 col-lg-4">
-        <div class="content-section d-none d-md-block d-lg-block">
-            <form method=" GET">
-            {{ filter.form|bootstrap}}
-            <button type = "submit" class= "btn btn-primary">Submit</button>
-        </div>
-    </div>
-{% endblock %}
 

@@ -42,6 +42,8 @@
    {% include "need_a_help_app/mess_not.html" %}
 {% endblock %}
 
+{% block filters %} {% endblock %}
+
 {% block content %}
    <div class="row">
     <div class="col-sm-8">
@@ -50,7 +52,7 @@
    </div>
    <hr width="100%">
    {% if f %}
-       {% for us in filter.qs %}
+       {% for us in users %}
             {% if us.profile.profession == prof.first.profession or us.first_name == name.first.first_name or us.last_name == name.first.last_name %}
                 {% if us.profile.role == 'repairman' %}
                     <article class="media content-section d-none d-md-block d-lg-block">
@@ -106,7 +108,7 @@
     {% endif %}
 
     {% if f %}
-       {% for us in filter.qs %}
+       {% for us in users %}
             {% if us.profile.profession == prof.first.profession or us.first_name == name.first.first_name or us.last_name == name.first.last_name %}
                 {% if us.profile.role == 'repairman' %}
                     <article class="media content-section d-block d-md-none d-lg-none text-center">
@@ -192,14 +194,4 @@
 
 {% include 'need_a_help_app/stars_js.html' %}
 {# include 'need_a_help_app/search_ajax.html' #}
-{% endblock %}
-
-{% block filters %}
-    <div class="col-sm-4 col-md-4 col-lg-4">
-        <div class="content-section d-none d-md-block d-lg-block">
-            <form method=" GET">
-            {{ filter.form|bootstrap}}
-            <button type = "submit" class= "btn btn-primary">Submit</button>
-        </div>
-    </div>
 {% endblock %}
