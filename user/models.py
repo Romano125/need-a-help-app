@@ -40,6 +40,21 @@ PROFESSION = (
     ('Other', 'Other')
 )
 
+CURRENCY = (
+    ('EUR', 'EUR'),
+    ('GBP', 'GBP'),
+    ('AUD', 'AUD (Australian dollar)'),
+    ('USD', 'USD (United States dollar)'),
+    ('CAD', 'CAD (Canadian dollar)'),
+    ('HRK', 'HRK'),
+    ('CZK', 'CZK'),
+    ('HUF', 'HUF'),
+    ('CHF', 'CHF'),
+    ('RON', 'RON'),
+    ('RSD', 'RSD'),
+    ('SEK', 'SEK'),
+)
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -48,6 +63,7 @@ class Profile(models.Model):
     birth_date = models.DateField(null=True)
     phone_number = models.CharField(max_length=100)
     costs = models.IntegerField(default=100)
+    currency = models.CharField(max_length=10, choices=CURRENCY, default='EUR')
     role = models.CharField(max_length=15, choices=ROLES)
     profession = models.CharField(max_length=250, choices=PROFESSION, default='Other')
     knowledges = models.TextField(max_length=1000)
@@ -112,6 +128,7 @@ class Requests(models.Model):
     job_title = models.CharField(max_length=30)
     required_knowledges = models.TextField(max_length=1000)
     price = models.IntegerField()
+    currency = models.CharField(max_length=10, choices=CURRENCY, default='EUR')
     address = models.CharField(max_length=30)
     job_description = models.TextField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)

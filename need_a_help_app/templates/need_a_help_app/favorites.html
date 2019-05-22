@@ -75,7 +75,7 @@
                                     <div class="col-sm-5 pl-5">
                                         <h1>{{ rep.first_name }} {{ rep.last_name }}</h1>
                                         <small class="text-secondary text-muted">Profession: {{ rep.profile.profession }}</small><br>
-                                        <small class="text-secondary text-muted">Cost: 155</small><br>
+                                        <small class="text-secondary text-muted">Cost: {{ rep.profile.costs }} {{ rep.profile.currency }}</small><br>
                                         <div class="row">
                                             <div class="col-sm-7 text-truncate">
                                                 <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>
@@ -122,7 +122,7 @@
                                     <div class="col-sm-5 text-center">
                                         <h1>{{ rep.first_name }} {{ rep.last_name }}</h1>
                                         <small class="text-secondary text-muted">Profession: {{ rep.profile.profession }}</small><br>
-                                        <small class="text-secondary text-muted">Cost: 155</small><br>
+                                        <small class="text-secondary text-muted">Cost: {{ rep.profile.costs }} {{ rep.profile.currency }}</small><br>
                                         <div class="row">
                                             <div class="col-sm-7 text-truncate">
                                                 <small class="text-secondary text-muted">Address: {{ rep.profile.address }}</small><br>

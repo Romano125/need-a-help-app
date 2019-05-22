@@ -69,7 +69,7 @@
                     <div class="col-sm-5 pl-5">
                         <h1>{{ p.user.first_name }} {{ p.user.last_name }}</h1>
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
-                        <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ p.costs }} €</small><br>
+                        <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ p.costs }} {{ p.currency }}</small><br>
                         <div class="row">
                             <div class="col-sm-7 text-truncate">
                                 <small class="text-secondary text-muted">Address: {{ p.address }}</small><br>
@@ -117,7 +117,7 @@
                     <div class="col-sm-5">
                         <h1>{{ p.user.first_name }} {{ p.user.last_name }}</h1>
                         <small class="text-secondary text-muted">Profession: {{ p.profession }}</small><br>
-                        <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ p.costs }} €</small><br>
+                        <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ p.costs }} {{ p.currency }}</small><br>
                         <div class="row">
                             <div class="col-sm-7 text-truncate">
                                 <small class="text-secondary text-muted">Address: {{ p.address }}</small><br>

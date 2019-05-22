@@ -211,7 +211,7 @@
                                     {% else %}
                                          <h4 class="text-muted">None</h4>
                                     {% endif %}
-                                    <h4>{{ modal_info.profile.costs }} €</h4>
+                                    <h4>{{ modal_info.profile.costs }} {{ modal_info.profile.currency }}</h4>
                                     <h4>
                                         <i class="fas fa-user-check tool1 {% if modal_info.profile.hired >= 5 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Beginner - 5 times hired"></i>
                                       <i class="far fa-paper-plane tool1 {% if modal_info.profile.hired >= 25 %} tool1 {% else %} tool2 {% endif %}" data-toggle="tooltip" data-placement="bottom" title="Advance - 25 times hired"></i>

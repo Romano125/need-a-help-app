@@ -223,6 +223,7 @@ class RepairmanUpdateForm(forms.ModelForm):
             'birth_date',
             'phone_number',
             'costs',
+            'currency',
             'profession',
             'knowledges',
             'user_description',

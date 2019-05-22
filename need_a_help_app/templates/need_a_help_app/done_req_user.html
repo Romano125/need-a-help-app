@@ -82,7 +82,7 @@
                       {% else %}
                           <small class="text-secondary text-muted">Status: <span style="color: green">{{ i.status }}</span></small><br>
                       {% endif %}
-                      <small class="text-secondary text-muted">Price: {{ i.request.price }} €</small><br>
+                      <small class="text-secondary text-muted">Price: {{ i.request.price }} {{ i.request.currency }}</small><br>
                       <small class="text-secondary text-muted">Address: {{ i.request.address }}</small><br>
                     </div>
                   </div>
