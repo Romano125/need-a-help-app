@@ -43,11 +43,23 @@
 {% endblock %}
 
 {% block content_client %}
-    <h2>Most wanted</h2>
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <h2>Most wanted</h2>
+        </div>
+        <div class="col-sm-6 col-md-6 text-right">
+            <div class="slidecontainer">
+                <h6>Distance is less than: <i><span id="demo"></span> km</i></h6>
+              <input type="range" min="1" max="10000" value="5000" class="slider" id="myRange">
+            </div>
+        </div>
+    </div>
     <hr width="100%">
     {% for p in filter.qs %}
+        {% resolve dist p.user.id as value %}
         <article class="media content-section d-none d-md-block d-lg-block">
-            <div class="media-body">
+            <div class="media-body all_content">
+                <input type="hidden" value="{{ value }}" id="calc_dist"/>
                 <div class="row">
                     <div class="col-sm-3">
                         <a href="{% url 'info' p.user.id %}">
@@ -169,7 +181,9 @@
             </div>
         </div>
    </div>
+
 {% include 'need_a_help_app/stars_js.html' %}
+{% include 'need_a_help_app/range_slider.html' %}
 {% endblock %}
 
 {% block filters %}

@@ -1,0 +1,33 @@
+<script type="text/javascript">
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value; // Display the default slider value
+
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+      var calc = this.value;
+      var dist = document.getElementsByClassName('all_content');
+      var br, mul;
+
+      for(var i = 0; i < dist.length; i++) {
+        var str = dist[i].childNodes[1].value;
+        br = 0;
+        mul = 1;
+        for(var j = 0; j < str.length; j++) {
+            if( !isNaN(str[j]) && str[j] != ' ' ) {
+                br = br * mul + ( str[j] - '0' );
+                mul = 10;
+            }
+        }
+        if (calc >= br) {
+            dist[i].classList.add('slide_show');
+            dist[i].classList.remove('slide_hide');
+        } else {
+            dist[i].classList.add('slide_hide');
+            dist[i].classList.remove('slide_show');
+        }
+      }
+    }
+
+</script>

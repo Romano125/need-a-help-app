@@ -1251,7 +1251,7 @@ input.invalid {
 <<<<<<< HEAD
 
 =======
-  
+
 >>>>>>> 7b9e95b07dd449969a3186139d01f947046739e8
 }
 @media screen and (max-width: 735px) {
@@ -1885,5 +1885,53 @@ input.invalid {
 
 .message-input{
   padding-right: 27%;
+}
+
+/* hide block where distance is bigger than choosen on slider - slider css */
+
+.slide_hide {
+  display: none;
+}
+
+.slide_show {
+  display: block;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 50%;
+  border-radius: 8px;
+  height: 12px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 18px;
+  height: 18px;
+  background: #4CAF50;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
 }
 
