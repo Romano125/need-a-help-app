@@ -75,8 +75,8 @@
     {% if req %}
         {% for r in req %}
             {% resolve dist r.id as value %}
-            <article class="media content-section d-none d-md-block d-lg-block">
-                <div class="media-body all_content">
+            <article class="media content-section d-none d-md-block d-lg-block all_content">
+                <div class="media-body">
                     <input type="hidden" value="{{ value }}" id="calc_dist"/>
                     <div class="row">
                         <div class="col-sm-3">

@@ -11,21 +11,26 @@
       var br, mul;
 
       for(var i = 0; i < dist.length; i++) {
-        var str = dist[i].childNodes[1].value;
+        var str = dist[i].childNodes[1].childNodes[1].value;
         br = 0;
         mul = 1;
         for(var j = 0; j < str.length; j++) {
+            if (str[j] == '.') break;
             if( !isNaN(str[j]) && str[j] != ' ' ) {
                 br = br * mul + ( str[j] - '0' );
                 mul = 10;
             }
         }
         if (calc >= br) {
-            dist[i].classList.add('slide_show');
-            dist[i].classList.remove('slide_hide');
+            dist[i].classList.remove('d-md-none');
+            dist[i].classList.add('d-md-block');
+            dist[i].classList.remove('d-lg-none');
+            dist[i].classList.add('d-lg-block');
         } else {
-            dist[i].classList.add('slide_hide');
-            dist[i].classList.remove('slide_show');
+            dist[i].classList.add('d-md-none');
+            dist[i].classList.remove('d-md-block');
+            dist[i].classList.add('d-lg-none');
+            dist[i].classList.remove('d-lg-block');
         }
       }
     }
