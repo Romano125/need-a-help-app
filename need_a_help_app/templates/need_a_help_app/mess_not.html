@@ -3,7 +3,15 @@
         <div class='container'>
             {% for n in mess_cli|slice:'5' %}
                 <div {% if not n.seen %}class='row not_seen'{% else %}class='row not_row' style='cursor: pointer;'{% endif %} onclick='location.href=&quot;{{ n.url_to_go }}?not_c={{ n.id }}&quot;;' {% if not n.seen %}style='background: #f2f2f2;'{% endif %}>
-                    <b> {{n.message.user.first_name}} {{n.message.user.last_name}} </b> - {{ n.message.message }}
+                    <div class='col-sm-2 col-md-2 col-lg-2 align-items-center justify-content' style='margin: auto'>
+                        <a href='{% url 'info' n.message.user.id %}'>
+                            <img class='rounded-circle navbar-img' src='{{ n.message.user.profile.photo.url }}'>
+                        </a>
+                    </div>
+                    <div class='col-sm-7 col-md-7 col-lg-7'>
+                        <a href='{% url 'info' n.message.user.id %}'>{{ n.message.user.username }}</a></br>
+                        {{ n.message.message }}
+                    </div>
                     <div class='col-sm-3 col-md-3 col-lg-3'>
                         <small class='text-secondary text-muted'>{{ n.date|date:'dM H:i' }}</small>
                     </div>
@@ -21,6 +29,6 @@
         <span class="badge badge-notify-mess">{{mess_cli_c}}</span>
     {% endif %}
 {% else %}
-    <i class="nav-item nav-link fas fa-envelope mt-1 popOver" data-title="Notifications" data-content="
+    <i class="nav-item nav-link fas fa-envelope mt-1 popOver" data-title="Messages" data-content="
         <h6 class='text-secondary text-muted' align='center'>No results</h6>" data-placement="bottom" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover"></i>
 {% endif %}
