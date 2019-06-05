@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.db.models import Q
 from .forms import (
     UserRegisterForm,
     ProfileRegisterForm,
@@ -82,8 +83,8 @@ def profile(request, log):
     not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
     not_rep = RepairmanNotifications.objects.filter(repairman=user, seen=False).count()
     not_cli = ClientNotifications.objects.filter(client=user, seen=False).count()
-    mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
-    mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
+    mess_cli = ClientMessage.objects.filter((Q(client=us) | Q(sender=us)) & Q(seen=False)).order_by("-date")
+    mess_cli_c = ClientMessage.objects.filter(Q(client=us) & Q(seen_notif=False)).count()
 
     args = {
         'u_form': u_form,

@@ -80,18 +80,32 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
 
         other_username = self.kwargs.get("username")
         other_object = User.objects.filter(username=other_username)[0]
-        not_seen = ClientMessage.objects.filter(client=us,seen=False, sender=other_object)
+        not_seen_notif = ClientMessage.objects.filter(client=us,seen_notif=False, sender=other_object)
+        #not_seen_notif_count = ClientMessage.objects.filter(client=us,seen=False, sender=other_object).count()
+        for n in not_seen_notif:
+            n.seen_notif = True
+            n.save()
 
+
+        not_seen = ClientMessage.objects.filter((Q(client=us, sender=other_object) | Q(sender=us, client=other_object)) & Q(seen=False))
+        not_seen_count = ClientMessage.objects.filter((Q(client=us, sender=other_object) | Q(sender=us, client=other_object)) & Q(seen=False)).count()
+        not_seen_count -= 1
+        i = 0
         for m in not_seen:
-            m.seen = True
-            m.save()
+            if i != not_seen_count:
+                m.seen = True
+                m.save()
+            i += 1
+        
+
+
 
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_c = ClientNotifications.objects.filter(client=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
         not_cli = ClientNotifications.objects.filter(client=us, seen=False).count()
-        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
-        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
+        mess_cli = ClientMessage.objects.filter((Q(client=us) | Q(sender=us)) & Q(seen=False)).order_by("-date")
+        mess_cli_c = ClientMessage.objects.filter(Q(client=us) & Q(seen_notif=False)).count()
 
         thr = Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-updated')
 
@@ -131,13 +145,18 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         else :
             not_usr = thread.first
 
-        url = f'{ reverse("messages", kwargs={"username": user}) }'
+        url1 = f'{ reverse("messages", kwargs={"username": user}) }'
+        url2 = f'{ reverse("messages", kwargs={"username": not_usr}) }'
+        """
         noti = ClientMessage.objects.filter(client=not_usr,seen=False, sender=user)
+        i = 0
         for n in noti :
-            n.seen = True
-            n.save()
-
-        ClientMessage.objects.create(client= not_usr, message = mess, url_to_go = url, sender=user)
+            if i != 0:
+                n.seen = True
+                n.save()
+            i += 1    
+        """
+        ClientMessage.objects.create(client= not_usr, message = mess, url_to_go_client = url2, url_to_go_sender=url1, sender=user)
 
         return super().form_valid(form)
 #boto3 1.5.0
