@@ -24,6 +24,7 @@ def register(request):
             user.profile.address = form_p.cleaned_data.get('address')
             user.profile.birth_date = form_p.cleaned_data.get('birth_date')
             user.profile.role = form_p.cleaned_data.get('role')
+            user.profile.gender = form_p.cleaned_data.get('gender')
 
             user.profile.user_description = f'An repairman whose profession is Other, Master Other — wide range of knowladges based on his profession, can help with similar types of job which contains part of his own profession, Newby - still we don\'t have any information about his past jobs and expiriences...'
 
