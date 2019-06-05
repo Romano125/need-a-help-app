@@ -35,9 +35,9 @@ from django.views.generic import (
 from user.forms import RequestsForm
 from need_a_help import settings
 from .filters import MostWantedFilter, TopRatedFilter, FavouritesFilter, SearchFilter
-#from storages.backends.s3boto3 import S3Boto3Storage, SpooledTemporaryFile
+from storages.backends.s3boto3 import S3Boto3Storage, SpooledTemporaryFile
 
-"""
+
 class CustomS3Boto3Storage(S3Boto3Storage):
 
     def _save_content(self, obj, content, parameters):
@@ -61,7 +61,7 @@ class CustomS3Boto3Storage(S3Boto3Storage):
         if not content_autoclose.closed:
             content_autoclose.close()
 
-"""
+
 api_key = settings.GOOGLE_MAPS_API_KEY
 
 
