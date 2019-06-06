@@ -29,7 +29,7 @@ class ThreadManager(models.Manager):
                 obj = self.model(
                     first=user,
                     second=user2,
-                    names=user+"_"+user2
+                    names=''
                 )
                 obj.save()
                 return obj, True
