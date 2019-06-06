@@ -88,10 +88,10 @@
         <div id="profile">
             <div class="wrap">
                 {% if user != object.first %}
-                    <img class="rounded-circle" src="{{ object.second.profile.photo.url }}">
+                    <img class="rounded-circle online" src="{{ object.second.profile.photo.url }}">
                     <p>{{ object.second.first_name }} {{ object.second.last_name }}</p>
                 {% else %}
-                    <img class="rounded-circle" src="{{ object.first.profile.photo.url }}">
+                    <img class="rounded-circle online" src="{{ object.first.profile.photo.url }}">
                     <p>{{ object.first.first_name }} {{ object.first.last_name }}</p>
                 {% endif %}
                 <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
@@ -122,7 +122,7 @@
                         </div>
                         <div class = "col">
                             <button type ="submit" class = "fa fa-search" aria-hidden = "true" style = "padding: 10%; margin-top: 10%"></button>
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </form>
@@ -132,12 +132,12 @@
                 <ul>
                     {% for u in filter.qs %}
                         {% if u.first == user %}
-                            <li class="contact active" onclick="location.href=&quot;{% url 'messages' u.second %}&quot;;">
+                            <li class="contact" onclick="location.href=&quot;{% url 'messages' u.second %}&quot;;">
                         {% else %}
                             <li class="contact" onclick="location.href=&quot;{% url 'messages' u.first %}&quot;;">
                         {% endif %}
                             <div class="wrap">
-                                <span class="contact-status busy"></span>
+                                <span class="contact-status online"></span>
                                 {% if u.first == user %}
                                 <a href="{% url 'info' u.second.id %}"><img class="rounded-circle navbar-img" src="{{ u.second.profile.photo.url }}"></a>
                                 {% else %}
@@ -169,7 +169,7 @@
             {% endif %}
         </div>
         <div id="bottom-bar">
-            
+
         </div>
     </div>
     <div class="content">
@@ -183,7 +183,7 @@
             {% endif %}
         </div>
         <div class="messages">
-            <ul>
+            <ul class="pr-3 pl-0">
                 {% for chat in object.chatmessage_set.all %}
                     {% if user != chat.user %}
                         <li class="sent">
@@ -206,7 +206,7 @@
                     {% csrf_token %}
                     <input type = "hidden" id = "myUsername" value = '{{user.username}}'/>
                     {{form|crispy }}
-                    
+
                     <button type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </form>
             </div>
@@ -274,10 +274,14 @@ socket.onclose = function(e){
 	console.log("message", e)
 }
 
-    var el = document.getElementById('message');
+var el = document.getElementById('message');
 
-    el.autocomplete = 'off';
-    el.placeholder = 'Write your message here ...';
+el.autocomplete = 'off';
+el.placeholder = 'Write your message here ...';
+el.style.borderRadius = '18px';
+
+el = document.getElementById('div_message');
+el.classList.add('pl-5');
 
 
 </script>
