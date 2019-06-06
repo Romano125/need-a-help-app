@@ -120,16 +120,24 @@
             {% if inbox %}
                 <ul>
                     {% for u in inbox %}
-                        {% if u.second == object.second %}
+                        {% if u.first == user %}
                             <li class="contact active" onclick="location.href=&quot;{% url 'messages' u.second %}&quot;;">
                         {% else %}
-                            <li class="contact" onclick="location.href=&quot;{% url 'messages' u.second %}&quot;;">
+                            <li class="contact" onclick="location.href=&quot;{% url 'messages' u.first %}&quot;;">
                         {% endif %}
                             <div class="wrap">
                                 <span class="contact-status busy"></span>
+                                {% if u.first == user %}
                                 <a href="{% url 'info' u.second.id %}"><img class="rounded-circle navbar-img" src="{{ u.second.profile.photo.url }}"></a>
+                                {% else %}
+                                <a href="{% url 'info' u.first.id %}"><img class="rounded-circle navbar-img" src="{{ u.first.profile.photo.url }}"></a>
+                                {% endif %}
                                 <div class="meta">
+                                    {% if u.first == user %}
                                     <p class="name">{{ u.second.first_name }} {{ u.second.last_name }} </p>
+                                    {% else %}
+                                    <p class="name">{{ u.firstfirst_name }} {{ u.first.last_name }} </p>
+                                    {% endif %}
                                     <p class="preview ml-5">{{u.latestMessage}}</p>
                                 </div>
                             </div>
