@@ -114,27 +114,18 @@
             </div>
         </div>
         <div id="search">
-            <form method = "GET">
-                <div class = "containter">
-                    <div class = "row">
-                        <div class = "col-md-auto">
-                            {{ filter.form|bootstrap }}
-                        </div>
-                        <div class = "col">
-                            <button type ="submit" class = "fa fa-search" aria-hidden = "true" style = "padding: 10%; margin-top: 10%"></button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <input type="text" id="q" class="form-control pl-2 w-100" style="border-radius: 18px" placeholder="Search contacts...">
         </div>
         <div id="contacts">
             {% if inbox %}
                 <ul>
-                    {% for u in filter.qs %}
+                    {% for u in inbox %}
                         {% if u.first == user %}
-                            <li class="contact" onclick="location.href=&quot;{% url 'messages' u.second %}&quot;;">
+                            <li class="contact" id="{{ u.second.id }}" onclick="location.href=&quot;{% url 'messages' u.second %}&quot;;">
+                            <input type="hidden" id="getId" value="{{ u.second.id }}">
                         {% else %}
-                            <li class="contact" onclick="location.href=&quot;{% url 'messages' u.first %}&quot;;">
+                            <li class="contact" id="{{ u.first.id }}" onclick="location.href=&quot;{% url 'messages' u.first %}&quot;;">
+                            <input type="hidden" id="getId" value="{{ u.first.id }}">
                         {% endif %}
                             <div class="wrap">
                                 <span class="contact-status online"></span>
@@ -145,9 +136,9 @@
                                 {% endif %}
                                 <div class="meta">
                                     {% if u.first == user %}
-                                    <p class="name">{{ u.second.first_name }} {{ u.second.last_name }} </p>
+                                    <p class="name">{{ u.second.first_name }} {{ u.second.last_name }}</p>
                                     {% else %}
-                                    <p class="name">{{ u.firstfirst_name }} {{ u.first.last_name }} </p>
+                                    <p class="name">{{ u.firstfirst_name }} {{ u.first.last_name }}</p>
                                     {% endif %}
                                     <p class="preview ml-5">{{u.latestMessage}}</p>
                                 </div>
@@ -284,6 +275,27 @@ el.style.boxShadow = '0 0 0 0.2rem rgba(0, 0, 0, 0.5)';
 el = document.getElementById('div_message');
 el.classList.add('pl-5');
 
+var q = document.getElementById('q');
+q.autocomplete = 'off';
+
+q.addEventListener('keyup', () => {
+    var el = document.getElementsByClassName('name');
+    var q = document.getElementById('q').value;
+    var block = document.getElementsByClassName('contact');
+    var str;
+
+    for (var i = 0; i < el.length; i++) {
+        str = el[i].innerHTML;
+        var br = block[i].childNodes[1].value;
+        var el_to_hid = document.getElementById(`${br}`);
+        if (str.includes(q)) {
+            el_to_hid.style.display = 'block';
+            el_to_hid.style.listStyle = 'inherit';
+        } else {
+            el_to_hid.style.display = 'none';
+        }
+    }
+});
 
 </script>
 
