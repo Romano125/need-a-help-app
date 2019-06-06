@@ -1,5 +1,6 @@
 {% extends "need_a_help_app/base.html" %}
 {% load crispy_forms_tags %}
+{% load bootstrap %}
 
 {% block notify_repairman %}
     {% if not_r %}
@@ -113,13 +114,23 @@
             </div>
         </div>
         <div id="search">
-            <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-            <input type="text" placeholder="Search contacts..." />
+            <form method = "GET">
+                <div class = "containter">
+                    <div class = "row">
+                        <div class = "col-md-auto">
+                            {{ filter.form|bootstrap }}
+                        </div>
+                        <div class = "col">
+                            <button type ="submit" class = "fa fa-search" aria-hidden = "true" style = "padding: 10%; margin-top: 10%"></button>
+                        </div>    
+                    </div>
+                </div>
+            </form>
         </div>
         <div id="contacts">
             {% if inbox %}
                 <ul>
-                    {% for u in inbox %}
+                    {% for u in filter.qs %}
                         {% if u.first == user %}
                             <li class="contact active" onclick="location.href=&quot;{% url 'messages' u.second %}&quot;;">
                         {% else %}

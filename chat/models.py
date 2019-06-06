@@ -28,7 +28,8 @@ class ThreadManager(models.Manager):
             if user != user2:
                 obj = self.model(
                     first=user,
-                    second=user2
+                    second=user2,
+                    names=user+"_"+user2
                 )
                 obj.save()
                 return obj, True
@@ -41,6 +42,7 @@ class Thread(models.Model):
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     latestMessage = models.TextField()
+    names = models.TextField()
 
     objects = ThreadManager()
 

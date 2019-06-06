@@ -13,6 +13,7 @@ from .forms import ComposeForm
 from .models import Thread, ChatMessage
 from  user.models import ClientMessage
 from user.models import ClientNotifications, RepairmanNotifications
+from .filters import InboxFilter
 
 
 class InboxView(LoginRequiredMixin, ListView):
@@ -107,6 +108,7 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         mess_cli = ClientMessage.objects.filter((Q(client=us) | Q(sender=us)) & Q(seen=False)).order_by("-date")
         mess_cli_c = ClientMessage.objects.filter(Q(client=us) & Q(seen_notif=False)).count()
         thrd = Thread.objects.filter(Q(first=self.request.user)|Q(second=self.request.user)).order_by('-updated')
+        inb_filter = InboxFilter(self.request.GET, queryset = self.get_queryset())
 
         context['form'] = self.get_form()
         context['not_r'] = not_r
@@ -116,6 +118,7 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         context['inbox'] = thrd
         context['mess_cli'] = mess_cli
         context['mess_cli_c'] = mess_cli_c
+        context['filter'] = inb_filter
         
 
         return context
