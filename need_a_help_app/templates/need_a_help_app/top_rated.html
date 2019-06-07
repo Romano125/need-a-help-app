@@ -103,7 +103,7 @@
     {% endif %}
     <hr width="100%">
 
-    {% for p in filter.qs %}
+    {% for p in filter %}
         {% if p.user == user %}
             <article class="media content-section bigger d-none d-md-block d-lg-block">
         {% else %}
@@ -274,7 +274,7 @@
     <div class="col-sm-4 col-md-4 col-lg-4">
         <div class="content-section d-none d-md-block d-lg-block text-center">
             <form method=" GET">
-            {{ filter.form|bootstrap}}
+            {{ filter_form.form|bootstrap}}
             <button class="badge badge-pag" style="border: none;" type="submit">Submit</button>
         </div>
     </div>

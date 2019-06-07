@@ -55,7 +55,7 @@
         </div>
     </div>
     <hr width="100%">
-    {% for p in filter.qs %}
+    {% for p in filter %}
         {% resolve dist p.user.id as value %}
         <article class="media content-section d-none d-md-block d-lg-block all_content">
             <div class="media-body">
@@ -105,7 +105,7 @@
         </article>
     {% endfor %}
 
-    {% for p in filter.qs %}
+    {% for p in filter %}
         <article class="media content-section d-block d-md-none d-lg-none text-center">
             <div class="media-body">
                 <div class="row">
@@ -190,7 +190,7 @@
     <div class="col-sm-4 col-md-4 col-lg-4">
         <div class="content-section d-none d-md-block d-lg-block text-center">
             <form method=" GET">
-            {{ filter.form|bootstrap}}
+            {{ filter_form.form|bootstrap}}
             <button class="badge badge-pag" style="border: none;" type="submit">Submit</button>
         </div>
     </div>

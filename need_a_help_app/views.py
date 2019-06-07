@@ -99,11 +99,12 @@ def about(request):
 
 class AppMainClientView(LoginRequiredMixin, ListView):
     template_name = 'need_a_help_app/app_main_client.html'
-    context_object_name = 'prof'
+    context_object_name = 'filter'
     paginate_by = 5
 
     def get_queryset(self):
-        return Profile.objects.filter(role='repairman').order_by('-rating')
+        qs = Profile.objects.filter(role='repairman').order_by('-rating')
+        return MostWantedFilter(self.request.GET, queryset=qs).qs
 
     def get_context_data(self, **kwargs):
         context_data = super(AppMainClientView, self).get_context_data(**kwargs)
@@ -140,7 +141,7 @@ class AppMainClientView(LoginRequiredMixin, ListView):
         context_data['not_c'] = not_c
         context_data['not_cli'] = not_cli
         context_data['dist'] = distance
-        context_data['filter'] = MostWantedFilter(self.request.GET, queryset=self.get_queryset())
+        context_data['filter_form'] = MostWantedFilter(self.request.GET, queryset=self.get_queryset())
         context_data['mess_cli'] = mess_cli
         context_data['mess_cli_c'] = mess_cli_c
 
@@ -1648,11 +1649,12 @@ class UserDoneReqListView(LoginRequiredMixin, ListView):
 
 class TopRatedView(LoginRequiredMixin, ListView):
     template_name = 'need_a_help_app/top_rated.html'
-    context_object_name = 'prof'
+    context_object_name = 'filter'
     paginate_by = 5
 
     def get_queryset(self):
-        return Profile.objects.filter(role='repairman').order_by('-rating')
+        qs = Profile.objects.filter(role='repairman').order_by('-rating')
+        return TopRatedFilter(self.request.GET, queryset=qs).qs
 
     def get_context_data(self, **kwargs):
         context_data = super(TopRatedView, self).get_context_data(**kwargs)
@@ -1703,7 +1705,7 @@ class TopRatedView(LoginRequiredMixin, ListView):
         context_data['not_cli'] = not_cli
         context_data['mess_cli'] = mess_cli
         context_data['mess_cli_c'] = mess_cli_c
-        context_data['filter'] = TopRatedFilter(self.request.GET, queryset = self.get_queryset())
+        context_data['filter_form'] = TopRatedFilter(self.request.GET, queryset=self.get_queryset())
 
         return context_data
 
