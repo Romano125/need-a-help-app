@@ -79,8 +79,8 @@ def about(request):
         cnt = RepairmanRequests.objects.filter(repairman=us, seen=False).count()
         not_r = RepairmanNotifications.objects.filter(repairman=us, remove=False).order_by('-date')
         not_rep = RepairmanNotifications.objects.filter(repairman=us, seen=False).count()
-        mess_cli = ClientMessage.objects.filter(client=us,seen=False).order_by('-date')
-        mess_cli_c = ClientMessage.objects.filter(client=us,seen=False).count()
+        mess_cli = ClientMessage.objects.filter((Q(client=us) | Q(sender=us)) & Q(seen=False)).order_by("-date")
+        mess_cli_c = ClientMessage.objects.filter(Q(client=us) & Q(seen_notif=False)).count()
 
         context = {
             'cnt': cnt,

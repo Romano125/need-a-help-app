@@ -41,7 +41,7 @@
                     <hr width=100%>
                 {% endfor %}
                 <div class='row'>
-                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5 text-center'>
                         <a href='{% url 'notifications_client' user.id %}'>Show all notifications</a>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                     <hr width=100%>
                 {% endfor %}
                 <div class='row'>
-                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5'>
+                    <div class='col-sm-12 col-md-12 col-lg-12 pl-5 text-center'>
                         <a href='{% url 'notifications_repairman' user.id %}'>Show all notifications</a>
                     </div>
                 </div>
@@ -83,20 +83,8 @@
     {% endif %}
 {% endblock %}
 
-{% block mess_client %}
-        <span class="badge badge-notify-mess">55</span>
-    {% if mess_cli %}
-    {% else %}
-        {{ block.super }}
-    {% endif %}
-{% endblock %}
-
-{% block mess_repairman %}
-    {% if mess_rep %}
-        <span class="badge badge-notify-mess">{{ mess_rep }}</span>
-    {% else %}
-        {{ block.super }}
-    {% endif %}
+{% block mess_not %}
+    {% include 'need_a_help_app/mess_not.html' %}
 {% endblock %}
 
 {% block count %}
