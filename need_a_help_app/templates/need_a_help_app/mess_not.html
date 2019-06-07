@@ -13,7 +13,7 @@
                         </a>
                         {% endif %}
                     </div>
-                    <div class='col-sm-7 col-md-7 col-lg-7'>
+                    <div class='col-sm-7 col-md-7 col-lg-7 text-truncate'>
                         {% if user != n.client %}<a href='{% url 'info' n.client.id %}'>{{ n.client.username }}</a></br>{% else %}<a href='{% url 'info' n.sender.id %}'>{{ n.sender.username }}</a></br>
                         {% endif %}
                         {% if n.sender == user %} You: {{ n.message.message }} {% else %} {{n.sender.username}}: {{ n.message.message }}
