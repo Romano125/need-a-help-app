@@ -173,7 +173,7 @@
                 <p>{{ object.second.first_name }} {{ object.second.last_name }}</p>
             {% endif %}
         </div>
-        <div class="messages">
+        <div class="messages" id="mess_cont">
             <ul class="pr-3 pl-0">
                 {% for chat in object.chatmessage_set.all %}
                     {% if user != chat.user %}
@@ -296,6 +296,9 @@ q.addEventListener('keyup', () => {
         }
     }
 });
+
+var objDiv = document.getElementById("mess_cont");
+objDiv.scrollTop = objDiv.scrollHeight;
 
 </script>
 
