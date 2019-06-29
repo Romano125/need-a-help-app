@@ -180,7 +180,6 @@
                                     <h4><b>Phone number: </b></h4>
                                     <h4><b>Birth date: </b></h4>
                                     <h4><b>Profession: </b></h4>
-                                    <h4><b>Knowledges: </b></h4>
                                     <h4><b>Cost / <sup>hour</sup>: </b></h4>
                                     <h4><b>Badges:</b></h4>
                                 {% else %}
@@ -203,11 +202,6 @@
                                     {% endif %}
                                     {% if modal_info.profile.profession %}
                                         <h4>{{ modal_info.profile.profession }}</h4>
-                                    {% else %}
-                                         <h4 class="text-muted">None</h4>
-                                    {% endif %}
-                                    {% if modal_info.profile.knowledges %}
-                                        <h4>{{ modal_info.profile.knowledges }}</h4>
                                     {% else %}
                                          <h4 class="text-muted">None</h4>
                                     {% endif %}
@@ -239,6 +233,14 @@
                                     </h4>
                                 {% endif %}
                             </div>
+                        </div>
+                        <div class="description text-center">
+                            <h4><b>Extra knowledges:</b></h4>
+                            {% if modal_info.profile.knowledges %}
+                                <p>{{ modal_info.profile.knowledges }}</p>
+                            {% else %}
+                                 <p class="text-muted">None</p>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="tab-pane text-center gallery" id="works">
