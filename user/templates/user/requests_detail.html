@@ -254,7 +254,7 @@
                   <div class="col-sm-5 pl-5">
                       <h5>{{ a.repairman.first_name }} {{ a.repairman.last_name }}</h5>
                       <small class="text-secondary text-muted">Profession: {{ a.repairman.profile.profession }}</small><br>
-                      <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ a.repairman.profile.costs }} €</small><br>
+                      <small class="text-secondary text-muted">Cost / <sup>hour</sup>: {{ a.repairman.profile.costs }} {{ a.repairman.profile.currency }}</small><br>
                       <div class="row">
                           <div class="col-sm-6 col-md-6 text-truncate">
                               <small class="text-muted">Address: {{ a.repairman.profile.address }}</small><br><br>
