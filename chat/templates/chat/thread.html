@@ -88,10 +88,10 @@
         <div id="profile">
             <div class="wrap">
                 {% if user != object.first %}
-                    <img class="rounded-circle online" src="{{ object.second.profile.photo.url }}">
+                    <img id ="profilna" class="rounded-circle online" src="{{ object.second.profile.photo.url }}">
                     <p>{{ object.second.first_name }} {{ object.second.last_name }}</p>
                 {% else %}
-                    <img class="rounded-circle online" src="{{ object.first.profile.photo.url }}">
+                    <img id = "profilna" class="rounded-circle online" src="{{ object.first.profile.photo.url }}">
                     <p>{{ object.first.first_name }} {{ object.first.last_name }}</p>
                 {% endif %}
                 <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
@@ -166,15 +166,15 @@
     <div class="content">
         <div class="contact-profile">
             {% if user != object.first %}
-                <img class="rounded-circle" src="{{ object.first.profile.photo.url }}">
+                <img id ="other_profilna" class="rounded-circle" src="{{ object.first.profile.photo.url }}">
                 <p>{{ object.first.first_name }} {{ object.first.last_name }}</p>
             {% else %}
-                <img class="rounded-circle" src="{{ object.second.profile.photo.url }}">
+                <img id = "other_profilna" class="rounded-circle" src="{{ object.second.profile.photo.url }}">
                 <p>{{ object.second.first_name }} {{ object.second.last_name }}</p>
             {% endif %}
         </div>
         <div class="messages" id="mess_cont">
-            <ul class="pr-3 pl-0">
+            <ul class="pr-3 pl-0" id = "mes_cont">
                 {% for chat in object.chatmessage_set.all %}
                     {% if user != chat.user %}
                         <li class="sent">
@@ -218,8 +218,12 @@
 console.log(window.location)
 var loc = window.location
 var formData = $("#form")
-var msgInput = $("#id_message")    //dohvat elementa stvarne poruke unutar forme
-var chatHolder = $("#chat-items")
+var msgInput = $("#message")    //dohvat elementa stvarne poruke unutar forme
+var chatHolder = $("#mes_cont")
+var user_pic = $("#profilna").attr('src')
+var other_pic = $("#other_profilna").attr('src')
+var img_user = $
+
 var me = $("#myUsername").val()
 
 var wsStart = 'ws://'
@@ -235,9 +239,11 @@ socket.onmessage = function(e){
 	console.log("message", e)
 	var chatDataMsg = JSON.parse(e.data)
 	if (chatDataMsg.username == "{{user}}") {
-			chatHolder.append("<button type='button' class='btn btn-info' >" + chatDataMsg.message + "</button><br> <p style = 'font-size: 10px;'> "+ chatDataMsg.username + "</p>" )
+        chatHolder.append("<li class='replies'><img class='rounded-circle' src="+ user_pic +"><p id ='text' >" + chatDataMsg.message + " </p></li>")
+			//chatHolder.append("<button type='button' class='btn btn-info' >" + chatDataMsg.message + "</button><br> <p style = 'font-size: 10px;'> "+ chatDataMsg.username + "</p>" )
 	} else {
-		chatHolder.append("<button type='button' class='btn btn-info' style = 'float:right; display:block;' >" + chatDataMsg.message + "</button><br> <p align = 'right' style = 'font-size: 10px;'> <br>"+ chatDataMsg.username + "</p>" )
+		chatHolder.append("<li class='sent'><img class='rounded-circle' src="+ user_pic +"><p id ='text' >" + chatDataMsg.message + " </p></li>")
+        //chatHolder.append("<button type='button' class='btn btn-info' style = 'float:right; display:block;' >" + chatDataMsg.message + "</button><br> <p align = 'right' style = 'font-size: 10px;'> <br>"+ chatDataMsg.username + "</p>" )
 	}
 }
 
