@@ -48,7 +48,7 @@ six==1.12.0
 sklearn==0.0
 somepackage==1.2.3
 txaio==18.8.1
-urllib3==1.24.2
+urllib3==1.26.5
 virtualenv==16.4.3
 whitenoise==4.1.2
 zope.interface==4.6.0
