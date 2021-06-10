@@ -11,7 +11,7 @@ constantly==15.1.0
 cycler==0.10.0
 decorator==4.3.2
 dj-database-url==0.5.0
-Django==2.1.5
+Django==2.2.24
 django-address==0.2.1
 django-betterforms==1.2
 django-bootstrap==0.2.4
