@@ -33,7 +33,7 @@ joblib==0.13.2
 kiwisolver==1.0.1
 llvmlite==0.27.0
 matplotlib==3.0.3
-numpy==1.16.2
+numpy==1.22.0
 Pillow==5.4.1
 psycopg2==2.8.2
 pydub==0.23.1
