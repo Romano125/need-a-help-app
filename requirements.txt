@@ -29,7 +29,7 @@ hyperlink==18.0.0
 idna==2.8
 incremental==17.5.0
 jmespath==0.9.4
-joblib==0.13.2
+joblib==1.2.0
 kiwisolver==1.0.1
 llvmlite==0.27.0
 matplotlib==3.0.3
